@@ -157,7 +157,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Kinect.Replay\Kinect.Replay\Kinect.Replay.csproj">
+    <ProjectReference Include="Kinect.Replay\Kinect.Replay\Kinect.Replay.csproj">
       <Project>{7ce86894-45da-4ed7-bc9d-0d073c0e481b}</Project>
       <Name>Kinect.Replay</Name>
     </ProjectReference>
