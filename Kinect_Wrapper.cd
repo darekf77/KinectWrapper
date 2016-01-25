@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Interface Name="Kinect_Wrapper.device.audio.IAudio">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIEAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>device\audio\IAudio.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Mode" />
+    </ShowAsAssociation>
+  </Interface>
+  <Interface Name="Kinect_Wrapper.device.IDevice">
+    <Position X="3.25" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAIgAAEAAAQAAAAgAAAAAQAABAAEACg=</HashCode>
+      <FileName>device\IDevice.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="State" />
+      <Property Name="Type" />
+      <Property Name="Audio" />
+      <Property Name="Video" />
+    </ShowAsAssociation>
+  </Interface>
+  <Interface Name="Kinect_Wrapper.device.video.IVideo">
+    <Position X="3.25" Y="4" Width="1.5" />
+    <AssociationLine Name="RecordingMode" Type="Kinect_Wrapper.structures.RecordMode" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="4.75" Y="5.472" />
+        <Point X="8.188" Y="5.472" />
+        <Point X="8.188" Y="4.989" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAIAAAACAAAAEQAACAACEABAAAgABgAAAA=</HashCode>
+      <FileName>device\video\IVideo.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="RecordingMode" />
+    </ShowAsAssociation>
+  </Interface>
+  <Interface Name="Kinect_Wrapper.device.stream.skeleton.ISkeleton">
+    <Position X="7.25" Y="5.75" Width="1.25" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAABAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>frame\user\skeleton\ISkeleton.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Kinect_Wrapper.wrapper.IKinectWrapper">
+    <Position X="0.5" Y="4.25" Width="2.5" />
+    <AssociationLine Name="Devices" Type="Kinect_Wrapper.device.IDevice" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="2.797" Y="4.25" />
+        <Point X="2.797" Y="2.73" />
+        <Point X="3.25" Y="2.73" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>QAABAAAAAAAAAgAAAAAAAAAAQAIIAAAAAAAAABAAAgA=</HashCode>
+      <FileName>wrapper\IKinectWrapper.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Device" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Devices" />
+    </ShowAsCollectionAssociation>
+  </Interface>
+  <Interface Name="Kinect_Wrapper.device.stream.IStream">
+    <Position X="7" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAQAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>device\stream\IStream.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Kinect_Wrapper.user.IKinectUser">
+    <Position X="5" Y="5.75" Width="1.25" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>frame\user\IKinectUser.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Skeleton" />
+    </ShowAsAssociation>
+  </Interface>
+  <Enum Name="Kinect_Wrapper.structures.AudioMode">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAQAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>structures\AudioMode.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Kinect_Wrapper.structures.DeviceType">
+    <Position X="6.5" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAABBAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>structures\DeviceType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Kinect_Wrapper.structures.RecordMode">
+    <Position X="7" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAiAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>structures\RecordMode.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Kinect_Wrapper.structures.DeviceState">
+    <Position X="5.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAgABgAAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>structures\DeviceState.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
