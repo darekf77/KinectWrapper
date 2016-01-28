@@ -1,4 +1,5 @@
 ﻿using Kinect_Wrapper.device;
+using Kinect_Wrapper.device.audio.message;
 using Kinect_Wrapper.device.stream;
 using Kinect_Wrapper.frame;
 using Kinect_Wrapper.structures;
@@ -23,6 +24,7 @@ namespace Kinect_Wrapper.wrapper
                 Monitor.Pulse(_locker);
         }
 
+
         private void prepareDevice(IDevice device) {
             
             if (_currentDevice != null)
@@ -31,7 +33,12 @@ namespace Kinect_Wrapper.wrapper
                 if (_currentDevice.Video != null)
                 {
                     _currentDevice.Video.RecordComplete -= _currentDevice_RecordComplete;
-                    _currentDevice.Video.FramesReady -= Video_FramesReady;
+                    _currentDevice.Video.FramesReady -= Video_FramesReady;                    
+                }
+                if (_currentDevice.Audio != null)
+                {
+                    _currentDevice.Audio.start(Grammar);
+                    _currentDevice.Audio.UserSaying -= Audio_UserSaying;                    
                 }
             }
             _currentDevice = device;
@@ -39,9 +46,22 @@ namespace Kinect_Wrapper.wrapper
             if (_currentDevice.Video != null)
             {
                 _currentDevice.Video.RecordComplete += _currentDevice_RecordComplete;
-                _currentDevice.Video.FramesReady += Video_FramesReady;
+                _currentDevice.Video.FramesReady += Video_FramesReady;                
+            }
+            if (_currentDevice.Audio != null)
+            {
+                _currentDevice.Audio.stop();
+                _currentDevice.Audio.UserSaying += Audio_UserSaying;
             }
             _infoDeviceName.Value = _currentDevice.Name;            
+        }
+
+        void Audio_UserSaying(object sender, IAudioMessage e)
+        {
+            if (NewUserMessageReady != null)
+            {
+                NewUserMessageReady(this, e);
+            }
         }
 
 

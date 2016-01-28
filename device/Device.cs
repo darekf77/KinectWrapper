@@ -26,7 +26,8 @@ namespace Kinect_Wrapper.device
         private IAudio _audio;
         private Video _video;
         private String _name;
-        
+      
+
         public Device(KinectSensor sensor_xbox360)
         {
             _sensor = sensor_xbox360;
@@ -35,8 +36,9 @@ namespace Kinect_Wrapper.device
             KinectSensor.KinectSensors.StatusChanged += KinectSensors_StatusChanged; //TODO what to do
             if (_sensor.Status == KinectStatus.Connected)
             {
-                _video = new Video(this, _sensor);            
-            }            
+                _video = new Video(this, _sensor);
+                _audio = new Audio(this, _sensor);
+            }
         }
                 
         public Device(String filePath) {
@@ -44,14 +46,16 @@ namespace Kinect_Wrapper.device
             _deviceType = DeviceType.RECORD_FILE_KINECT_1;
             _name = "RecordFile-" + System.IO.Path.GetFileName(_filePath);
             _replay = new KinectReplay(_filePath);
-            _video = new Video(this, _replay);           
+            _video = new Video(this, _replay);
+            _audio = new Audio(this,_filePath);
         }
 
         public Device()
         {
             _deviceType = DeviceType.NO_DEVICE;
             _name = "NO SIGNAL";
-            _video = new Video(this);            
+            _video = new Video(this);
+            _audio = new Audio(this);
         }
                 
 
@@ -60,6 +64,7 @@ namespace Kinect_Wrapper.device
             if (e.Status == KinectStatus.Connected && _video != null)
             {
                 _video = new Video(this, _sensor);
+                _audio = new Audio(this, _sensor);
             }
         }
 

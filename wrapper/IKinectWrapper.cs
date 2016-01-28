@@ -1,4 +1,5 @@
 ﻿using Kinect_Wrapper.device;
+using Kinect_Wrapper.device.audio.message;
 using Kinect_Wrapper.device.stream;
 using Kinect_Wrapper.frame;
 using Kinect_Wrapper.structures;
@@ -59,6 +60,10 @@ namespace Kinect_Wrapper.wrapper
         /// Display image ready 
         /// </summary>
         event EventHandler<ImageSource> DisplayImageReady;
-        
+
+        event EventHandler<IAudioMessage> NewUserMessageReady;
+
+        List<String> Grammar { get; set; }
+
     }
 }

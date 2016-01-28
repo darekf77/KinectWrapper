@@ -1,4 +1,5 @@
 ﻿using Kinect_Wrapper.device;
+using Kinect_Wrapper.device.audio.message;
 using Kinect_Wrapper.device.stream;
 using Kinect_Wrapper.frame;
 using Kinect_Wrapper.helpers;
@@ -53,7 +54,8 @@ namespace Kinect_Wrapper.wrapper
         InfoRow _infoFramesPerSecond = new InfoRow("FPS", "");
 
         private KinectWrapper()
-        {            
+        {
+            Grammar = new List<string>();
             UIEnable = true;
             _statistic = new Statistics();            
             Info = new TrulyObservableCollection<InfoRow>();
@@ -182,5 +184,13 @@ namespace Kinect_Wrapper.wrapper
         }
 
         public Boolean UIEnable { get; set; }
+
+
+        public event EventHandler<IAudioMessage> NewUserMessageReady;
+        
+        public List<string> Grammar { get; set; }
+
+
+
     }
 }

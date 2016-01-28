@@ -71,6 +71,9 @@
     <Compile Include="app\KinectWrapperListWidget.xaml.cs">
       <DependentUpon>KinectWrapperListWidget.xaml</DependentUpon>
     </Compile>
+    <Compile Include="device\audio\AudioWorker.cs" />
+    <Compile Include="device\audio\message\AudioMessage.cs" />
+    <Compile Include="device\audio\message\IAudioMessage.cs" />
     <Compile Include="device\DeviceState.cs" />
     <Compile Include="device\stream\DepthStream.cs" />
     <Compile Include="device\stream\ColorStream.cs" />
