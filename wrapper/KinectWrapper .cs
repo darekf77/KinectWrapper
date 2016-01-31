@@ -52,6 +52,7 @@ namespace Kinect_Wrapper.wrapper
         InfoRow _infoSpine = new InfoRow("SpinePos", "");
         InfoRow _infoIsSkeletonDetected = new InfoRow("IsSkeletonDetected", "");
         InfoRow _infoFramesPerSecond = new InfoRow("FPS", "");
+        InfoRow _infoWastedFrames = new InfoRow("Wasted FPS", "");
 
         private KinectWrapper()
         {
@@ -65,6 +66,7 @@ namespace Kinect_Wrapper.wrapper
             Info.Add(_infoSpine);
             Info.Add(_infoIsSkeletonDetected);
             Info.Add(_infoFramesPerSecond);
+            Info.Add(_infoWastedFrames);
             IStream color = new ColorStream();
             _streams.Add(color);
             _stream = color;
