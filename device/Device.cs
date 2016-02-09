@@ -53,7 +53,7 @@ namespace Kinect_Wrapper.device
         public Device()
         {
             _deviceType = DeviceType.NO_DEVICE;
-            _name = "NO SIGNAL";
+            _name = "Plug in your Kinect";
             _video = new Video(this);
             _audio = new Audio(this);
         }

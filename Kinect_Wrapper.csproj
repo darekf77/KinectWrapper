@@ -166,7 +166,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="assets\img\nosignalw640.png" />
+    <Resource Include="assets\img\nosignalw640.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="assets\img\nosignalw.jpg" />

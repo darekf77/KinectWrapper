@@ -22,6 +22,10 @@ namespace Kinect_Wrapper.frame
         {
             colorFrame.CopyPixelDataTo(_colorByte);
             depthFrame.CopyPixelDataTo(_depthShort);
+            for (int i = 0; i < _pixelDepthDataLength; i++)
+            {
+                _depthByte[i] = (byte)(_depthShort[i] * 0.064-1);
+            }
             IsSkeletonDetected = skletonFrame.IsSkeletonDetected;
             //TODO umcoment this
             if (skletonFrame.IsSkeletonDetected)
@@ -51,6 +55,7 @@ namespace Kinect_Wrapper.frame
         {
             colorFrame.CopyPixelDataTo(_colorByte);
 
+            //Console.WriteLine("max depth: "+depthFrame.MaxDepth);
             depthFrame.CopyDepthImagePixelDataTo(_depthPixels);
 
             _sensor.CoordinateMapper.MapColorFrameToDepthFrame(
@@ -63,6 +68,7 @@ namespace Kinect_Wrapper.frame
             for (int i = 0; i < _pixelDepthDataLength; i++)
             {
                 _depthShort[i] = (short)_depthPoint[i].Depth;
+                _depthByte[i] = (byte)(_depthPoint[i].Depth*0.064-1);
             }
 
             skletonFrame.CopySkeletonDataTo(totalSkeleton);            
@@ -93,15 +99,15 @@ namespace Kinect_Wrapper.frame
         {
             if (isVisible)
             {
-                byte fontsize = 24;
+                byte fontsize = 20;
                 RectangleF rectBitmap = new RectangleF(0,0,_bitmap.Width,_bitmap.Height);
-                RectangleF rectf = new RectangleF(0, _bitmap.Height /2 - fontsize , _bitmap.Width, 3*fontsize);
+                RectangleF rectf = new RectangleF(200, _bitmap.Height /2 - fontsize , _bitmap.Width, 3*fontsize);
                 Bitmap bmp = _bitmap.Clone(rectBitmap, _bitmap.PixelFormat);
                 Graphics g = Graphics.FromImage(bmp);
                 g.SmoothingMode = SmoothingMode.AntiAlias;
                 g.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                g.DrawString(message, new Font("Tahoma", fontsize), Brushes.Black, rectf);
+                g.DrawString(message, new Font("Tahoma", fontsize), Brushes.White, rectf);
                 g.Flush();
                 prepareColorPixelsFrom(bmp);
             }

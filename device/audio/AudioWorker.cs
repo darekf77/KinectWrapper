@@ -26,7 +26,7 @@ namespace Kinect_Wrapper.device.audio
 
         private void Start()
         {
-            if (_sensor == null && _sensor.Status != KinectStatus.Connected)
+            if (_sensor == null || !_sensor.IsRunning || _sensor.Status != KinectStatus.Connected)
             {
                 Console.WriteLine("Audio initiation fail");
                 return;

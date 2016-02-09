@@ -121,35 +121,18 @@ namespace Kinect_Wrapper.frame
             }
             set
             {
-                _doNotTrasformDepthShortBytes = false;
                 _depthShort = value;
             }
         }
 
 
-        private Boolean _doNotTrasformDepthShortBytes = false;
         public Byte[] DepthColor
         {
             get {
-                if (!_doNotTrasformDepthShortBytes)
-                {
-                    int colorPixelIndex = 0;
-                    for (int i = 0; i < this._depthPixels.Length; ++i)
-                    {
-                        byte intensity = (byte)(_depthShort[i] >= MinDepth
-                            && _depthShort[i] <= MaxDepth ? _depthShort[i] / 16 : 0);
-                        _depthByte[colorPixelIndex++] = intensity;
-                        _depthByte[colorPixelIndex++] = intensity;
-                        _depthByte[colorPixelIndex++] = intensity;
-                        _depthByte[colorPixelIndex++] = 0;
-                    }
-                }
-                _doNotTrasformDepthShortBytes = false;
                 return _depthByte;                 
             }
             set
             {
-                _doNotTrasformDepthShortBytes = true;
                 _depthByte = value;
             }
         }
