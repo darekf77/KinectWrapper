@@ -35,14 +35,9 @@ namespace Kinect_Wrapper.app
 
         }
 
-        public event EventHandler<IDevice> NewDeviceSelected;
         private void ListViewDevices_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (NewDeviceSelected != null)
-            {
-
-                NewDeviceSelected(this,(IDevice)ListViewDevices.SelectedItem);
-            }
+        {            
+            _kinect.SelectedDevice = (IDevice)ListViewDevices.SelectedItem;            
         }
 
     }

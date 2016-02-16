@@ -41,7 +41,6 @@ namespace Kinect_Wrapper
             _kinectControls = new PageKinectWrapperControl(kinect);
             KinectWrapperDevicesListWidget.NavigationService.Navigate(_devicesList);
             KinectWrapperControlsWidget.NavigationService.Navigate(_kinectControls);
-            _devicesList.NewDeviceSelected += _devicesList_NewDeviceSelected;
         }
 
         void initApp()
@@ -50,10 +49,6 @@ namespace Kinect_Wrapper
             kinect.DisplayImageReady += kinect_ReadyDisplayImage;
         }
 
-        void _devicesList_NewDeviceSelected(object sender, IDevice e)
-        {
-            _kinectControls.selectDevice(e);
-        }
         
         void kinect_ReadyFrame(object sender, frame.IKinectFrame e)
         {

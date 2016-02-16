@@ -194,5 +194,8 @@ namespace Kinect_Wrapper.wrapper
 
 
 
+
+
+        public IDevice SelectedDevice { get; set; }
     }
 }

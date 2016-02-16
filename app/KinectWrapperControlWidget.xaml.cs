@@ -27,7 +27,6 @@ namespace Kinect_Wrapper.app
     public partial class PageKinectWrapperControl : Page
     {
         private IKinectWrapper _kinect;
-        private IDevice selectedDevice;
         
         public PageKinectWrapperControl(IKinectWrapper kinect)
         {
@@ -40,27 +39,11 @@ namespace Kinect_Wrapper.app
                 video = _kinect.Device.Video
             };
         }
-
-
-        public void selectDevice(IDevice device)
-        {
-            selectedDevice = device;
-        }
-
-        public void commitNormalFrame()
-        {
-            
-        }
-
-        public void commitMissingFrame()
-        {
-            
-        }
-        
+     
 
         private void play(object sender, RoutedEventArgs e)
         {
-            _kinect.Device = selectedDevice;
+            _kinect.Device = _kinect.SelectedDevice;
             _kinect.Device.start();
         }
 
@@ -110,10 +93,6 @@ namespace Kinect_Wrapper.app
             _kinect.Device.Video.nextFrame();
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-
-        }
 
 
     }

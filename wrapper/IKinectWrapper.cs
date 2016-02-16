@@ -24,6 +24,9 @@ namespace Kinect_Wrapper.wrapper
         /// </summary>
         IDevice Device { get; set; }
 
+
+        IDevice SelectedDevice { get; set; }
+
         /// <summary>
         /// Current used stream
         /// </summary>
