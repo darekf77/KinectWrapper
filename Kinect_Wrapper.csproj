@@ -81,7 +81,6 @@
     <Compile Include="device\stream\IStream.cs" />
     <Compile Include="device\video\VideoRecord.cs" />
     <Compile Include="frame\KinectFrameCreation.cs" />
-    <Compile Include="helpers\TrulyObservableCollection.cs" />
     <Compile Include="statistic\FrameType.cs" />
     <Compile Include="statistic\IStatistics.cs" />
     <Compile Include="statistic\Statistics.cs" />
@@ -160,6 +159,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\sharedlibjg\SharedLibJG.csproj">
+      <Project>{95f45d9e-3d43-4a78-9ec4-537e50c29de2}</Project>
+      <Name>SharedLibJG</Name>
+    </ProjectReference>
     <ProjectReference Include="Kinect.Replay\Kinect.Replay\Kinect.Replay.csproj">
       <Project>{7ce86894-45da-4ed7-bc9d-0d073c0e481b}</Project>
       <Name>Kinect.Replay</Name>

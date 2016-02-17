@@ -6,6 +6,7 @@ using Kinect_Wrapper.structures;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -50,7 +51,7 @@ namespace Kinect_Wrapper.wrapper
         /// <param name="out_frame"></param>
         void commit(IKinectFrame frame);
 
-        void commit(ImageSource frame);
+        void commit(Bitmap frame);
 
         ObservableCollection<InfoRow> Info { get; }
 

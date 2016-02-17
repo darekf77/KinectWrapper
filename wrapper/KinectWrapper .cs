@@ -2,10 +2,10 @@
 using Kinect_Wrapper.device.audio.message;
 using Kinect_Wrapper.device.stream;
 using Kinect_Wrapper.frame;
-using Kinect_Wrapper.helpers;
 using Kinect_Wrapper.statistic;
 using Kinect_Wrapper.structures;
 using Microsoft.Kinect;
+using SharedLibJG.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -116,12 +116,12 @@ namespace Kinect_Wrapper.wrapper
             }
         }
 
-        public void commit(ImageSource out_frame)
+        public void commit(System.Drawing.Bitmap out_frame)
         {
             if (DisplayImageReady != null)
             {
                 _statistic.commitFrame(FrameType.NORMAL);
-                DisplayImageReady(this, _stream.update(out_frame));
+                DisplayImageReady(this, _stream.update(HelpersConverters.ToBitmapSourceSlow(out_frame)));
                 _infoFramesPerSecond.Value = _statistic.FramesPerSecond(FrameType.NORMAL).ToString() + "/s";          
             }
         }
