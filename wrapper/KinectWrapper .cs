@@ -40,10 +40,10 @@ namespace Kinect_Wrapper.wrapper
         private IDevice _currentDevice;
         private BackgroundWorker _worker;
         private Params _params = new Params();
-        private IStream _stream;
+        private StreamBase _stream;
         private IDevice _defaultDevice;
         private Statistics _statistic;
-        private ObservableCollection<IStream> _streams = new ObservableCollection<IStream>();
+        private ObservableCollection<StreamBase> _streams = new ObservableCollection<StreamBase>();
         public ObservableCollection<InfoRow> Info { get; private set; }
 
         InfoRow _infoDeviceName = new InfoRow("Device Name", "");
@@ -67,10 +67,10 @@ namespace Kinect_Wrapper.wrapper
             Info.Add(_infoIsSkeletonDetected);
             Info.Add(_infoFramesPerSecond);
             Info.Add(_infoWastedFrames);
-            IStream color = new ColorStream();
+            StreamBase color = new ColorStream();
             _streams.Add(color);
             _stream = color;
-            IStream depth = new DepthStream();
+            StreamBase depth = new DepthStream();
             _streams.Add(depth);       
             AutoPickUpNewDevice = true;
             _devices = new ObservableCollection<IDevice>();
@@ -146,7 +146,7 @@ namespace Kinect_Wrapper.wrapper
             }
         }
 
-        public IStream Stream
+        public StreamBase Stream
         {
             get
             {
@@ -158,7 +158,7 @@ namespace Kinect_Wrapper.wrapper
             }
         }
 
-        public ObservableCollection<IStream> Streams
+        public ObservableCollection<StreamBase> Streams
         {
             get
             {
@@ -197,5 +197,6 @@ namespace Kinect_Wrapper.wrapper
 
 
         public IDevice SelectedDevice { get; set; }
+
     }
 }

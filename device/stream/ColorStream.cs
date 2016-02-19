@@ -14,7 +14,6 @@ namespace Kinect_Wrapper.device.stream
         {
             Name = "Color Stream";
             Description = "Color stream from kinect";
-            IsCustom = false;
         }
 
         public ColorStream(String name, String description)
@@ -22,7 +21,6 @@ namespace Kinect_Wrapper.device.stream
         {
             Name = name;
             Description = description;
-            IsCustom = true;
         }
 
     }

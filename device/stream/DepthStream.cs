@@ -14,7 +14,6 @@ namespace Kinect_Wrapper.device.stream
         {
             Name = "Depth Stream";
             Description = "Depth stream from kinect";
-            IsCustom = false;
         }
 
         public override ImageSource update(frame.IKinectFrame frame)

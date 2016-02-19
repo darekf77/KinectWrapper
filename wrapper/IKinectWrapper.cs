@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 
 namespace Kinect_Wrapper.wrapper
 {
+    
     public interface IKinectWrapper
     {
         /// <summary>
@@ -31,12 +32,12 @@ namespace Kinect_Wrapper.wrapper
         /// <summary>
         /// Current used stream
         /// </summary>
-        IStream Stream { get; set; }
+        StreamBase Stream { get; set; }
 
         /// <summary>
         /// All available streams 
         /// </summary>
-        ObservableCollection<IStream> Streams { get; set; }
+        ObservableCollection<StreamBase> Streams { get; set; }
 
         Boolean UIEnable { get; set; }
 
@@ -52,6 +53,7 @@ namespace Kinect_Wrapper.wrapper
         void commit(IKinectFrame frame);
 
         void commit(Bitmap frame);
+
 
         ObservableCollection<InfoRow> Info { get; }
 

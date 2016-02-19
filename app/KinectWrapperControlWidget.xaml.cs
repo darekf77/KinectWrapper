@@ -85,7 +85,7 @@ namespace Kinect_Wrapper.app
         
         private void ComboboxStreams_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _kinect.Stream = (IStream)ComboboxStreams.SelectedItem;
+            _kinect.Stream = (StreamBase)ComboboxStreams.SelectedItem;
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)

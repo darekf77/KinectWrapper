@@ -11,6 +11,7 @@ namespace Kinect_Wrapper.device.stream
 {
     public interface IStream
     {
+        int id { get; }
         /// <summary>
         /// Name of stream
         /// </summary>
@@ -20,8 +21,6 @@ namespace Kinect_Wrapper.device.stream
         /// Descriptio of stream
         /// </summary>
         String Description { get; set; }
-
-        Boolean IsCustom { get; }
 
         /// <summary>
         /// Updat stream

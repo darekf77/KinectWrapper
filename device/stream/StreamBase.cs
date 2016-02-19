@@ -15,9 +15,21 @@ namespace Kinect_Wrapper.device.stream
     {
         protected WriteableBitmap _bitmapaColor;
         protected WriteableBitmap _bitmapaDepth;
+
+        public static StreamBase ById(int id)
+        {
+            return Instances[id];
+        }
+        public static Dictionary<int, StreamBase> Instances = new Dictionary<int, StreamBase>();
+
         protected Bitmap _imageSource;
+        private static int cid = 0;
         public StreamBase()
         {
+            id = cid;
+            ++cid;
+            StreamBase.Instances[id] = this;
+
             Name = "Stream";
             Description = "Stream description";
             _bitmapaColor = new WriteableBitmap(
@@ -28,16 +40,25 @@ namespace Kinect_Wrapper.device.stream
                 640,
                 480,
                 96.0, 96.0, PixelFormats.Bgr32, null);
-            IsCustom = true;
-
             // TODO what bitmap
-            _imageSource = new Bitmap(640,480,System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+            _imageSource = new Bitmap(640,480,System.Drawing.Imaging.PixelFormat.Format32bppRgb);            
         }
 
         public string Name { get; set; }
 
         public string Description { get; set; }
 
+        
+        public override bool Equals (object pobj)
+        {
+            var obj = (StreamBase)pobj;
+            if (obj == null || GetType() != obj.GetType()) 
+            {
+                return false;
+            }        
+            // TODO: write your implementation of Equals() here
+            return obj.id == obj.id;
+        }        
 
         public virtual ImageSource update(ImageSource image)
         {
@@ -56,8 +77,12 @@ namespace Kinect_Wrapper.device.stream
                0);
             return _bitmapaColor;
         }
-        
 
-        public bool IsCustom { get; protected set; }
+        public override string ToString()
+        {
+            return "Stream base with id:" + id;
+        }
+
+        public int id { get; private set; }
     }
 }
