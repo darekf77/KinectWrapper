@@ -16,6 +16,7 @@ namespace Kinect_Wrapper.wrapper
     
     public interface IKinectWrapper
     {
+        Boolean DeviceNotAvailable { get; }
         /// <summary>
         /// Observable list of devices
         /// </summary>

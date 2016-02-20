@@ -198,5 +198,10 @@ namespace Kinect_Wrapper.wrapper
 
         public IDevice SelectedDevice { get; set; }
 
+
+        public bool DeviceNotAvailable
+        {
+            get { return _currentDevice.Equals(_defaultDevice); }
+        }
     }
 }
