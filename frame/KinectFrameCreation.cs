@@ -4,6 +4,7 @@ using Kinect.Replay.Replay.Depth;
 using Kinect.Replay.Replay.Skeletons;
 using Kinect_Wrapper.user;
 using Microsoft.Kinect;
+using SharedLibJG.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -107,7 +108,7 @@ namespace Kinect_Wrapper.frame
                 g.SmoothingMode = SmoothingMode.AntiAlias;
                 g.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                g.DrawString(message, new Font("Tahoma", fontsize), Brushes.White, rectf);
+                g.DrawString(message, new Font("Segoe UI Light", Helpers.getResponsiveFontSize(fontsize)), Brushes.White, rectf);
                 g.Flush();
                 prepareColorPixelsFrom(bmp);
             }

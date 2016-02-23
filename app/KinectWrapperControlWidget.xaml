@@ -17,7 +17,8 @@
                     SelectionChanged="ComboboxStreams_SelectionChanged">
         </ComboBox>
         <Button Content="STOP"  Margin="0,28,139,93" Click="stop" />
-        <Button Content="PLAY"  Click="play" Margin="0,28,107,93" HorizontalAlignment="Right" Width="30" RenderTransformOrigin="0.189,0.507"/>
+        <Button Content="PLAY"  Click="play" Margin="0,28,107,93" HorizontalAlignment="Right" 
+                Width="30" RenderTransformOrigin="0.189,0.507"/>
         <Button Content="PAUSE" Name="ButtonPause" Margin="70,28,63,93" Click="pause" />
         <Button Content="RECORD" Name="ButtonRecordAndSave"  Margin="0,56,123,65" Click="Button_Click" />
         <Button Content="+" Margin="54,56,93,65" />
