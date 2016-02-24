@@ -68,6 +68,8 @@ namespace Kinect_Wrapper.wrapper
         /// </summary>
         event EventHandler<ImageSource> DisplayImageReady;
 
+        event EventHandler<StreamBase> StreamChanged;
+
         event EventHandler<IAudioMessage> NewUserMessageReady;
 
         List<String> Grammar { get; set; }

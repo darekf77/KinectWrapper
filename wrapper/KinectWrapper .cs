@@ -155,8 +155,15 @@ namespace Kinect_Wrapper.wrapper
             set
             {
                 _stream = value;
+                if (StreamChanged != null && value != null)
+                {
+                    StreamChanged(this, value);
+                }
             }
         }
+
+        public event EventHandler<StreamBase> StreamChanged;
+
 
         public ObservableCollection<StreamBase> Streams
         {

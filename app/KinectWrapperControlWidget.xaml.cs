@@ -33,11 +33,18 @@ namespace Kinect_Wrapper.app
             InitializeComponent();            
             _kinect = kinect;
             ComboboxStreams.SelectedIndex = 0;
+            kinect.StreamChanged += kinect_StreamChanged;
             this.DataContext = new
             {
                 kinectWrap = _kinect,
                 video = _kinect.Device.Video
             };
+        }
+
+        void kinect_StreamChanged(object sender, StreamBase e)
+        {
+            Console.WriteLine("Kinect stream changed");
+            ComboboxStreams.SelectedItem = e; 
         }
      
 
