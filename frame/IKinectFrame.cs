@@ -2,10 +2,11 @@
 using Kinect.Replay.Replay.Color;
 using Kinect.Replay.Replay.Depth;
 using Kinect.Replay.Replay.Skeletons;
-using Kinect_Wrapper.user;
+using Kinect_Wrapper.structures;
 using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,12 +18,9 @@ namespace Kinect_Wrapper.frame
     /// </summary>
     public interface IKinectFrame
     {
-        /// <summary>
-        /// Kinect users
-        /// </summary>
-        IKinectUser[] Users { get; }
+        Dictionary<SkeletonDataType, Point> UserSkeleton { get; set; }
 
-        Boolean IsSkeletonDetected { get; }
+        Boolean IsSkeletonDetected { get; set; }
 
         /// <summary>
         /// get rgba color stream byte
@@ -41,9 +39,6 @@ namespace Kinect_Wrapper.frame
         /// </summary>
         Byte[] DepthColor { get; set; }
         
-
-        int VideoWidth { get; }
-        int VideoHeight { get; }
 
         void synchronize(ReplayDepthImageFrame depthFrame, ReplayColorImageFrame colorFrame, ReplaySkeletonFrame skletonFrame);
         void synchronize(DepthImageFrame depthFrame, ColorImageFrame colorFrame, SkeletonFrame skletonFrame);

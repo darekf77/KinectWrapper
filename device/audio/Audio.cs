@@ -1,6 +1,5 @@
 ﻿using Kinect_Wrapper.device.audio.message;
 using Kinect_Wrapper.structures;
-using Kinect_Wrapper.user;
 using Microsoft.Kinect;
 using Microsoft.Speech.AudioFormat;
 using Microsoft.Speech.Recognition;
@@ -17,7 +16,6 @@ namespace Kinect_Wrapper.device.audio
     public partial class Audio:IAudio
     {
         private IDevice _device;
-        private IKinectUser[] _users = KinectUser.TempInstance;
         private BackgroundWorker worker;        
         private KinectSensor _sensor;
         private String filePathAudio;
@@ -47,20 +45,18 @@ namespace Kinect_Wrapper.device.audio
 
         private void userIsSaying(String words)
         {
-            IKinectUser user = null;
             if (UserSaying != null)
             {
-                if (user == null) user = _users[0]; // TODO recognize user
                 if (UserSaying != null)
                 {
-                    UserSaying(this, new AudioMessage(words, user));
+                    UserSaying(this, new AudioMessage(words));
                 }
             }
         }
 
-        public void Say(string words, IKinectUser user)
+        public void Say(string words)
         {
-            Say( new AudioMessage(words,user));
+            Say( new AudioMessage(words));
         }
 
         public void Say(IAudioMessage message)

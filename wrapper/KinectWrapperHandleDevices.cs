@@ -81,9 +81,9 @@ namespace Kinect_Wrapper.wrapper
             {
                 App.Current.Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    _infoLeftHand.Value = e.Users[0].Skeleton.LeftHand.ToString();
-                    _infoRightHand.Value = e.Users[0].Skeleton.RigthHand.ToString();
-                    _infoSpine.Value = e.Users[0].Skeleton.Spine.ToString();
+                    _infoLeftHand.Value = e.UserSkeleton[SkeletonDataType.LEFT_HAND].ToString();
+                    _infoRightHand.Value = e.UserSkeleton[SkeletonDataType.RIGHT_HAND].ToString();
+                    _infoSpine.Value = e.UserSkeleton[SkeletonDataType.SPINE].ToString();
                     _infoIsSkeletonDetected.Value = e.IsSkeletonDetected.ToString();
                 }));            
             }

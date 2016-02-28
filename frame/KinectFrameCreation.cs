@@ -2,7 +2,7 @@
 using Kinect.Replay.Replay.Color;
 using Kinect.Replay.Replay.Depth;
 using Kinect.Replay.Replay.Skeletons;
-using Kinect_Wrapper.user;
+using Kinect_Wrapper.structures;
 using Microsoft.Kinect;
 using SharedLibJG.Helpers;
 using System;
@@ -31,17 +31,17 @@ namespace Kinect_Wrapper.frame
             //TODO umcoment this
             if (skletonFrame.IsSkeletonDetected)
             {
-                Users[0].Skeleton.RigthHand = new Point(
+                UserSkeleton[SkeletonDataType.RIGHT_HAND] = new Point(
                     skletonFrame.RightHandPositionX,
                     skletonFrame.RightHandPositionY
                     );
 
-                Users[0].Skeleton.LeftHand = new Point(
+                UserSkeleton[SkeletonDataType.LEFT_HAND] = new Point(
                     skletonFrame.LeftHandPositionX,
                     skletonFrame.LeftHandPositionY
                     );
 
-                Users[0].Skeleton.Spine = new Point(
+                UserSkeleton[SkeletonDataType.SPINE] = new Point(
                     skletonFrame.SpinePositionX,
                     skletonFrame.SpinePositionY
                     );
@@ -84,11 +84,11 @@ namespace Kinect_Wrapper.frame
                 if (firstSkeleton.Joints[JointType.Spine].TrackingState == JointTrackingState.Tracked)
                 {
                     IsSkeletonDetected = true;
-                    Users[0].Skeleton.RigthHand =
+                    UserSkeleton[SkeletonDataType.RIGHT_HAND] =
                         ScalePosition(firstSkeleton.Joints[JointType.HandRight].Position);
-                    Users[0].Skeleton.LeftHand =
+                    UserSkeleton[SkeletonDataType.LEFT_HAND] =
                         ScalePosition(firstSkeleton.Joints[JointType.HandLeft].Position);
-                    Users[0].Skeleton.Spine =
+                    UserSkeleton[SkeletonDataType.SPINE] =
                         ScalePosition(firstSkeleton.Joints[JointType.Spine].Position);
                     return;
                 }

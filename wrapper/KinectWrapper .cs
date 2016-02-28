@@ -39,7 +39,6 @@ namespace Kinect_Wrapper.wrapper
         private ObservableCollection<IDevice> _devices;
         private IDevice _currentDevice;
         private BackgroundWorker _worker;
-        private Params _params = new Params();
         private StreamBase _stream;
         private IDevice _defaultDevice;
         private Statistics _statistic;
@@ -209,6 +208,16 @@ namespace Kinect_Wrapper.wrapper
         public bool DeviceNotAvailable
         {
             get { return _currentDevice.Equals(_defaultDevice); }
+        }
+
+        public int VideoWidth
+        {
+            get { return 640; }
+        }
+
+        public int VideoHeight
+        {
+            get { return 480; }
         }
     }
 }

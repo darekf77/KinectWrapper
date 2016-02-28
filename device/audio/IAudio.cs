@@ -1,6 +1,5 @@
 ﻿using Kinect_Wrapper.device.audio.message;
 using Kinect_Wrapper.structures;
-using Kinect_Wrapper.user;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,7 +14,7 @@ namespace Kinect_Wrapper.device.audio
         void start(List<String> grammar);
         void stop();
 
-        void Say(string words, IKinectUser user);
+        void Say(string words);
         void Say(IAudioMessage message);
 
         event EventHandler<IAudioMessage> UserSaying;

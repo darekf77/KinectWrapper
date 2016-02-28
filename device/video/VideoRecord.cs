@@ -2,7 +2,6 @@
 using Kinect.Replay.Replay;
 using Kinect_Wrapper.frame;
 using Kinect_Wrapper.structures;
-using Kinect_Wrapper.user;
 using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;

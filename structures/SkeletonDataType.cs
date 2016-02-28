@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Kinect_Wrapper.structures
 {
-    public enum StreamType
+    public enum SkeletonDataType
     {
-        COLOR,
-        DEPTH,
-        SKELETON
+        RIGHT_HAND,
+        LEFT_HAND,
+        SPINE
     }
 }

@@ -2,7 +2,6 @@
 using Kinect.Replay.Replay;
 using Kinect_Wrapper.frame;
 using Kinect_Wrapper.structures;
-using Kinect_Wrapper.user;
 using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
@@ -76,11 +75,11 @@ namespace Kinect_Wrapper.device.video
             //                        480 / bi.Height));
             _frame = new KinectFrame(BitmapImage2Bitmap(bi));  
         }
-        
+
         private Bitmap BitmapImage2Bitmap(BitmapImage bitmapImage)
         {
             Console.WriteLine(bitmapImage);
-            using(MemoryStream outStream = new MemoryStream())
+            using (MemoryStream outStream = new MemoryStream())
             {
                 BitmapEncoder enc = new BmpBitmapEncoder();
                 enc.Frames.Add(BitmapFrame.Create(bitmapImage));
@@ -90,8 +89,7 @@ namespace Kinect_Wrapper.device.video
                 return new Bitmap(bitmap);
             }
         }
-
-        #region to implement
+        
         
         public bool IsPaused { get; private set; }
 
@@ -119,9 +117,6 @@ namespace Kinect_Wrapper.device.video
                 _isNextFrameSensor = true;
             }
         }
-        #endregion
-
-        #region implementation
 
         
 
@@ -159,18 +154,7 @@ namespace Kinect_Wrapper.device.video
             }
         }
         
-
-
-        public int Width
-        {
-            get { return _frame.VideoWidth; }
-        }
-
-        public int Height
-        {
-            get { return _frame.VideoHeight; }
-
-        }        
+      
 
         public RecordMode RecordingMode
         {
@@ -190,7 +174,6 @@ namespace Kinect_Wrapper.device.video
 
         public event EventHandler<IDevice> RecordComplete;
 
-        #endregion
         
         public event EventHandler<IKinectFrame> FramesReady;
 

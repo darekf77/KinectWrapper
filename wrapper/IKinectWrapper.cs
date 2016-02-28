@@ -16,6 +16,9 @@ namespace Kinect_Wrapper.wrapper
     
     public interface IKinectWrapper
     {
+        int VideoWidth { get; }
+        int VideoHeight { get; }
+
         Boolean DeviceNotAvailable { get; }
         /// <summary>
         /// Observable list of devices

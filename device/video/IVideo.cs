@@ -11,15 +11,6 @@ namespace Kinect_Wrapper.device.video
 {
     public interface IVideo
     {
-        /// <summary>
-        /// Width of frame
-        /// </summary>
-        int Width { get; }
-
-        /// <summary>
-        /// Height of frame
-        /// </summary>
-        int Height { get; }
 
         /// <summary>
         /// check whether device video is paused

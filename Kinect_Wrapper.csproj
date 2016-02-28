@@ -86,14 +86,13 @@
     <Compile Include="statistic\Statistics.cs" />
     <Compile Include="structures\AudioMode.cs" />
     <Compile Include="structures\InfoRow.cs" />
-    <Compile Include="structures\StreamType.cs" />
+    <Compile Include="structures\SkeletonDataType.cs" />
     <Compile Include="structures\DeviceState.cs" />
     <Compile Include="structures\DeviceType.cs" />
     <Compile Include="structures\RecordMode.cs" />
     <Compile Include="wrapper\IKinectWrapper.cs" />
     <Compile Include="wrapper\KinectWrapper .cs" />
     <Compile Include="wrapper\KinectWrapperHandleDevices.cs" />
-    <Compile Include="structures\Params.cs" />
     <Page Include="app\KinectWrapperControlWidget.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -119,10 +118,6 @@
     <Compile Include="device\video\VideoUpdate.cs" />
     <Compile Include="frame\IKinectFrame.cs" />
     <Compile Include="frame\KinectFrame.cs" />
-    <Compile Include="frame\user\IKinectUser.cs" />
-    <Compile Include="frame\user\KinectUser.cs" />
-    <Compile Include="frame\user\skeleton\ISkeleton.cs" />
-    <Compile Include="frame\user\skeleton\Skeleton.cs" />
     <Compile Include="app\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

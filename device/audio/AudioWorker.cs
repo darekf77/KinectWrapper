@@ -1,5 +1,4 @@
 ﻿using Kinect_Wrapper.structures;
-using Kinect_Wrapper.user;
 using Microsoft.Kinect;
 using Microsoft.Speech.AudioFormat;
 using Microsoft.Speech.Recognition;
