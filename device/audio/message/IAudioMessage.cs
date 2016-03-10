@@ -9,5 +9,6 @@ namespace Kinect_Wrapper.device.audio.message
     public interface IAudioMessage
     {
         String Message { get; }
+        float Confidence { get; }
     }
 }

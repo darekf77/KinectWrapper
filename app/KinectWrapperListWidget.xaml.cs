@@ -30,7 +30,8 @@ namespace Kinect_Wrapper.app
             this.DataContext = new
             {
                 kinectWrap = _kinect,
-                video = _kinect.Device.Video
+                video = _kinect.Video,
+                audio = _kinect.Audio
             };
 
         }

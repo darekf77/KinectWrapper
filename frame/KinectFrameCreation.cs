@@ -28,7 +28,7 @@ namespace Kinect_Wrapper.frame
                 _depthByte[i] = (byte)(_depthShort[i] * 0.064-1);
             }
             IsSkeletonDetected = skletonFrame.IsSkeletonDetected;
-            //TODO umcoment this
+            
             if (skletonFrame.IsSkeletonDetected)
             {
                 UserSkeleton[SkeletonDataType.RIGHT_HAND] = new Point(
@@ -78,7 +78,7 @@ namespace Kinect_Wrapper.frame
                                       Tracked
                                       select trackskeleton).FirstOrDefault();
             
-            //TODO uncoment this
+            
             if (firstSkeleton != null)
             {
                 if (firstSkeleton.Joints[JointType.Spine].TrackingState == JointTrackingState.Tracked)

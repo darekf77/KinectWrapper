@@ -17,27 +17,60 @@ namespace Kinect_Wrapper.device
 {
     public partial class Device
     {
+        private void KinectSensors_StatusChanged(object sender, StatusChangedEventArgs e)
+        {
+            if (e.Sensor.UniqueKinectId != sensor.UniqueKinectId) return;
+            if (StateChanged != null)
+            {
+                StateChanged(this, EventArgs.Empty);
+            }
+        }
+
+        private void Replay_ReplayFinished()
+        {
+            if (StateChanged != null)
+            {
+                StateChanged(this, EventArgs.Empty);
+            }
+        }
+
+        private void _video_StreamingStarted(object sender, EventArgs e)
+        {
+            if (_initializingDevice) _initializingDevice = false;
+        }
+
         public DeviceState State
         {
             get
             {
+                if (_initializingDevice) return DeviceState.INITIALIZING;
+                if (_stoppingDevice) return DeviceState.STOPPING;
+
                 if (_deviceType == DeviceType.KINECT_1)
                 {
-                    if (_sensor == null) return DeviceState.NOT_READY;
-                    if (_sensor.Status != KinectStatus.Connected) return DeviceState.NOT_READY;
-
+                    if (sensor == null) return DeviceState.NOT_READY;
+                    if (sensor.Status != KinectStatus.Connected) return DeviceState.NOT_READY;                    
                 }
                 else if (_deviceType == DeviceType.RECORD_FILE_KINECT_1)
                 {
                     if (_filePath == null) return DeviceState.NOT_READY;
                     if (_filePath.Length == 0) return DeviceState.NOT_READY;
-                    FileInfo recordFile = new FileInfo(_filePath);
+                    var recordFile = new FileInfo(_filePath);
                     if (recordFile.Length == 0) return DeviceState.NOT_READY;
                     if (!recordFile.Exists) return DeviceState.NOT_READY;
                 }
-                if (_video != null && _video.IsStreaming) return DeviceState.IS_WORKING_PLAYING;
-                if (_video != null && _video.IsRecording) return DeviceState.IS_WORKING_RECORDING;
-                return DeviceState.IS_READY_NOT_WORKING;
+                else if(_deviceType == DeviceType.NO_DEVICE)
+                {
+                    return DeviceState.IS_WORKING_PLAYING;
+                }
+
+                if (_video.Device!=null && _video.Device.Equals(this))
+                {   
+                    if (_video.IsRecording) return DeviceState.IS_WORKING_RECORDING;
+                    if (_video.IsStreaming) return DeviceState.IS_WORKING_PLAYING;
+                }
+
+                return DeviceState.IS_READY;
             }
         }
 

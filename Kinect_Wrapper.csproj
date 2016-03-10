@@ -71,6 +71,8 @@
     <Compile Include="app\KinectWrapperListWidget.xaml.cs">
       <DependentUpon>KinectWrapperListWidget.xaml</DependentUpon>
     </Compile>
+    <Compile Include="device\audio\AudioDevices.cs" />
+    <Compile Include="device\audio\AudioUserSaying.cs" />
     <Compile Include="device\audio\AudioWorker.cs" />
     <Compile Include="device\audio\message\AudioMessage.cs" />
     <Compile Include="device\audio\message\IAudioMessage.cs" />
@@ -79,6 +81,7 @@
     <Compile Include="device\stream\ColorStream.cs" />
     <Compile Include="device\stream\StreamBase.cs" />
     <Compile Include="device\stream\IStream.cs" />
+    <Compile Include="device\video\VideoDevices.cs" />
     <Compile Include="device\video\VideoRecord.cs" />
     <Compile Include="frame\KinectFrameCreation.cs" />
     <Compile Include="statistic\FrameType.cs" />
@@ -92,7 +95,11 @@
     <Compile Include="structures\RecordMode.cs" />
     <Compile Include="wrapper\IKinectWrapper.cs" />
     <Compile Include="wrapper\KinectWrapper .cs" />
-    <Compile Include="wrapper\KinectWrapperHandleDevices.cs" />
+    <Compile Include="wrapper\KinectWrapperAudioVideo.cs" />
+    <Compile Include="wrapper\KinectWrapperStreams.cs" />
+    <Compile Include="wrapper\KinectWrapperWorker.cs" />
+    <Compile Include="wrapper\KinectWrapperStatistics.cs" />
+    <Compile Include="wrapper\KinectWrapperDevices.cs" />
     <Page Include="app\KinectWrapperControlWidget.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

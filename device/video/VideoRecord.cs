@@ -15,11 +15,15 @@ namespace Kinect_Wrapper.device.video
 {
     public partial class Video
     {
+        private Boolean _isStoppingRecorder = false;
+        private KinectRecorder _recorder;
+        private RecordMode _recordMode = RecordMode.NO_AUDIO;
+
         public void startRecordAndSaveTo(string filename)
         {
             IsRecording = true;
             _isStoppingRecorder = false;
-            _recorder = new KinectRecorder(KinectRecordOptions.Frames, filename, _sensor);
+            _recorder = new KinectRecorder(KinectRecordOptions.Frames, filename, _device.sensor);
         }
 
         public void stopRecord()
@@ -32,9 +36,25 @@ namespace Kinect_Wrapper.device.video
             _recorder = null;
             if (RecordComplete != null)
             {
-                RecordComplete(this, new Device(fileName));
+                RecordComplete(this, fileName);
             }
         }
+
+        public RecordMode RecordingMode
+        {
+            get
+            {
+                return _recordMode;
+            }
+            set
+            {
+                _recordMode = value;
+            }
+        }
+
+        public bool IsRecording { get; private set; }
+
+        public event EventHandler<String> RecordComplete;
 
 
     }

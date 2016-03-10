@@ -40,7 +40,7 @@ namespace Kinect_Wrapper.device.stream
                 640,
                 480,
                 96.0, 96.0, PixelFormats.Bgr32, null);
-            // TODO what bitmap
+            
             _imageSource = new Bitmap(640,480,System.Drawing.Imaging.PixelFormat.Format32bppRgb);            
         }
 
@@ -76,6 +76,11 @@ namespace Kinect_Wrapper.device.stream
                _bitmapaColor.PixelWidth * sizeof(int),
                0);
             return _bitmapaColor;
+        }
+
+        internal object update(object p)
+        {
+            throw new NotImplementedException();
         }
 
         public override string ToString()

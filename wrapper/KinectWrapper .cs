@@ -15,6 +15,8 @@ using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Kinect_Wrapper.device.audio;
+using Kinect_Wrapper.device.video;
 
 namespace Kinect_Wrapper.wrapper
 {
@@ -35,189 +37,37 @@ namespace Kinect_Wrapper.wrapper
             }
         }
         #endregion
-        public Boolean AutoPickUpNewDevice { get; set; }
-        private ObservableCollection<IDevice> _devices;
-        private IDevice _currentDevice;
-        private BackgroundWorker _worker;
-        private StreamBase _stream;
-        private IDevice _defaultDevice;
-        private Statistics _statistic;
-        private ObservableCollection<StreamBase> _streams = new ObservableCollection<StreamBase>();
-        public ObservableCollection<InfoRow> Info { get; private set; }
-
-        InfoRow _infoDeviceName = new InfoRow("Device Name", "");
-        InfoRow _infoRightHand = new InfoRow("RightHandPos", "");
-        InfoRow _infoLeftHand = new InfoRow("LeftHandPos", "");
-        InfoRow _infoSpine = new InfoRow("SpinePos", "");
-        InfoRow _infoIsSkeletonDetected = new InfoRow("IsSkeletonDetected", "");
-        InfoRow _infoFramesPerSecond = new InfoRow("FPS", "");
-        InfoRow _infoWastedFrames = new InfoRow("Wasted FPS", "");
-
+        
+        
         private KinectWrapper()
         {
-            Grammar = new List<string>();
+            initAudioVideo();
             UIEnable = true;
-            _statistic = new Statistics();            
-            Info = new TrulyObservableCollection<InfoRow>();
-            Info.Add(_infoDeviceName);
-            Info.Add(_infoRightHand);
-            Info.Add(_infoLeftHand);
-            Info.Add(_infoSpine);
-            Info.Add(_infoIsSkeletonDetected);
-            Info.Add(_infoFramesPerSecond);
-            Info.Add(_infoWastedFrames);
-            StreamBase color = new ColorStream();
-            _streams.Add(color);
-            _stream = color;
-            StreamBase depth = new DepthStream();
-            _streams.Add(depth);       
-            AutoPickUpNewDevice = true;
-            _devices = new ObservableCollection<IDevice>();
-            _defaultDevice = new Device();
-            prepareDevice(_defaultDevice);
-            checkPotentialSensor();
-            checkPotentialFiles();            
-            _worker = new BackgroundWorker();
-            _worker.DoWork += _worker_DoWork;
-            _worker.RunWorkerAsync();
+            initStatistics();
+            initStreams();
+            initDevices();
+            initWorker();
         }
 
-
-        #region implementation
-        // stop worker when replay from file on no current device
-        void _worker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            while (true)
-            {
-                if (_currentDevice != null)
-                {                    
-                    _currentDevice.update();
-                    if (_currentDevice.Type == DeviceType.NO_DEVICE)
-                    {
-                        Thread.Sleep(1000);
-                    }                    
-                    continue;
-                }
-                lock (_locker)
-                    while (_currentDevice == null || 
-                        _currentDevice.Type == DeviceType.RECORD_FILE_KINECT_1)
-                        Monitor.Wait(_locker);// thread is waiting until new data from kinect                 
-            }
-        }
-
-        public void commit(IKinectFrame out_frame)
-        {            
-            if (DisplayImageReady != null)
-            {
-                _statistic.commitFrame(FrameType.NORMAL);
-                DisplayImageReady(this, _stream.update(out_frame));
-                _infoFramesPerSecond.Value = _statistic.FramesPerSecond(FrameType.NORMAL).ToString()+ "/s";
-            }
-        }
-
-        public void commit(System.Drawing.Bitmap out_frame)
-        {
-            if (DisplayImageReady != null)
-            {
-                _statistic.commitFrame(FrameType.NORMAL);
-                DisplayImageReady(this, _stream.update(HelpersConverters.ToBitmapSourceSlow(out_frame)));
-                _infoFramesPerSecond.Value = _statistic.FramesPerSecond(FrameType.NORMAL).ToString() + "/s";          
-            }
-        }
-
-        void _currentDevice_RecordComplete(object sender, IDevice d)
-        {
-            _devices.Add(d);
-        }
-          
-        public ObservableCollection<IDevice> Devices
-        {
-            get { return _devices; }
-        }
         
-        public IDevice Device
-        {
-            get { return _currentDevice; }
-            set
-            {
-                _currentDevice = value;
-                selectNewCurrentDevice(_currentDevice);
-            }
-        }
 
-        public StreamBase Stream
-        {
-            get
-            {
-                return _stream;
-            }
-            set
-            {
-                _stream = value;
-                if (StreamChanged != null && value != null)
-                {
-                    StreamChanged(this, value);
-                }
-            }
-        }
-
-        public event EventHandler<StreamBase> StreamChanged;
-
-
-        public ObservableCollection<StreamBase> Streams
-        {
-            get
-            {
-                return _streams;
-            }
-            set
-            {
-                _streams = value;
-            }
-        }
-
-        #endregion
-        
         public event PropertyChangedEventHandler PropertyChanged;
-        
-        public event EventHandler<IKinectFrame> FrameReady;
 
-        public event EventHandler<System.Windows.Media.ImageSource> DisplayImageReady;
+        public event EventHandler<ImageSource> DisplayImageReady;
 
         
+
         virtual protected void OnPropertyChanged(string propName)
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propName));
         }
 
-        public Boolean UIEnable { get; set; }
-
-
-        public event EventHandler<IAudioMessage> NewUserMessageReady;
-        
-        public List<string> Grammar { get; set; }
 
 
 
 
 
-        public IDevice SelectedDevice { get; set; }
 
-
-        public bool DeviceNotAvailable
-        {
-            get { return _currentDevice.Equals(_defaultDevice); }
-        }
-
-        public int VideoWidth
-        {
-            get { return 640; }
-        }
-
-        public int VideoHeight
-        {
-            get { return 480; }
-        }
     }
 }

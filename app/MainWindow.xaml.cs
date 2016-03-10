@@ -45,7 +45,7 @@ namespace Kinect_Wrapper
 
         void initApp()
         {
-            kinect.FrameReady += kinect_ReadyFrame;
+            kinect.Video.FrameReady += kinect_ReadyFrame;
             kinect.DisplayImageReady += kinect_ReadyDisplayImage;
         }
 

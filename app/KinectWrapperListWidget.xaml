@@ -34,6 +34,20 @@
                 </ListView>
             </Grid>
         </TabItem>
+        <TabItem Header="Audio" Name="TabCommands" Margin="-2,-2,2,0">
+            <Grid >
+                <ListView Name="ListViewCommands"  ItemsSource="{Binding audio.Grammar}"
+                          PreviewMouseLeftButtonUp="ListViewDevices_PreviewMouseLeftButtonDown" >
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Width="160" Header="Commands" DisplayMemberBinding="{Binding}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
+        </TabItem>
+        
+        
     </TabControl>
 
 

@@ -14,93 +14,73 @@ using System.Threading;
 namespace Kinect_Wrapper.device.audio
 {
     public partial class Audio:IAudio
-    {
-        private IDevice _device;
-        private BackgroundWorker worker;        
-        private KinectSensor _sensor;
-        private String filePathAudio;
-        private Boolean _deviceStarted = false;
+    {        
+        private BackgroundWorker worker;     
+        
+        public SpeechRecognitionEngine SpeechRecognizer { get; private set; }
+        public ObservableCollection<String> Grammar { get; set; }
 
-        private SpeechRecognitionEngine speechRecognizer;
-        private Choices _grammar;
-        private SpeechRecognitionEngine sre;
         private KinectAudioSource audioSource;
+        private RecognizerInfo recognizerInfo = GetRecognizer();
 
-        public Audio(IDevice device,KinectSensor sensor)
-        {
-            _device = device;
-            _sensor = sensor;           
+        private Boolean audioStarted = false;
+
+        public Audio() {
+            Grammar = new ObservableCollection<String>();
+            Grammar.CollectionChanged += Grammar_CollectionChanged;
         }
 
-        public Audio(IDevice device, String filepath)
+        private void Grammar_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            _device = device;
-            filePathAudio = filepath;
+            if(audioStarted) SpeechRecognizer.LoadGrammarAsync(GetCurrentGrammar());
         }
 
-        public Audio(IDevice device)
+        private Grammar GetCurrentGrammar()
         {
-            _device = device;
-        }
-
-        private void userIsSaying(String words)
-        {
-            if (UserSaying != null)
+            var gb = new GrammarBuilder { Culture = recognizerInfo.Culture };
+            var choices = new Choices();
+            foreach (var word in Grammar)
             {
-                if (UserSaying != null)
+                choices.Add(word);
+            }
+            gb.Append(choices);
+            //set up the grammar builder
+            return new Grammar(gb);
+        }
+
+       
+
+        private static RecognizerInfo GetRecognizer()
+        {
+            #region speech recognizer info
+            Console.WriteLine("BEFORE");
+            foreach (RecognizerInfo ri in SpeechRecognitionEngine.InstalledRecognizers())
+            {
+                Console.WriteLine(String.Format("Id={0}, Name={1}, Description={2}, Culture={3}", ri.Id, ri.Name, ri.Description, ri.Culture));
+                foreach (string key in ri.AdditionalInfo.Keys)
                 {
-                    UserSaying(this, new AudioMessage(words));
+                    Console.WriteLine(string.Format("{0} = {1}", key, ri.AdditionalInfo[key]));
+                }
+                Console.WriteLine("-");
+            }
+
+            Console.WriteLine("AFTER");
+            #endregion
+            foreach (RecognizerInfo recognizer in SpeechRecognitionEngine.InstalledRecognizers())
+            {
+                System.Diagnostics.Debug.Write(recognizer.Culture.Name + "\n\n");
+                //string value;
+                //recognizer.AdditionalInfo.TryGetValue("KinectDevice",out value);
+                if ("en-US".Equals(recognizer.Culture.Name, StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine("Recodnizer description" + recognizer.Description);
+                    Console.WriteLine("Recodnizer id" + recognizer.Id);
+                    return recognizer;
                 }
             }
+
+            return null;
         }
-
-        public void Say(string words)
-        {
-            Say( new AudioMessage(words));
-        }
-
-        public void Say(IAudioMessage message)
-        {
-            userIsSaying(message.Message);
-        }               
-
-        private void SreSpeechRecognized(object sender, SpeechRecognizedEventArgs e)
-        {
-            userIsSaying(e.Result.Text);
-        }
-
-        public event EventHandler<IAudioMessage> UserSaying;
-
-        public void start(List<string> grammar)
-        {
-            if (_device.Type == DeviceType.KINECT_1)
-            {
-                _grammar = new Choices();
-                foreach (var word in grammar)
-                {
-                    _grammar.Add(word);
-                }
-                worker = new BackgroundWorker();
-                worker.DoWork += worker_DoWork;
-                worker.RunWorkerAsync();
-            }
-        }
-
-        public void stop()
-        {
-            if (_device.Type == DeviceType.KINECT_1 && _deviceStarted)
-            {
-                _deviceStarted = false;
-                audioSource.Stop();
-                speechRecognizer.RecognizeAsyncStop();
-                speechRecognizer.UnloadAllGrammars();
-                sre.SpeechRecognized -= SreSpeechRecognized;
-                sre.SpeechHypothesized -= SreSpeechHypothesized;
-                sre.SpeechRecognitionRejected -= SreSpeechRecognitionRejected;
-                worker.DoWork -= new DoWorkEventHandler(worker_DoWork);
-            }            
-        }
-
 
 
     }

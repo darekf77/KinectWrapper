@@ -18,106 +18,99 @@ namespace Kinect_Wrapper.device
 {
     public partial class Device :IDevice
     {
-        public event EventHandler<IDevice> RecordComplete;
-        private KinectSensor _sensor;
-        private DeviceType _deviceType;
-        private String _filePath;        
-        private KinectReplay _replay;
-        private IAudio _audio;
-        private Video _video;
-        private String _name;
-      
+        public KinectSensor sensor { get; private set; }
+        public KinectReplay replay { get; private set; }
 
-        public Device(KinectSensor sensor_xbox360)
+        private DeviceType _deviceType;
+
+        private String _filePath;
+
+        private IAudio _audio; 
+        private IVideo _video;
+        private String _name;
+
+        public event EventHandler StateChanged;
+
+        public Device(IAudio audio,IVideo video, KinectSensor sensor_xbox360)
         {
-            _sensor = sensor_xbox360;
+            _audio = audio;
+            _video = video;
+            sensor = sensor_xbox360;
+            KinectSensor.KinectSensors.StatusChanged += KinectSensors_StatusChanged;
             _deviceType = DeviceType.KINECT_1;
-            _name = "KinectX360-" + _sensor.UniqueKinectId;            
-            KinectSensor.KinectSensors.StatusChanged += KinectSensors_StatusChanged; //TODO what to do
-            if (_sensor.Status == KinectStatus.Connected)
-            {
-                _video = new Video(this, _sensor);
-                _audio = new Audio(this, _sensor);
-            }
+            _name = "KinectX360-" + sensor.UniqueKinectId;        
         }
-                
-        public Device(String filePath) {
+        
+        public Device(IAudio audio, IVideo video, String filePath) {
+            _audio = audio;
+            _video = video;
             _filePath = filePath;
             _deviceType = DeviceType.RECORD_FILE_KINECT_1;
             _name = "RecordFile-" + System.IO.Path.GetFileName(_filePath);
-            _replay = new KinectReplay(_filePath);
-            _video = new Video(this, _replay);
-            _audio = new Audio(this,_filePath);
-        }
-
-        public Device()
-        {
-            _deviceType = DeviceType.NO_DEVICE;
-            _name = "Plug in your Kinect";
-            _video = new Video(this);
-            _audio = new Audio(this);
+            replay = new KinectReplay(_filePath);
+            replay.ReplayFinished += Replay_ReplayFinished;
         }
                 
-
-        void KinectSensors_StatusChanged(object sender, StatusChangedEventArgs e)
+        public Device(IAudio audio, IVideo video)
         {
-            if (e.Status == KinectStatus.Connected && _video != null)
-            {
-                _video = new Video(this, _sensor);
-                _audio = new Audio(this, _sensor);
-            }
+            _audio = audio;
+            _video = video;
+            _deviceType = DeviceType.NO_DEVICE;
+            _name = "Plug in your Kinect";
         }
 
-        #region implementation
-
+        private Boolean _initializingDevice = false;
+        
         public void start()
         {
-            try
+            _initializingDevice = true;
+            stop();
+            _video.StreamingStarted += _video_StreamingStarted;
+            if (Type == DeviceType.KINECT_1)
             {
-                if (_deviceType == DeviceType.KINECT_1)
+                try
                 {
-                    if (_sensor != null)
-                    {
-                        try
-                        {
-                            _sensor.Start();
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine("cannot start kinect or already started"+ e.Message);
-                        }
-                        
-                        if (_video == null) _video = new Video(this, _sensor);
-                    }
-                    
+                    sensor.Start();
+                    sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
+                    sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
+                    sensor.SkeletonStream.Enable();
+
+                    _video.Device = this;
+                    _audio.Device = this;
                 }
-                else if (_deviceType == DeviceType.RECORD_FILE_KINECT_1)
+                catch (Exception e)
                 {
-                    if (_replay != null) _replay.Start();
+                    Console.WriteLine("cannot start kinect or already started" + e.Message);
                 }
             }
-            catch (Exception ex)
+            else
+            if (Type == DeviceType.RECORD_FILE_KINECT_1)
             {
-                Console.WriteLine(ex.Message);
-            }            
+                _video.Device = this;
+                _audio.Device = this;
+            }
+            if(Type == DeviceType.NO_DEVICE)
+            {
+                _video.Device = this;
+                _audio.Device = this;
+                _initializingDevice = false;
+            }           
         }
 
+        
+
+        private Boolean _stoppingDevice = false;
         public void stop()
         {
-            if (_video != null)
+            _stoppingDevice = true;
+            _video.StreamingStarted -= _video_StreamingStarted;
+            _video.Device = null;
+            _audio.Device = null;
+            _stoppingDevice = false;
+            if (StateChanged != null)
             {
-                if(_video.IsRecording) _video.stopRecord();
+                StateChanged(this, EventArgs.Empty);
             }
-            if (_deviceType == DeviceType.KINECT_1)
-            {
-                if (_sensor != null) _sensor.Stop();
-            }
-            else if(_deviceType == DeviceType.RECORD_FILE_KINECT_1)
-            {
-                if (_replay != null) _replay.Stop();
-            }
-            if (StateChanged!=null)
-                StateChanged(this, State);
         }
 
         public string Name
@@ -131,41 +124,28 @@ namespace Kinect_Wrapper.device
             {
                 if (_deviceType == DeviceType.KINECT_1)
                 {
-                    return _sensor.DeviceConnectionId;
+                    return sensor.DeviceConnectionId;
                 }
                 return _filePath;
             }
         }
 
-        public Kinect_Wrapper.structures.DeviceType Type
+        public DeviceType Type
         {
             get { return _deviceType; }
         }
-                
-        public audio.IAudio Audio
-        {
-            get { return _audio; }
-        }
-
-        public video.IVideo Video
-        {
-            get { return _video; }
-        }
+          
 
         public override string ToString()
         {
-            return "Device from list";
+            return Name;
         }
 
         public void update()
         {
             if (_video != null) _video.update();
         }
-
-        #endregion
-
-        public event EventHandler<DeviceState> StateChanged;
-
+        
 
 
     }

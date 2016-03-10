@@ -1,5 +1,6 @@
 ﻿using Kinect_Wrapper.device.audio.message;
 using Kinect_Wrapper.structures;
+using Microsoft.Speech.Recognition;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,13 +12,12 @@ namespace Kinect_Wrapper.device.audio
 {
     public interface IAudio
     {
-        void start(List<String> grammar);
-        void stop();
+        IDevice Device { get; set; }
 
-        void Say(string words);
-        void Say(IAudioMessage message);
+        ObservableCollection<String> Grammar { get; set; }
+
+        SpeechRecognitionEngine SpeechRecognizer { get; }
 
         event EventHandler<IAudioMessage> UserSaying;
-
     }
 }

@@ -8,9 +8,11 @@ namespace Kinect_Wrapper.structures
 {
     public enum DeviceState
     {
-        IS_READY_NOT_WORKING,
+        NOT_READY,
+        INITIALIZING,
+        IS_READY,
         IS_WORKING_PLAYING,
         IS_WORKING_RECORDING,
-        NOT_READY
+        STOPPING
     }
 }

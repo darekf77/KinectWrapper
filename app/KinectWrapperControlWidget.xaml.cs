@@ -37,7 +37,7 @@ namespace Kinect_Wrapper.app
             this.DataContext = new
             {
                 kinectWrap = _kinect,
-                video = _kinect.Device.Video
+                video = _kinect.Video
             };
         }
 
@@ -66,7 +66,7 @@ namespace Kinect_Wrapper.app
         private String _labelDefaultPause;
         private void pause(object sender, RoutedEventArgs e)
         {
-            if (_kinect.Device.Video.IsPaused)
+            if (_kinect.Video.IsPaused)
             {
                 ButtonPause.Content = _labelDefaultPause;
             }
@@ -75,20 +75,20 @@ namespace Kinect_Wrapper.app
                 _labelDefaultPause = ButtonPause.Content.ToString();
                 ButtonPause.Content = "START";
             }
-            _kinect.Device.Video.pausePlay();
+            _kinect.Video.pausePlay();
         }
 
         private String _labelDefaultRecord;
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if(_kinect.Device.Video.IsRecording) {
-                _kinect.Device.Video.stopRecord();
+            if(_kinect.Video.IsRecording) {
+                _kinect.Video.stopRecord();
                 ButtonRecordAndSave.Content = _labelDefaultRecord;
             }
             else {
                 var saveFileDialog = new SaveFileDialog { Title = "Select filename", Filter = "Replay files|*.replay" };
                 if (saveFileDialog.ShowDialog() != true) return;
-                _kinect.Device.Video.startRecordAndSaveTo(saveFileDialog.FileName);
+                _kinect.Video.startRecordAndSaveTo(saveFileDialog.FileName);
                 _labelDefaultRecord = ButtonRecordAndSave.Content.ToString();
                 ButtonRecordAndSave.Content = "STOP REC.";
             }
@@ -101,7 +101,7 @@ namespace Kinect_Wrapper.app
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            _kinect.Device.Video.nextFrame();
+            _kinect.Video.nextFrame();
         }
 
 

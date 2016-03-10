@@ -19,13 +19,53 @@ namespace Kinect_Wrapper.device.video
 {
     public partial class Video
     {
+        public event EventHandler StreamingStarted;
+        private Boolean _isStreaming = false;
+
+        public bool IsStreaming
+        {
+            get
+            {
+                return _isStreaming;
+            }
+            set
+            {
+                var before = _isStreaming;
+                _isStreaming = value;
+                if(value && !before && StreamingStarted!=null)
+                {
+                    StreamingStarted(this, EventArgs.Empty);
+                }
+                OnPropertyChanged("IsStreaming");
+            }
+        }
+
+
+        public void update()
+        {
+            if (_device == null) return;
+            if (_device.Type == DeviceType.KINECT_1)
+            {
+                IsStreaming = updateFrames();
+            }
+            else if (_device.Type == DeviceType.RECORD_FILE_KINECT_1)
+            {
+                IsStreaming = (_device!=null &&_device.replay.Started && !_device.replay.IsFinished);
+            }
+            else if (_device.Type == DeviceType.NO_DEVICE)
+            {
+                IsStreaming = false;
+                updateFramesNoDevice();
+            }
+        }
+
         void _replay_ReplayFinished()
         {
             IsStreaming = false;
             Console.WriteLine("Replay finish");
-            if (_replay != null)
+            if (_device.replay != null)
             {
-                _replay.Start();
+                _device.replay.Start();
             }
         }
 
@@ -39,24 +79,25 @@ namespace Kinect_Wrapper.device.video
             if (color != null && skeleton != null && depth != null)
             {
                 _frame.synchronize(depth, color, skeleton);
-                if(FramesReady!=null)
-                FramesReady(this, _frame);
+                if(FrameReady!=null)
+                FrameReady(this, _frame);
             }
         }
 
         private Boolean updateFrames()
         {
             //Console.WriteLine("isStreaming kinect" + IsStreaming.ToString());
-            if (_sensor == null ||
-                !_sensor.IsRunning ||
-                _sensor.Status != KinectStatus.Connected)
+            var sensor = _device.sensor;
+            if (sensor == null ||
+                !sensor.IsRunning ||
+                sensor.Status != KinectStatus.Connected)
                 return false;
-            if (_sensor.DepthStream == null || _sensor.SkeletonStream == null || _sensor.ColorStream == null) return false;
-            if (!_sensor.DepthStream.IsEnabled || !_sensor.ColorStream.IsEnabled || !_sensor.SkeletonStream.IsEnabled) return false;
+            if (sensor.DepthStream == null || sensor.SkeletonStream == null || sensor.ColorStream == null) return false;
+            if (!sensor.DepthStream.IsEnabled || !sensor.ColorStream.IsEnabled || !sensor.SkeletonStream.IsEnabled) return false;
             if (IsPaused)
             {
                 Thread.Sleep(300);
-                FramesReady(this, _frame);
+                FrameReady(this, _frame);
                 if (_isNextFrameSensor) IsPaused = false;
                 return true;
             }
@@ -68,9 +109,9 @@ namespace Kinect_Wrapper.device.video
                     _isNextFrameSensor = false;
                 }
             }
-            using (DepthImageFrame depthFrame = _sensor.IsRunning ? _sensor.DepthStream.OpenNextFrame(0) : null)
-            using (SkeletonFrame skeletonFrame = _sensor.IsRunning?_sensor.SkeletonStream.OpenNextFrame(100):null)
-            using (ColorImageFrame colorFrame = _sensor.IsRunning?_sensor.ColorStream.OpenNextFrame(100):null)
+            using (DepthImageFrame depthFrame = sensor.IsRunning ? sensor.DepthStream.OpenNextFrame(0) : null)
+            using (SkeletonFrame skeletonFrame = sensor.IsRunning?sensor.SkeletonStream.OpenNextFrame(100):null)
+            using (ColorImageFrame colorFrame = sensor.IsRunning?sensor.ColorStream.OpenNextFrame(100):null)
             {
 
                 if (depthFrame != null && colorFrame != null && skeletonFrame != null)
@@ -80,9 +121,9 @@ namespace Kinect_Wrapper.device.video
                     {
                         _recorder.Record(colorFrame);
                         _recorder.Record(depthFrame);
-                        _recorder.Record(skeletonFrame,_sensor);
+                        _recorder.Record(skeletonFrame,sensor);
                     }
-                    FramesReady(this, _frame);
+                    FrameReady(this, _frame);
                     return true;
                 }                
             }
@@ -93,7 +134,7 @@ namespace Kinect_Wrapper.device.video
         private void updateFramesNoDevice() {
             _frame.synchronize(_device.Name,toogleVisibleMessage);
             toogleVisibleMessage = !toogleVisibleMessage;
-            if (FramesReady!=null) FramesReady(this, _frame);
+            if (FrameReady!=null) FrameReady(this, _frame);
         }
         
 
