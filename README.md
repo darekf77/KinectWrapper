@@ -6,4 +6,4 @@ KinectWrapper
 
 
 
-![Zrzut ekranu](screen.png)
+![Zrzut ekranu](screen.PNG)
