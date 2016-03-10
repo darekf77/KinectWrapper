@@ -64,7 +64,7 @@ namespace Kinect_Wrapper.device
                     return DeviceState.IS_WORKING_PLAYING;
                 }
 
-                if (_video.Device!=null && _video.Device.Equals(this))
+                if (_video.CurrentDevice!=null && _video.CurrentDevice.Equals(this))
                 {   
                     if (_video.IsRecording) return DeviceState.IS_WORKING_RECORDING;
                     if (_video.IsStreaming) return DeviceState.IS_WORKING_PLAYING;

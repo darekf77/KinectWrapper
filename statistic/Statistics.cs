@@ -31,7 +31,7 @@ namespace Kinect_Wrapper.statistic
         {
             _frames = new Dictionary<FrameType, Frame>();
             _frames[FrameType.NORMAL] = new Frame();
-            _frames[FrameType.MISSING_BALL_DETECTOR] = new Frame();
+            _frames[FrameType.MISSING_TARGET] = new Frame();
             _worker = new BackgroundWorker();
             _worker.DoWork += _worker_DoWork;
             _worker.RunWorkerAsync();
@@ -62,7 +62,7 @@ namespace Kinect_Wrapper.statistic
         {
             get
             {
-                return _frames[FrameType.MISSING_BALL_DETECTOR].getFrameRate();
+                return _frames[FrameType.MISSING_TARGET].getFrameRate();
             }
         }
 

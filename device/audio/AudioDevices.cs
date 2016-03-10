@@ -17,7 +17,7 @@ namespace Kinect_Wrapper.device.audio
     {
         private IDevice _device;
 
-        public IDevice Device
+        public IDevice CurrentDevice
         {
             get
             {

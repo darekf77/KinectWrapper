@@ -17,7 +17,7 @@ namespace Kinect_Wrapper.device.video
 
         int Height { get; }
 
-        IDevice Device { get; set; }
+        IDevice CurrentDevice { get; set; }
         
         void update();                
 

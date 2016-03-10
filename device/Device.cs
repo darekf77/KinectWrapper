@@ -75,8 +75,8 @@ namespace Kinect_Wrapper.device
                     sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
                     sensor.SkeletonStream.Enable();
 
-                    _video.Device = this;
-                    _audio.Device = this;
+                    _video.CurrentDevice = this;
+                    _audio.CurrentDevice = this;
                 }
                 catch (Exception e)
                 {
@@ -86,13 +86,13 @@ namespace Kinect_Wrapper.device
             else
             if (Type == DeviceType.RECORD_FILE_KINECT_1)
             {
-                _video.Device = this;
-                _audio.Device = this;
+                _video.CurrentDevice = this;
+                _audio.CurrentDevice = this;
             }
             if(Type == DeviceType.NO_DEVICE)
             {
-                _video.Device = this;
-                _audio.Device = this;
+                _video.CurrentDevice = this;
+                _audio.CurrentDevice = this;
                 _initializingDevice = false;
             }           
         }
@@ -104,8 +104,8 @@ namespace Kinect_Wrapper.device
         {
             _stoppingDevice = true;
             _video.StreamingStarted -= _video_StreamingStarted;
-            _video.Device = null;
-            _audio.Device = null;
+            _video.CurrentDevice = null;
+            _audio.CurrentDevice = null;
             _stoppingDevice = false;
             if (StateChanged != null)
             {

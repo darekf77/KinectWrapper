@@ -87,7 +87,6 @@
     <Compile Include="statistic\FrameType.cs" />
     <Compile Include="statistic\IStatistics.cs" />
     <Compile Include="statistic\Statistics.cs" />
-    <Compile Include="structures\AudioMode.cs" />
     <Compile Include="structures\InfoRow.cs" />
     <Compile Include="structures\SkeletonDataType.cs" />
     <Compile Include="structures\DeviceState.cs" />

@@ -24,7 +24,7 @@ namespace Kinect_Wrapper.device.video
         private IKinectFrame _frame;
         
 
-        public IDevice Device
+        public IDevice CurrentDevice
         {
             set
             {

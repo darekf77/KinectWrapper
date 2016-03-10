@@ -22,7 +22,7 @@ namespace Kinect_Wrapper.wrapper
         
         IVideo Video { get; }
 
-        Boolean DeviceNotAvailable { get; }
+        Boolean IsStopped { get; }
         
         ObservableCollection<IDevice> Devices { get; }
         

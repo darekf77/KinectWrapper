@@ -9,6 +9,6 @@ namespace Kinect_Wrapper.statistic
     public enum FrameType
     {
         NORMAL,
-        MISSING_BALL_DETECTOR
+        MISSING_TARGET
     }
 }

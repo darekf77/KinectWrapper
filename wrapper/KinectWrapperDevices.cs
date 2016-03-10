@@ -55,7 +55,7 @@ namespace Kinect_Wrapper.wrapper
         }
                 
 
-        public bool DeviceNotAvailable
+        public bool IsStopped
         {
             get { return _currentDevice.Equals(_defaultDevice); }
         }

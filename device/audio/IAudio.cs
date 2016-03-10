@@ -12,7 +12,7 @@ namespace Kinect_Wrapper.device.audio
 {
     public interface IAudio
     {
-        IDevice Device { get; set; }
+        IDevice CurrentDevice { get; set; }
 
         ObservableCollection<String> Grammar { get; set; }
 
