@@ -6,7 +6,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAkAAAEwAAAAAQAAgAIAAAAQAAAAEAEAgA=</HashCode>
+      <HashCode>AAAAAAAAAAAkAAAEQAAAAAQAAgAIAAAAQAAAAEAEAgA=</HashCode>
       <FileName>device\stream\StreamBase.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.1" />
@@ -18,14 +18,11 @@
       <FileName>wrapper\IKinectWrapper.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Property Name="Device" />
-      <Property Name="SelectedDevice" />
+      <Property Name="Audio" />
       <Property Name="Video" />
       <Property Name="Stream" />
-      <Property Name="Audio" />
     </ShowAsAssociation>
     <ShowAsCollectionAssociation>
-      <Property Name="Devices" />
       <Property Name="Streams" />
     </ShowAsCollectionAssociation>
   </Interface>

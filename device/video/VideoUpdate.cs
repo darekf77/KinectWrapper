@@ -44,15 +44,15 @@ namespace Kinect_Wrapper.device.video
         public void update()
         {
             if (_device == null) return;
-            if (_device.Type == DeviceType.KINECT_1)
+            if (_device != null && _device.Type == DeviceType.KINECT_1)
             {
                 IsStreaming = updateFrames();
             }
-            else if (_device.Type == DeviceType.RECORD_FILE_KINECT_1)
+            else if (_device != null && _device.Type == DeviceType.RECORD_FILE_KINECT_1)
             {
                 IsStreaming = (_device!=null &&_device.replay.Started && !_device.replay.IsFinished);
             }
-            else if (_device.Type == DeviceType.NO_DEVICE)
+            else if (_device != null && _device.Type == DeviceType.NO_DEVICE)
             {
                 IsStreaming = false;
                 updateFramesNoDevice();

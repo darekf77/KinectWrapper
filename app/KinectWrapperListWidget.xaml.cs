@@ -38,7 +38,7 @@ namespace Kinect_Wrapper.app
 
         private void ListViewDevices_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {            
-            _kinect.SelectedDevice = (IDevice)ListViewDevices.SelectedItem;            
+            _kinect.SelectedDevice = (DeviceBase)ListViewDevices.SelectedItem;            
         }
 
     }

@@ -4,6 +4,7 @@ using Kinect_Wrapper.device.stream;
 using Kinect_Wrapper.frame;
 using Kinect_Wrapper.structures;
 using Microsoft.Kinect;
+using SharedLibJG.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,16 +17,16 @@ namespace Kinect_Wrapper.wrapper
 {
     public partial class KinectWrapper
     {
-        private IDevice _defaultDevice;
-        private ObservableCollection<IDevice> _devices;
-        private IDevice _currentDevice;
-        public IDevice SelectedDevice { get; set; }
+        private DeviceBase _defaultDevice;
+        private ObservableCollection<DeviceBase> _devices;
+        private DeviceBase _currentDevice;
+        public DeviceBase SelectedDevice { get; set; }
 
         public static Boolean AutoPickUpFirstKinect = false;
 
         private void initDevices()
         {
-            _devices = new ObservableCollection<IDevice>();
+            _devices = new TrulyObservableCollection<DeviceBase>();
             _defaultDevice = new Device(Audio, Video);
             Device = _defaultDevice;
             Device.start();
@@ -61,12 +62,12 @@ namespace Kinect_Wrapper.wrapper
         }
 
 
-        public ObservableCollection<IDevice> Devices
+        public ObservableCollection<DeviceBase> Devices
         {
             get { return _devices; }
         }
 
-        public IDevice Device
+        public DeviceBase Device
         {
             get { return _currentDevice; }
             set

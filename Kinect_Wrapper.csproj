@@ -76,6 +76,7 @@
     <Compile Include="device\audio\AudioWorker.cs" />
     <Compile Include="device\audio\message\AudioMessage.cs" />
     <Compile Include="device\audio\message\IAudioMessage.cs" />
+    <Compile Include="device\Device.cs" />
     <Compile Include="device\DeviceState.cs" />
     <Compile Include="device\stream\DepthStream.cs" />
     <Compile Include="device\stream\ColorStream.cs" />
@@ -117,7 +118,7 @@
     </Compile>
     <Compile Include="device\audio\Audio.cs" />
     <Compile Include="device\audio\IAudio.cs" />
-    <Compile Include="device\Device.cs" />
+    <Compile Include="device\DeviceBase.cs" />
     <Compile Include="device\IDevice.cs" />
     <Compile Include="device\video\IVideo.cs" />
     <Compile Include="device\video\Video.cs" />

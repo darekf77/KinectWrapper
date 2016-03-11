@@ -24,11 +24,11 @@ namespace Kinect_Wrapper.wrapper
 
         Boolean IsStopped { get; }
         
-        ObservableCollection<IDevice> Devices { get; }
+        ObservableCollection<DeviceBase> Devices { get; }
         
-        IDevice Device { get; set; }
+        DeviceBase Device { get; set; }
 
-        IDevice SelectedDevice { get; set; }
+        DeviceBase SelectedDevice { get; set; }
         
         StreamBase Stream { get; set; }
         
