@@ -7,14 +7,6 @@ namespace Kinect_Wrapper.device
 {
     public partial class DeviceBase
     {
-        private void KinectSensors_StatusChanged(object sender, StatusChangedEventArgs e)
-        {
-            if (e.Sensor.UniqueKinectId != sensor.UniqueKinectId) return;
-            if (StateChanged != null)
-            {
-                StateChanged(this, EventArgs.Empty);
-            }
-        }
 
         private void Replay_ReplayFinished()
         {
@@ -49,19 +41,19 @@ namespace Kinect_Wrapper.device
             }
             else if (_deviceType == DeviceType.NO_DEVICE)
             {
-                return DeviceState.IS_WORKING_PLAYING;
+                return DeviceState.PLAYING;
             }
 
             if (_video.CurrentDevice != null && _video.CurrentDevice.Equals(this))
             {
-                if (_video.IsRecording) return DeviceState.IS_WORKING_RECORDING;
-                if (_video.IsStreaming) return DeviceState.IS_WORKING_PLAYING;
+                if (_video.IsRecording) return DeviceState.RECORDING;
+                if (_video.IsStreaming) return DeviceState.PLAYING;
             }
 
-            return DeviceState.IS_READY;
+            return DeviceState.READY;
         }
 
-        private DeviceState _state = DeviceState.IS_READY;
+        private DeviceState _state = DeviceState.READY;
         public DeviceState State
         {
             get

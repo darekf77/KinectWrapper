@@ -6,6 +6,7 @@ using Kinect_Wrapper.wrapper;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,20 +27,24 @@ namespace Kinect_Wrapper.app
     /// </summary>
     public partial class PageKinectWrapperControl : Page
     {
-        private IKinectWrapper _kinect;
+        private IKinectWrapper Kinect;
         
         public PageKinectWrapperControl(IKinectWrapper kinect)
         {
             InitializeComponent();            
-            _kinect = kinect;
+            Kinect = kinect;
             ComboboxStreams.SelectedIndex = 0;
             kinect.StreamChanged += kinect_StreamChanged;
             this.DataContext = new
             {
-                kinectWrap = _kinect,
-                video = _kinect.Video
+                kinect = Kinect,
+                video = Kinect.Video,
+                audio = Kinect.Audio
             };
         }
+
+       
+        
 
         void kinect_StreamChanged(object sender, StreamBase e)
         {
@@ -54,52 +59,42 @@ namespace Kinect_Wrapper.app
 
         private void play(object sender, RoutedEventArgs e)
         {
-            _kinect.Device = _kinect.SelectedDevice; // TODO again press play - > Complete !!! ballls containter
-            _kinect.Device.start();
+            Kinect.Device = Kinect.SelectedDevice; // TODO again press play - > Complete !!! ballls containter
+            Kinect.Device.start();
         }
 
         private void stop(object sender, RoutedEventArgs e)
         {
-            _kinect.Device.stop();
-        }
-
-        private String _labelDefaultPause;
-        private void pause(object sender, RoutedEventArgs e)
-        {
-            if (_kinect.Video.IsPaused)
+            if(Kinect.Video.IsRecording)
             {
-                ButtonPause.Content = _labelDefaultPause;
+                Kinect.Video.stopRecord(true);
+                System.GC.Collect();
+                System.GC.WaitForPendingFinalizers();
+                File.Delete(Kinect.Video.RecordingFilePath);
             }
-            else
-            {
-                _labelDefaultPause = ButtonPause.Content.ToString();
-                ButtonPause.Content = "START";
-            }
-            _kinect.Video.pausePlay();
+            else  Kinect.Device.stop();
         }
-
-        private String _labelDefaultRecord;
-        private void Button_Click(object sender, RoutedEventArgs e)
+        
+        private void record(object sender, RoutedEventArgs e)
         {
-            if(_kinect.Video.IsRecording) {
-                _kinect.Video.stopRecord();
-                ButtonRecordAndSave.Content = _labelDefaultRecord;
+            if(Kinect.Video.IsRecording) {
+                Kinect.Video.stopRecord();
             }
             else {
                 var saveFileDialog = new SaveFileDialog { Title = "Select filename", Filter = "Replay files|*.replay" };
                 if (saveFileDialog.ShowDialog() != true) return;
-                _kinect.Video.startRecordAndSaveTo(saveFileDialog.FileName);
-                _labelDefaultRecord = ButtonRecordAndSave.Content.ToString();
-                ButtonRecordAndSave.Content = "STOP REC.";
+                Kinect.Video.startRecordAndSaveTo(saveFileDialog.FileName);
             }
         }
         
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void next_frame(object sender, RoutedEventArgs e)
         {
-            _kinect.Video.nextFrame();
+            Kinect.Video.nextFrame();
         }
 
-
-
+        private void pause(object sender, RoutedEventArgs e)
+        {
+            Kinect.Video.pausePlay();
+        }
     }
 }

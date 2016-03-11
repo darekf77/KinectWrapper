@@ -19,17 +19,17 @@ namespace Kinect_Wrapper.device
     public partial class Device :DeviceBase
     {
 
-        public Device(IAudio audio,IVideo video, KinectSensor sensor_xbox360): base(audio,video,sensor_xbox360)
+        public Device(AudioBase audio, VideoBase video, KinectSensor sensor_xbox360): base(audio,video,sensor_xbox360)
         {
             
         }
         
-        public Device(IAudio audio, IVideo video, String filePath):base(audio,video,filePath)
+        public Device(AudioBase audio, VideoBase video, String filePath):base(audio,video,filePath)
         {
             
         }
                 
-        public Device(IAudio audio, IVideo video):base(audio,video)
+        public Device(AudioBase audio, VideoBase video):base(audio,video)
         {
             
         }

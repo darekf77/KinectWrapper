@@ -31,12 +31,17 @@ namespace Kinect_Wrapper.device.video
 
         Boolean IsRecording { get; }
 
+        Boolean IsRecordingPossible { get; }
+
         RecordMode RecordingMode { get; set; }
 
         void startRecordAndSaveTo(String filename);
 
-        void stopRecord();
+        void stopRecord(Boolean noEvent = false);
 
+        String RecordingFilePath { get; }
+
+        String StreamingFilePath { get; }
 
         event EventHandler StreamingStarted;
         event EventHandler<String> RecordComplete;

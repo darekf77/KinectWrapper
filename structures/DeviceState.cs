@@ -10,9 +10,9 @@ namespace Kinect_Wrapper.structures
     {
         NOT_READY,
         INITIALIZING,
-        IS_READY,
-        IS_WORKING_PLAYING,
-        IS_WORKING_RECORDING,
+        READY,
+        PLAYING,
+        RECORDING,
         STOPPING
     }
 }

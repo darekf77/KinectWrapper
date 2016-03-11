@@ -10,22 +10,77 @@
 	Title="KinectWrapperControlWidget">
 
 
-    <Grid HorizontalAlignment="Left" Height="144" Margin="6,10,-17,0" VerticalAlignment="Top" Width="175">
-        <ComboBox ItemsSource="{Binding kinectWrap.Streams}" SelectedItem="{Binding kinectWrap.Stream}"
-                  IsSynchronizedWithCurrentItem="True"
-                    Name="ComboboxStreams" Height="20px" Margin="0,-3,0,127" HorizontalAlignment="Left" Width="158" 
+    <Grid HorizontalAlignment="Stretch" Height="190"  VerticalAlignment="Top">       
+        
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+        <ComboBox Name="ComboboxStreams" ItemsSource="{Binding kinect.Streams}" 
+                      SelectedItem="{Binding kinect.Stream}"
+                  IsSynchronizedWithCurrentItem="True" Grid.Row="0" Grid.ColumnSpan="2"
+                     Height="20"
                     DisplayMemberPath="Name" >
-        </ComboBox>
-        <Button Content="STOP"  Margin="0,28,139,93" Click="stop" />
-        <Button Content="PLAY"  Click="play" Margin="0,28,107,93" HorizontalAlignment="Right" 
-                Width="30" RenderTransformOrigin="0.189,0.507"/>
-        <Button Content="PAUSE" Name="ButtonPause" Margin="70,28,63,93" Click="pause" />
-        <Button Content="RECORD" Name="ButtonRecordAndSave"  Margin="0,56,123,65" Click="Button_Click" />
-        <Button Content="+" Margin="54,56,93,65" />
-        <Button Content="-" Margin="84,56,63,65" RenderTransformOrigin="1,0.565" />
-        <Button Content=" NEXT &#xD;&#xA;FRAME" Margin="120,28,17,65" HorizontalContentAlignment="Center" FontSize="9" Click="Button_Click_1" />
-        <CheckBox Content="play device audio" HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="0,84,0,0"/>
-        <CheckBox Content="record device audio" HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="0,104,0,0"/>
+            </ComboBox>
+        
+            <Button Content="STOP" Click="stop" Name="ButtonStopAndCancel"
+                    IsEnabled="{Binding video.IsStreaming}"
+                    Visibility="{c:Binding Path=!video.IsRecording}" 
+                    Grid.Row="1" Grid.Column="0" Margin="2" />
+            <Button Content="CANCEL RECORD" Click="stop" Name="ButtonCancelRecord"
+                    Visibility="{c:Binding Path=video.IsRecording}" 
+                    Grid.Row="1" Grid.Column="0" Margin="2"  FontSize="9"/>
+
+
+            <Button Content="RUN" Click="play" Name="ButtonPlayAndPause"                    
+                    Visibility="{c:Binding !video.IsStreaming}"
+                    Grid.Row="1" Grid.Column="1"  Margin="2"/>
+            <Button Content="PAUSE"  Name="ButtonPause" Click="pause"
+                    IsEnabled="{c:Binding !video.IsRecording}"
+                    Visibility="{c:Binding 'video.IsStreaming and !video.IsPaused'}"
+                    Grid.Row="1" Grid.Column="1"  Margin="2" />
+            <Button Content="START"  Name="ButtonStart" Click="pause"
+                    IsEnabled="{c:Binding !video.IsRecording}"
+                    Visibility="{c:Binding 'video.IsStreaming and video.IsPaused'}"
+                    Grid.Row="1" Grid.Column="1"  Margin="2"/>
+
+            <Button Content="RECORD" Click="record" Name="ButtonRecordStart"
+                    IsEnabled="{c:Binding video.IsRecordingPossible}"
+                    Visibility="{c:Binding !video.IsRecording}"
+                    Grid.Row="2" Grid.Column="0"  Margin="2"   />
+            <Button Content="SAVE RECORD" Click="record" Name="ButtonSaveRecord"
+                    Visibility="{c:Binding video.IsRecording}"
+                    Grid.Row="2" Grid.Column="0"  Margin="2" FontSize="9" FontWeight="Bold"  />
+        
+            <Button Content="NEXT FRAME" Click="next_frame"  Name="ButtonNextFrame"
+                    IsEnabled="{c:Binding 'video.IsStreaming and !video.IsRecording'}" 
+                    Grid.Row="2" Grid.Column="1"  Margin="2" FontSize="9" />
+        
+            <CheckBox Content="use device audio" Name="CheckboxPlayAudio"
+                      IsEnabled="{Binding audio.IsAvailable}"
+                      IsChecked="{Binding audio.IsEnable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      Grid.Row="4" Grid.ColumnSpan="2"   />
+            <CheckBox Content="record device audio" Name="CheckboxRecordAudWio"
+                      IsEnabled="{Binding audio.IsRecordingPossible}"
+                      IsChecked="{Binding audio.IsRecordingEnable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"                      
+                      Grid.Row="5" Grid.ColumnSpan="2"/>
+        
+        <TextBlock  Text="{Binding video.StreamingFilePath}" 
+                    TextWrapping="Wrap" Margin="2"
+               Grid.Row="6" Grid.ColumnSpan="2" FontSize="10" 
+               >
+        </TextBlock>
+
 
     </Grid>
 

@@ -40,7 +40,7 @@ namespace Kinect_Wrapper.wrapper
                         {
                             foreach (var dev in Devices)
                             {
-                                if (dev.Type == DeviceType.KINECT_1 && dev.State == DeviceState.IS_READY)
+                                if (dev.Type == DeviceType.KINECT_1 && dev.State == DeviceState.READY)
                                 {
                                     Device = dev;                                    
                                     Device.start();
@@ -50,7 +50,7 @@ namespace Kinect_Wrapper.wrapper
                         }
                         Thread.Sleep(1000);
                     }
-                    else if (Device.State == DeviceState.IS_READY || Device.State == DeviceState.NOT_READY)
+                    else if (Device.State == DeviceState.READY || Device.State == DeviceState.NOT_READY)
                     {
                         Device = _defaultDevice;
                         Device.start();

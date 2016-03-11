@@ -32,8 +32,18 @@ namespace Kinect_Wrapper.wrapper
             Device.start();
             checkPotentialSensor();
             checkPotentialFiles();
+            KinectSensor.KinectSensors.StatusChanged += KinectSensors_StatusChanged; ;
         }
-        
+
+        private void KinectSensors_StatusChanged(object sender, StatusChangedEventArgs e)
+        {
+            foreach (var device in Devices)
+            {
+                if (device.sensor.UniqueKinectId.Equals(e.Sensor.UniqueKinectId)) return;
+            }
+            Devices.Add(new Device(Audio, Video, e.Sensor));
+        }
+
         private void checkPotentialFiles()
         {
             var currentDirectory = System.IO.Directory.GetCurrentDirectory();

@@ -18,9 +18,9 @@ namespace Kinect_Wrapper.wrapper
     
     public interface IKinectWrapper
     {
-        IAudio Audio { get; }
-        
-        IVideo Video { get; }
+        AudioBase Audio { get; }
+
+        VideoBase Video { get; }
 
         Boolean IsStopped { get; }
         

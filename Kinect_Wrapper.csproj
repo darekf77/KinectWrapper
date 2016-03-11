@@ -71,6 +71,7 @@
     <Compile Include="app\KinectWrapperListWidget.xaml.cs">
       <DependentUpon>KinectWrapperListWidget.xaml</DependentUpon>
     </Compile>
+    <Compile Include="device\audio\Audio.cs" />
     <Compile Include="device\audio\AudioDevices.cs" />
     <Compile Include="device\audio\AudioUserSaying.cs" />
     <Compile Include="device\audio\AudioWorker.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="device\stream\ColorStream.cs" />
     <Compile Include="device\stream\StreamBase.cs" />
     <Compile Include="device\stream\IStream.cs" />
+    <Compile Include="device\video\Video.cs" />
     <Compile Include="device\video\VideoDevices.cs" />
     <Compile Include="device\video\VideoRecord.cs" />
     <Compile Include="frame\KinectFrameCreation.cs" />
@@ -116,12 +118,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="device\audio\Audio.cs" />
+    <Compile Include="device\audio\AudioBase.cs" />
     <Compile Include="device\audio\IAudio.cs" />
     <Compile Include="device\DeviceBase.cs" />
     <Compile Include="device\IDevice.cs" />
     <Compile Include="device\video\IVideo.cs" />
-    <Compile Include="device\video\Video.cs" />
+    <Compile Include="device\video\VideoBase.cs" />
     <Compile Include="device\video\VideoUpdate.cs" />
     <Compile Include="frame\IKinectFrame.cs" />
     <Compile Include="frame\KinectFrame.cs" />

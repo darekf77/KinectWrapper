@@ -13,12 +13,13 @@ using System.Threading;
 
 namespace Kinect_Wrapper.device.audio
 {
-    public partial class Audio
+    public abstract partial class AudioBase
     {
 
         // GOOD SPEACH
         private void SreSpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
+            if (!IsEnable) return;
             if (UserSaying != null)
             {
                 UserSaying(this, new AudioMessage(e.Result.Text, e.Result.Confidence));

@@ -13,7 +13,7 @@ using System.Threading;
 
 namespace Kinect_Wrapper.device.audio
 {
-    public partial class Audio:IAudio
+    public abstract partial class AudioBase
     {
         private IDevice _device;
 
@@ -28,6 +28,10 @@ namespace Kinect_Wrapper.device.audio
             {
                 if (value == null)
                 {
+                    IsEnable = false;
+                    IsAvailable = false;
+                    IsRecordingEnable = false;
+                    IsRecordingPossible = false;
                     //audioSource.Stop();
                     if (SpeechRecognizer != null)
                     {
@@ -51,9 +55,20 @@ namespace Kinect_Wrapper.device.audio
                 _device = value;
                 if (_device.Type == DeviceType.KINECT_1)
                 {
+                    IsEnable = true;
+                    IsAvailable = true;
+                    IsRecordingEnable = true;
+                    IsRecordingPossible = true;
                     worker = new BackgroundWorker();
                     worker.DoWork += worker_DoWork;
                     worker.RunWorkerAsync();
+                }
+                else
+                {
+                    IsEnable = false;
+                    IsAvailable = false;
+                    IsRecordingEnable = false;
+                    IsRecordingPossible = false;
                 }
 
             }

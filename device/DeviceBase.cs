@@ -25,8 +25,8 @@ namespace Kinect_Wrapper.device
 
         private String _filePath;
 
-        private IAudio _audio; 
-        private IVideo _video;
+        private AudioBase _audio; 
+        private VideoBase _video;
         private String _name;
         virtual protected void OnPropertyChanged(string propName)
         {
@@ -36,27 +36,26 @@ namespace Kinect_Wrapper.device
         public event EventHandler StateChanged;
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public DeviceBase(IAudio audio,IVideo video, KinectSensor sensor_xbox360)
+        public DeviceBase(AudioBase audio, VideoBase video, KinectSensor sensor_xbox360)
         {
             _audio = audio;
             _video = video;
-            sensor = sensor_xbox360;
-            KinectSensor.KinectSensors.StatusChanged += KinectSensors_StatusChanged;
+            sensor = sensor_xbox360;            
             _deviceType = DeviceType.KINECT_1;
-            _name = "KinectX360-" + sensor.UniqueKinectId;        
+            _name = "K360-" + sensor.UniqueKinectId;        
         }
         
-        public DeviceBase(IAudio audio, IVideo video, String filePath) {
+        public DeviceBase(AudioBase audio, VideoBase video, String filePath) {
             _audio = audio;
             _video = video;
             _filePath = filePath;
             _deviceType = DeviceType.RECORD_FILE_KINECT_1;
-            _name = "RecordFile-" + System.IO.Path.GetFileName(_filePath);
+            _name = "RF-" + System.IO.Path.GetFileName(_filePath);
             replay = new KinectReplay(_filePath);
             replay.ReplayFinished += Replay_ReplayFinished;
         }
                 
-        public DeviceBase(IAudio audio, IVideo video)
+        public DeviceBase(AudioBase audio, VideoBase video)
         {
             _audio = audio;
             _video = video;

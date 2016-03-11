@@ -11,7 +11,7 @@ using System.Threading;
 
 namespace Kinect_Wrapper.device.audio
 {
-    public partial class Audio:IAudio
+    public abstract partial class AudioBase
     {
         
 

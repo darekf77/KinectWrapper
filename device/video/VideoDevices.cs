@@ -18,7 +18,7 @@ using System.Windows.Media.Imaging;
 
 namespace Kinect_Wrapper.device.video
 {
-    public partial class Video:IVideo,INotifyPropertyChanged
+    public abstract partial class VideoBase
     {
         private IDevice _device;                
         private IKinectFrame _frame;
@@ -45,6 +45,8 @@ namespace Kinect_Wrapper.device.video
                         }
                     }
                     _device = null;
+                    StreamingFilePath = "";
+                    IsRecordingPossible = false;
                     return;
                 }
 
@@ -53,9 +55,11 @@ namespace Kinect_Wrapper.device.video
                 IsPaused = false;
 
                 _device = value;
+                StreamingFilePath = _device.Path;
                 if (_device.Type == DeviceType.KINECT_1)
                 {
                     _frame = new KinectFrame(_device.sensor);
+                    IsRecordingPossible = true;
                 }
                 else
                 if (_device.Type == DeviceType.RECORD_FILE_KINECT_1)

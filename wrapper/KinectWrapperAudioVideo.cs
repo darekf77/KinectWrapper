@@ -18,8 +18,8 @@ namespace Kinect_Wrapper.wrapper
 {
     public partial class KinectWrapper
     {
-        public IAudio Audio { get; private set; }
-        public IVideo Video { get; private set; }
+        public AudioBase Audio { get; private set; }
+        public VideoBase Video { get; private set; }
 
         private void initAudioVideo()
         {

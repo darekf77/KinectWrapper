@@ -12,6 +12,14 @@ namespace Kinect_Wrapper.device.audio
 {
     public interface IAudio
     {
+        Boolean IsAvailable { get; }
+
+        Boolean IsEnable { get; set; }
+
+        Boolean IsRecordingPossible { get; }
+
+        Boolean IsRecordingEnable { get; set; }
+
         IDevice CurrentDevice { get; set; }
 
         ObservableCollection<String> Grammar { get; set; }

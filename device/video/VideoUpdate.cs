@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Kinect_Wrapper.device.video
 {
-    public partial class Video
+    public abstract partial class VideoBase
     {
         public event EventHandler StreamingStarted;
         private Boolean _isStreaming = false;
@@ -119,9 +119,9 @@ namespace Kinect_Wrapper.device.video
                     _frame.synchronize(depthFrame, colorFrame, skeletonFrame);
                     if (_recorder != null && _recorder.isRecording && !_isStoppingRecorder)
                     {
-                        _recorder.Record(colorFrame);
-                        _recorder.Record(depthFrame);
-                        _recorder.Record(skeletonFrame,sensor);
+                        if(_recorder != null) _recorder.Record(colorFrame);
+                        if(_recorder != null) _recorder.Record(depthFrame);
+                        if(_recorder != null) _recorder.Record(skeletonFrame,sensor);
                     }
                     FrameReady(this, _frame);
                     return true;

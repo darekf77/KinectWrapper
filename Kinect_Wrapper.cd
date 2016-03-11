@@ -19,7 +19,6 @@
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="Audio" />
-      <Property Name="Video" />
       <Property Name="Stream" />
     </ShowAsAssociation>
     <ShowAsCollectionAssociation>
@@ -93,7 +92,7 @@
   <Enum Name="Kinect_Wrapper.structures.DeviceState">
     <Position X="6.25" Y="4.25" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAABAAAAAAAABAAAAAAgABAAAAABAAAAAAAAAAAAAI=</HashCode>
+      <HashCode>AAAABAAAAAAAAAAAAAAAgAAAAQAABCAAAAAAAAAAACA=</HashCode>
       <FileName>structures\DeviceState.cs</FileName>
     </TypeIdentifier>
   </Enum>
