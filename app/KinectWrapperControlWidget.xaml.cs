@@ -44,10 +44,10 @@ namespace Kinect_Wrapper.app
         void kinect_StreamChanged(object sender, StreamBase e)
         {
             Console.WriteLine("Kinect stream changed");
-            App.Current.Dispatcher.BeginInvoke(new Action(() =>
-            {
-                ComboboxStreams.SelectedItem = e; 
-            }));
+            //App.Current.Dispatcher.BeginInvoke(new Action(() =>
+            //{
+            //    ComboboxStreams.SelectedItem = e; 
+            //}));
             
         }
      
@@ -94,11 +94,6 @@ namespace Kinect_Wrapper.app
             }
         }
         
-        private void ComboboxStreams_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            _kinect.Stream = (StreamBase)ComboboxStreams.SelectedItem;
-        }
-
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             _kinect.Video.nextFrame();

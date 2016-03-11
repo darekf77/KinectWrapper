@@ -11,10 +11,10 @@
 
 
     <Grid HorizontalAlignment="Left" Height="144" Margin="6,10,-17,0" VerticalAlignment="Top" Width="175">
-        <ComboBox ItemsSource="{Binding kinectWrap.Streams}" 
+        <ComboBox ItemsSource="{Binding kinectWrap.Streams}" SelectedItem="{Binding kinectWrap.Stream}"
+                  IsSynchronizedWithCurrentItem="True"
                     Name="ComboboxStreams" Height="20px" Margin="0,-3,0,127" HorizontalAlignment="Left" Width="158" 
-                    DisplayMemberPath="Name"
-                    SelectionChanged="ComboboxStreams_SelectionChanged">
+                    DisplayMemberPath="Name" >
         </ComboBox>
         <Button Content="STOP"  Margin="0,28,139,93" Click="stop" />
         <Button Content="PLAY"  Click="play" Margin="0,28,107,93" HorizontalAlignment="Right" 

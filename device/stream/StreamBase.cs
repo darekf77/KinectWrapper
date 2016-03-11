@@ -49,16 +49,16 @@ namespace Kinect_Wrapper.device.stream
         public string Description { get; set; }
 
         
-        public override bool Equals (object pobj)
-        {
-            var obj = (StreamBase)pobj;
-            if (obj == null || GetType() != obj.GetType()) 
-            {
-                return false;
-            }        
-            // TODO: write your implementation of Equals() here
-            return obj.id == obj.id;
-        }        
+        //public override bool Equals (object pobj)
+        //{
+        //    var obj = (StreamBase)pobj;
+        //    if (obj == null || GetType() != obj.GetType()) 
+        //    {
+        //        return false;
+        //    }        
+        //    // TODO: write your implementation of Equals() here
+        //    return obj.id == obj.id;
+        //}        
 
         public virtual ImageSource update(ImageSource image)
         {

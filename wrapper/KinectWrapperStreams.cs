@@ -39,8 +39,10 @@ namespace Kinect_Wrapper.wrapper
             }
             set
             {
+                var different = (_stream!=null && !_stream.Equals(value));
                 _stream = value;
-                if (StreamChanged != null && value != null)
+                OnPropertyChanged("Stream");
+                if ( different && StreamChanged != null && value != null)
                 {
                     StreamChanged(this, value);
                 }
