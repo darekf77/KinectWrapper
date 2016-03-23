@@ -45,6 +45,8 @@ namespace Kinect_Wrapper.wrapper
         event EventHandler<ImageSource> DisplayImageReady;
 
         event EventHandler<StreamBase> StreamChanged;
-        
+
+        event EventHandler DeviceChanged;
+
     }
 }

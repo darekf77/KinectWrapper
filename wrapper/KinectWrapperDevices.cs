@@ -1,17 +1,10 @@
 ﻿using Kinect_Wrapper.device;
-using Kinect_Wrapper.device.audio.message;
-using Kinect_Wrapper.device.stream;
-using Kinect_Wrapper.frame;
-using Kinect_Wrapper.structures;
 using Microsoft.Kinect;
 using SharedLibJG.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.IO;
 using System.Threading;
-using System.Windows.Controls;
 
 namespace Kinect_Wrapper.wrapper
 {
@@ -64,32 +57,35 @@ namespace Kinect_Wrapper.wrapper
                 _devices.Add(new Device(Audio, Video, potentialSensor));
             }
         }
-                
-
+        
         public bool IsStopped
         {
             get { return _currentDevice.Equals(_defaultDevice); }
         }
-
-
+        
         public ObservableCollection<DeviceBase> Devices
         {
             get { return _devices; }
         }
+
+        public event EventHandler DeviceChanged;
 
         public DeviceBase Device
         {
             get { return _currentDevice; }
             set
             {
-                if (value == null) return;  
+                if (value == null) return;
+                if (_currentDevice != null && _currentDevice.Equals(value)) return;
                 if(_currentDevice!=null) _currentDevice.StateChanged -= _currentDevice_StateChanged;
                 _currentDevice = value;
                 if (_currentDevice != null) _currentDevice.StateChanged += _currentDevice_StateChanged;                                
                 App.Current.Dispatcher.BeginInvoke(new Action(() =>
                 {
                     _infoDeviceName.Value = _currentDevice.Name;
-                }));                
+                }));
+                if(DeviceChanged != null) DeviceChanged(this, EventArgs.Empty);
+                OnPropertyChanged("IsStopped");
             }
         }
 
