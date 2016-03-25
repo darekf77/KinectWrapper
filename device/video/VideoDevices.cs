@@ -78,8 +78,7 @@ namespace Kinect_Wrapper.device.video
                     bi.BeginInit();
                     bi.CreateOptions = BitmapCreateOptions.IgnoreColorProfile;
                     bi.UriSource = new Uri(dir + @"\..\..\assets\img\nosignalw640.png", UriKind.Relative);
-                    bi.EndInit();
-                    ///TODO scale bitmap
+                    bi.EndInit();                    
                     //var bitmapScale = new TransformedBitmap(bi,
                     //     new ScaleTransform(640 / bi.Width,
                     //                        480 / bi.Height));
