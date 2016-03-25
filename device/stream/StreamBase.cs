@@ -39,7 +39,7 @@ namespace Kinect_Wrapper.device.stream
             _bitmapaDepth = new WriteableBitmap(
                 640,
                 480,
-                96.0, 96.0, PixelFormats.Bgr32, null);
+                96.0, 96.0, PixelFormats.Gray8, null);
             
             _imageSource = new Bitmap(640,480,System.Drawing.Imaging.PixelFormat.Format32bppRgb);            
         }
