@@ -78,7 +78,7 @@ namespace Kinect_Wrapper.device.video
 
             if (color != null && skeleton != null && depth != null)
             {
-                _frame.synchronize(depth, color, skeleton);
+                _frame.synchronize(depth, color, skeleton, _isPaused);
                 if(FrameReady!=null)
                 FrameReady(this, _frame);
             }
@@ -116,7 +116,7 @@ namespace Kinect_Wrapper.device.video
 
                 if (depthFrame != null && colorFrame != null && skeletonFrame != null)
                 {
-                    _frame.synchronize(depthFrame, colorFrame, skeletonFrame);
+                    _frame.synchronize(depthFrame, colorFrame, skeletonFrame,_isPaused);
                     if (_recorder != null && _recorder.isRecording && !_isStoppingRecorder)
                     {
                         if(_recorder != null) _recorder.Record(colorFrame);
@@ -132,7 +132,7 @@ namespace Kinect_Wrapper.device.video
 
         private Boolean toogleVisibleMessage = false;
         private void updateFramesNoDevice() {
-            _frame.synchronize(_device.Name,toogleVisibleMessage);
+            _frame.synchronize(_device.Name,toogleVisibleMessage, _isPaused);
             toogleVisibleMessage = !toogleVisibleMessage;
             if (FrameReady!=null) FrameReady(this, _frame);
         }

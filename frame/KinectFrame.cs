@@ -24,11 +24,10 @@ namespace Kinect_Wrapper.frame
         private KinectSensor _sensor;
         private KinectReplay _replay;
         private Bitmap _bitmap;
-
-        public Boolean IsSkeletonDetected { get;  set;}
-        public Dictionary<SkeletonDataType, Point> UserSkeleton  {get; set;}
-
         
+
+
+
         void init() {
             IsSkeletonDetected = false;
             UserSkeleton = new Dictionary<SkeletonDataType,Point>();

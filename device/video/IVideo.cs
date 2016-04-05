@@ -46,6 +46,6 @@ namespace Kinect_Wrapper.device.video
         event EventHandler StreamingStarted;
         event EventHandler<String> RecordComplete;
         event EventHandler<IKinectFrame> FrameReady;
-        
+
     }
 }
