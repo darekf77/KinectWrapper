@@ -19,14 +19,19 @@ namespace Kinect_Wrapper.frame
         public void synchronize(
             ReplayDepthImageFrame depthFrame,
             ReplayColorImageFrame colorFrame,
-            ReplaySkeletonFrame skletonFrame)
+            ReplaySkeletonFrame skletonFrame,
+            Boolean isPauseMode
+            )
         {
+            IsPauseMode = isPauseMode;
             colorFrame.CopyPixelDataTo(_colorByte);
             depthFrame.CopyPixelDataTo(_depthShort);
             for (int i = 0; i < _pixelDepthDataLength; i++)
             {
                 _depthByte[i] = (byte)(_depthShort[i] * 0.064-1);
             }
+
+            _isCreation = true;
             IsSkeletonDetected = skletonFrame.IsSkeletonDetected;
             
             if (skletonFrame.IsSkeletonDetected)
@@ -46,14 +51,19 @@ namespace Kinect_Wrapper.frame
                     skletonFrame.SpinePositionY
                     );
             }
+            _isCreation = false;
+
         }
 
         
         public void synchronize(
             DepthImageFrame depthFrame,
             ColorImageFrame colorFrame,
-            SkeletonFrame skletonFrame)
+            SkeletonFrame skletonFrame,
+            Boolean isPauseMode
+            )
         {
+            IsPauseMode = isPauseMode;
             colorFrame.CopyPixelDataTo(_colorByte);
 
             //Console.WriteLine("max depth: "+depthFrame.MaxDepth);
@@ -77,8 +87,8 @@ namespace Kinect_Wrapper.frame
                                       where trackskeleton.TrackingState == SkeletonTrackingState.
                                       Tracked
                                       select trackskeleton).FirstOrDefault();
-            
-            
+
+            _isCreation = true;
             if (firstSkeleton != null)
             {
                 if (firstSkeleton.Joints[JointType.Spine].TrackingState == JointTrackingState.Tracked)
@@ -94,10 +104,13 @@ namespace Kinect_Wrapper.frame
                 }
             }
             IsSkeletonDetected = false;
+            _isCreation = false;
         }
         
-        public void synchronize(String message, Boolean isVisible)
+        public void synchronize(String message, Boolean isVisible, Boolean isPauseMode)
         {
+            //_isCreation = true;
+            //IsPauseMode = isPauseMode;
             if (isVisible)
             {
                 byte fontsize = 20;
@@ -116,7 +129,7 @@ namespace Kinect_Wrapper.frame
             {
                 prepareColorPixelsFrom(_bitmap);
             }
-            
+            //_isCreation = false;            
         }
 
         private Point ScalePosition(SkeletonPoint skeletonPoint)

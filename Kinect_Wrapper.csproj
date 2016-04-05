@@ -86,6 +86,7 @@
     <Compile Include="device\video\Video.cs" />
     <Compile Include="device\video\VideoDevices.cs" />
     <Compile Include="device\video\VideoRecord.cs" />
+    <Compile Include="frame\KinectFrameValidation.cs" />
     <Compile Include="frame\KinectFrameCreation.cs" />
     <Compile Include="statistic\FrameType.cs" />
     <Compile Include="statistic\IStatistics.cs" />

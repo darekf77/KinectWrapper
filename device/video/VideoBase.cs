@@ -1,19 +1,7 @@
-﻿using Kinect.Replay.Record;
-using Kinect.Replay.Replay;
-using Kinect_Wrapper.frame;
+﻿using Kinect_Wrapper.frame;
 using Kinect_Wrapper.structures;
-using Microsoft.Kinect;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace Kinect_Wrapper.device.video
 {
@@ -32,6 +20,7 @@ namespace Kinect_Wrapper.device.video
             }
             private set
             {
+                if (value == _isPaused) return;
                 _isPaused = value;
                 OnPropertyChanged("IsPaused");
             }
@@ -105,8 +94,6 @@ namespace Kinect_Wrapper.device.video
         public event EventHandler<IKinectFrame> FrameReady;
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-        
 
     }
 }

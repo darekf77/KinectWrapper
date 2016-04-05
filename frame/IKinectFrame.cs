@@ -21,7 +21,7 @@ namespace Kinect_Wrapper.frame
         Dictionary<SkeletonDataType, Point> UserSkeleton { get; set; }
 
         Boolean IsSkeletonDetected { get; set; }
-
+        
         /// <summary>
         /// get rgba color stream byte
         /// </summary>
@@ -40,9 +40,19 @@ namespace Kinect_Wrapper.frame
         Byte[] DepthColor { get; set; }
         
 
-        void synchronize(ReplayDepthImageFrame depthFrame, ReplayColorImageFrame colorFrame, ReplaySkeletonFrame skletonFrame);
-        void synchronize(DepthImageFrame depthFrame, ColorImageFrame colorFrame, SkeletonFrame skletonFrame);
-        void synchronize(String message,Boolean isVisible);
+        void synchronize(
+            ReplayDepthImageFrame depthFrame, 
+            ReplayColorImageFrame colorFrame, 
+            ReplaySkeletonFrame skletonFrame,
+            Boolean isPauseMode
+            );
+        void synchronize(
+            DepthImageFrame depthFrame, 
+            ColorImageFrame colorFrame, 
+            SkeletonFrame skletonFrame,
+            Boolean isPauseMode
+            );
+        void synchronize(String message,Boolean isVisible, Boolean isPauseMode);
 
     }
 }
