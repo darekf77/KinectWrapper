@@ -25,7 +25,7 @@ namespace Kinect_Wrapper.device.stream
                     _bitmapaDepth.PixelWidth,
                     _bitmapaDepth.PixelHeight),
                 frame.DepthColor,
-                _bitmapaDepth.PixelWidth * sizeof(int),
+                _bitmapaDepth.PixelWidth,
                 0);
             }
             return _bitmapaDepth;
