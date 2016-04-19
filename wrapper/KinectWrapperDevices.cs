@@ -15,7 +15,7 @@ namespace Kinect_Wrapper.wrapper
         private DeviceBase _currentDevice;
         public DeviceBase SelectedDevice { get; set; }
 
-        public static Boolean AutoPickUpFirstKinect = false;
+        public static Boolean AutoPickUpFirstKinect = true;
 
         private void initDevices()
         {

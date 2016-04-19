@@ -15,7 +15,12 @@ namespace Kinect_Wrapper.frame
 {
     public partial class KinectFrame 
     {
-   
+        private static byte getDepth(int Depth)
+        {
+            var d = Depth * 0.064 - 1;
+            return (byte)(d >= 0 && d <= 255 ? d : 0);
+        }
+
         public void synchronize(
             ReplayDepthImageFrame depthFrame,
             ReplayColorImageFrame colorFrame,
@@ -28,7 +33,7 @@ namespace Kinect_Wrapper.frame
             depthFrame.CopyPixelDataTo(_depthShort);
             for (int i = 0; i < _pixelDepthDataLength; i++)
             {
-                _depthByte[i] = (byte)(_depthShort[i] * 0.064-1);
+                _depthByte[i] = getDepth(_depthShort[i]);
             }
 
             _isCreation = true;
@@ -79,7 +84,7 @@ namespace Kinect_Wrapper.frame
             for (int i = 0; i < _pixelDepthDataLength; i++)
             {
                 _depthShort[i] = (short)_depthPoint[i].Depth;
-                _depthByte[i] = (byte)(_depthPoint[i].Depth*0.064-1);
+                _depthShort[i] = getDepth(_depthPoint[i].Depth);
             }
 
             skletonFrame.CopySkeletonDataTo(totalSkeleton);            
