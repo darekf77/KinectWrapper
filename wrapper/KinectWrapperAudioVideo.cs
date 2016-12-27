@@ -6,6 +6,7 @@ using Kinect_Wrapper.device.video;
 using Kinect_Wrapper.frame;
 using Kinect_Wrapper.structures;
 using Microsoft.Kinect;
+using SharedLibJG.models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

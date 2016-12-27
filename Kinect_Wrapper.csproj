@@ -92,7 +92,6 @@
     <Compile Include="statistic\IStatistics.cs" />
     <Compile Include="statistic\Statistics.cs" />
     <Compile Include="structures\InfoRow.cs" />
-    <Compile Include="structures\SkeletonDataType.cs" />
     <Compile Include="structures\DeviceState.cs" />
     <Compile Include="structures\DeviceType.cs" />
     <Compile Include="structures\RecordMode.cs" />

@@ -1,5 +1,6 @@
 ﻿using Kinect_Wrapper.structures;
 using Kinect_Wrapper.wrapper;
+using SharedLibJG.models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

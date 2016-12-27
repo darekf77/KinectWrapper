@@ -5,6 +5,7 @@ using Kinect.Replay.Replay.Skeletons;
 using Kinect_Wrapper.structures;
 using Microsoft.Kinect;
 using SharedLibJG.Helpers;
+using SharedLibJG.models;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

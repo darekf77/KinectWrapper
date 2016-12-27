@@ -1,6 +1,7 @@
 ﻿using Kinect.Replay.Replay;
 using Kinect_Wrapper.structures;
 using Microsoft.Kinect;
+using SharedLibJG.models;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
