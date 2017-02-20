@@ -16,7 +16,7 @@ namespace Kinect_Wrapper.frame
 {
     public partial class KinectFrame 
     {
-        private static byte getDepth(int Depth)
+        public static byte getDepth(int Depth)
         {
             var d = Depth * 0.064 - 1;
             return (byte)(d >= 0 && d <= 255 ? d : 0);
