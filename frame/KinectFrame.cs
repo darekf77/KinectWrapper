@@ -25,13 +25,14 @@ namespace Kinect_Wrapper.frame
         private KinectSensor _sensor;
         private KinectReplay _replay;
         private Bitmap _bitmap;
-        
 
 
 
-        void init() {
+
+        void init()
+        {
             IsSkeletonDetected = false;
-            UserSkeleton = new Dictionary<SkeletonDataType,Point>();
+            UserSkeleton = new Dictionary<SkeletonDataType, Point>();
             UserSkeleton[SkeletonDataType.LEFT_HAND] = new Point();
             UserSkeleton[SkeletonDataType.RIGHT_HAND] = new Point();
             UserSkeleton[SkeletonDataType.SPINE] = new Point();
@@ -40,7 +41,15 @@ namespace Kinect_Wrapper.frame
         public KinectFrame()
         {
             init();
-            
+        }
+
+        public KinectFrame(DimensionalFrame frame)
+        {
+            UserSkeleton = new Dictionary<SkeletonDataType, Point>(frame.UserSkeleton);
+            IsSkeletonDetected = frame.IsSkeletonDetected;
+            frame.Color.CopyTo(Color, 0);
+            frame.Depth.CopyTo(Depth, 0);
+            if (frame.DepthColor != null) frame.DepthColor.CopyTo(DepthColor, 0);
         }
 
         public KinectFrame(IKinectFrame frame)
@@ -49,7 +58,7 @@ namespace Kinect_Wrapper.frame
             IsSkeletonDetected = frame.IsSkeletonDetected;
             frame.Color.CopyTo(Color, 0);
             frame.Depth.CopyTo(Depth, 0);
-            frame.DepthColor.CopyTo(DepthColor, 0);
+            if (frame.DepthColor != null) frame.DepthColor.CopyTo(DepthColor, 0);
         }
 
         public KinectFrame(KinectSensor sensor)
@@ -77,7 +86,7 @@ namespace Kinect_Wrapper.frame
             init();
             _bitmap = bitmap;
             _colorByte = new byte[4 * (bitmap.Width * bitmap.Height)];
-            prepareColorPixelsFrom(bitmap);            
+            prepareColorPixelsFrom(bitmap);
         }
 
         private void prepareColorPixelsFrom(Bitmap bitmap)
@@ -98,10 +107,10 @@ namespace Kinect_Wrapper.frame
             }
         }
 
-            
-        
 
-        
+
+
+
         public byte[] Color
         {
             get
@@ -131,16 +140,17 @@ namespace Kinect_Wrapper.frame
 
         public Byte[] DepthColor
         {
-            get {
-                return _depthByte;                 
+            get
+            {
+                return _depthByte;
             }
             set
             {
                 _depthByte = value;
             }
         }
-        
 
-        
+
+
     }
 }
