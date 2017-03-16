@@ -150,7 +150,18 @@ namespace Kinect_Wrapper.frame
             }
         }
 
+        bool _IsIgnoringDepthRange = false;
+        public bool IsIgnoringDepthRange
+        {
+            get
+            {
+                return _IsIgnoringDepthRange;
+            }
 
-
+            set
+            {
+                _IsIgnoringDepthRange = value;
+            }
+        }
     }
 }

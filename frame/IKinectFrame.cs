@@ -17,21 +17,26 @@ namespace Kinect_Wrapper.frame
     /// <summary>
     /// Full synchronized frame with depth,color and skeleton data
     /// </summary>
-    public interface IKinectFrame: DimensionalFrame
-    {  
+    public interface IKinectFrame : DimensionalFrame
+    {
         void synchronize(
-            ReplayDepthImageFrame depthFrame, 
-            ReplayColorImageFrame colorFrame, 
+            ReplayDepthImageFrame depthFrame,
+            ReplayColorImageFrame colorFrame,
             ReplaySkeletonFrame skletonFrame,
             Boolean isPauseMode
             );
         void synchronize(
-            DepthImageFrame depthFrame, 
-            ColorImageFrame colorFrame, 
+            DepthImageFrame depthFrame,
+            ColorImageFrame colorFrame,
             SkeletonFrame skletonFrame,
             Boolean isPauseMode
             );
-        void synchronize(String message,Boolean isVisible, Boolean isPauseMode);
+        void synchronize(String message, Boolean isVisible, Boolean isPauseMode);
+
+        /// <summary>
+        /// For tracker tester purpose
+        /// </summary>
+        bool IsIgnoringDepthRange { get; set; }
 
     }
 }
