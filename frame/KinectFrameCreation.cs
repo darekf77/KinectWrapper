@@ -1,4 +1,5 @@
-﻿using Kinect.Replay.Replay;
+﻿using Kinect.Replay.Record;
+using Kinect.Replay.Replay;
 using Kinect.Replay.Replay.Color;
 using Kinect.Replay.Replay.Depth;
 using Kinect.Replay.Replay.Skeletons;
@@ -14,7 +15,7 @@ using System.Linq;
 
 namespace Kinect_Wrapper.frame
 {
-    public partial class KinectFrame 
+    public partial class KinectFrame
     {
         public static byte getDepth(int Depth)
         {
@@ -39,29 +40,22 @@ namespace Kinect_Wrapper.frame
 
             _isCreation = true;
             IsSkeletonDetected = skletonFrame.IsSkeletonDetected;
-            
+
             if (skletonFrame.IsSkeletonDetected)
             {
-                UserSkeleton[SkeletonDataType.RIGHT_HAND] = new Point(
-                    skletonFrame.RightHandPositionX,
-                    skletonFrame.RightHandPositionY
-                    );
-
-                UserSkeleton[SkeletonDataType.LEFT_HAND] = new Point(
-                    skletonFrame.LeftHandPositionX,
-                    skletonFrame.LeftHandPositionY
-                    );
-
-                UserSkeleton[SkeletonDataType.SPINE] = new Point(
-                    skletonFrame.SpinePositionX,
-                    skletonFrame.SpinePositionY
-                    );
+                foreach (var joint in SkeletonRecorder.neeededJoints)
+                {
+                    UserSkeleton[(SkeletonDataType)joint] = new Point(
+                            skletonFrame.jointsX[(SkeletonDataType)joint],
+                            skletonFrame.jointsY[(SkeletonDataType)joint]
+                        );
+                }
             }
             _isCreation = false;
 
         }
 
-        
+
         public void synchronize(
             DepthImageFrame depthFrame,
             ColorImageFrame colorFrame,
@@ -85,10 +79,10 @@ namespace Kinect_Wrapper.frame
             for (int i = 0; i < _pixelDepthDataLength; i++)
             {
                 _depthShort[i] = (short)_depthPoint[i].Depth;
-                _depthShort[i] = getDepth(_depthPoint[i].Depth);
+                _depthByte[i] = getDepth(_depthPoint[i].Depth);
             }
 
-            skletonFrame.CopySkeletonDataTo(totalSkeleton);            
+            skletonFrame.CopySkeletonDataTo(totalSkeleton);
             Skeleton firstSkeleton = (from trackskeleton in totalSkeleton
                                       where trackskeleton.TrackingState == SkeletonTrackingState.
                                       Tracked
@@ -100,19 +94,17 @@ namespace Kinect_Wrapper.frame
                 if (firstSkeleton.Joints[JointType.Spine].TrackingState == JointTrackingState.Tracked)
                 {
                     IsSkeletonDetected = true;
-                    UserSkeleton[SkeletonDataType.RIGHT_HAND] =
-                        ScalePosition(firstSkeleton.Joints[JointType.HandRight].Position);
-                    UserSkeleton[SkeletonDataType.LEFT_HAND] =
-                        ScalePosition(firstSkeleton.Joints[JointType.HandLeft].Position);
-                    UserSkeleton[SkeletonDataType.SPINE] =
-                        ScalePosition(firstSkeleton.Joints[JointType.Spine].Position);
+                    foreach (var joint in SkeletonRecorder.neeededJoints)
+                    {
+                        UserSkeleton[(SkeletonDataType)joint] = ScalePosition(firstSkeleton.Joints[joint].Position);
+                    }
                     return;
                 }
             }
             IsSkeletonDetected = false;
             _isCreation = false;
         }
-        
+
         public void synchronize(String message, Boolean isVisible, Boolean isPauseMode)
         {
             //_isCreation = true;
@@ -120,8 +112,8 @@ namespace Kinect_Wrapper.frame
             if (isVisible)
             {
                 byte fontsize = 20;
-                RectangleF rectBitmap = new RectangleF(0,0,_bitmap.Width,_bitmap.Height);
-                RectangleF rectf = new RectangleF(200, _bitmap.Height /2 - fontsize , _bitmap.Width, 3*fontsize);
+                RectangleF rectBitmap = new RectangleF(0, 0, _bitmap.Width, _bitmap.Height);
+                RectangleF rectf = new RectangleF(200, _bitmap.Height / 2 - fontsize, _bitmap.Width, 3 * fontsize);
                 Bitmap bmp = _bitmap.Clone(rectBitmap, _bitmap.PixelFormat);
                 Graphics g = Graphics.FromImage(bmp);
                 g.SmoothingMode = SmoothingMode.AntiAlias;
@@ -144,7 +136,7 @@ namespace Kinect_Wrapper.frame
             MapSkeletonPointToColorPoint(skeletonPoint, ColorImageFormat.RgbResolution640x480Fps30);
             return new Point(depthPoint.X, depthPoint.Y);
         }
-        
+
 
     }
 }

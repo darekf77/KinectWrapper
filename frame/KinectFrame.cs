@@ -1,4 +1,5 @@
-﻿using Kinect.Replay.Replay;
+﻿using Kinect.Replay.Record;
+using Kinect.Replay.Replay;
 using Kinect_Wrapper.structures;
 using Microsoft.Kinect;
 using SharedLibJG.models;
@@ -33,9 +34,10 @@ namespace Kinect_Wrapper.frame
         {
             IsSkeletonDetected = false;
             UserSkeleton = new Dictionary<SkeletonDataType, Point>();
-            UserSkeleton[SkeletonDataType.LEFT_HAND] = new Point();
-            UserSkeleton[SkeletonDataType.RIGHT_HAND] = new Point();
-            UserSkeleton[SkeletonDataType.SPINE] = new Point();
+            foreach (var joint in SkeletonRecorder.neeededJoints)
+            {
+                UserSkeleton[(SkeletonDataType)joint] = new Point();
+            }            
         }
 
         public KinectFrame()

@@ -45,6 +45,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\Program Files\Microsoft Speech Platform SDK\Assembly\Microsoft.Speech.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -79,6 +83,7 @@
     <Compile Include="device\audio\message\IAudioMessage.cs" />
     <Compile Include="device\Device.cs" />
     <Compile Include="device\DeviceState.cs" />
+    <Compile Include="device\list\DeviceList.cs" />
     <Compile Include="device\stream\DepthStream.cs" />
     <Compile Include="device\stream\ColorStream.cs" />
     <Compile Include="device\stream\StreamBase.cs" />

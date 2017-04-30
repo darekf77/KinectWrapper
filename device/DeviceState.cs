@@ -10,10 +10,7 @@ namespace Kinect_Wrapper.device
 
         private void Replay_ReplayFinished()
         {
-            if (StateChanged != null)
-            {
-                StateChanged(this, EventArgs.Empty);
-            }
+            StateChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void _video_StreamingStarted(object sender, EventArgs e)

@@ -1,0 +1,9 @@
+diff a/Kinect_Wrapper.csproj b/Kinect_Wrapper.csproj	(rejected hunks)
+@@ -95,6 +95,7 @@
+     <Compile Include="device\video\VideoRecord.cs" />
+     <Compile Include="frame\KinectFrameValidation.cs" />
+     <Compile Include="frame\KinectFrameCreation.cs" />
++    <Compile Include="ILNumerics_deploy\ILNHelper.cs" />
+     <Compile Include="statistic\FrameType.cs" />
+     <Compile Include="statistic\IStatistics.cs" />
+     <Compile Include="statistic\Statistics.cs" />
