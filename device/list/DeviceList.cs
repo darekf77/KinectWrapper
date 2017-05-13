@@ -56,9 +56,12 @@ namespace Kinect_Wrapper.device.list
                 List<string> replaysList = JsonConvert.DeserializeObject<List<string>>(jsonList);
                 foreach (var replayPath in replaysList)
                 {
-                    FileInfo f = new FileInfo(replayPath);
-                    if (f.Length == 0) continue;
-                    Devices.Add(new Device(audio, video, replayPath));
+                    if(File.Exists(replayPath)) {
+                        FileInfo f = new FileInfo(replayPath);
+                        if (f.Length == 0) continue;
+                        Devices.Add(new Device(audio, video, replayPath));
+                    }
+                    
                 }
                 s.Close();
             }

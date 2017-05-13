@@ -84,8 +84,7 @@ namespace Kinect_Wrapper.frame
 
             skletonFrame.CopySkeletonDataTo(totalSkeleton);
             Skeleton firstSkeleton = (from trackskeleton in totalSkeleton
-                                      where trackskeleton.TrackingState == SkeletonTrackingState.
-                                      Tracked
+                                      where trackskeleton.TrackingState == SkeletonTrackingState.Tracked
                                       select trackskeleton).FirstOrDefault();
 
             _isCreation = true;
