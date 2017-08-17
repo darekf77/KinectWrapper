@@ -4,6 +4,7 @@ using Kinect_Wrapper.device.audio.message;
 using Kinect_Wrapper.device.stream;
 using Kinect_Wrapper.device.video;
 using Kinect_Wrapper.frame;
+using Kinect_Wrapper.gestures;
 using Kinect_Wrapper.structures;
 using System;
 using System.Collections.Generic;
@@ -40,8 +41,10 @@ namespace Kinect_Wrapper.wrapper
 
         void commit(Bitmap frame);
 
-        ObservableCollection<InfoRow> Info { get; }        
-        
+        ObservableCollection<InfoRow> Info { get; }
+
+        event EventHandler<PlayerGestures> Gestures;
+
         event EventHandler<ImageSource> DisplayImageReady;
 
         event EventHandler<StreamBase> StreamChanged;
