@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Kinect_Wrapper.device.audio;
 using Kinect_Wrapper.device.video;
+using Kinect_Wrapper.gestures;
 
 namespace Kinect_Wrapper.wrapper
 {
@@ -54,8 +55,8 @@ namespace Kinect_Wrapper.wrapper
         public event PropertyChangedEventHandler PropertyChanged;
 
         public event EventHandler<ImageSource> DisplayImageReady;
+        public event EventHandler<PlayerGestures> Gestures;
 
-        
 
         virtual protected void OnPropertyChanged(string propName)
         {
