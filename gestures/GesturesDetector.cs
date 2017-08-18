@@ -36,11 +36,9 @@ namespace Kinect_Wrapper.gestures
             {
                 this.LastDetectedGesture = "-";
                 debouceWrapp = null;
+                gestureDetected = false;
+                Console.WriteLine("debouce successs");
             };
-
-            
-
-
         }
 
         Action<int> rmLabel;
@@ -58,32 +56,41 @@ namespace Kinect_Wrapper.gestures
 
         public void trigger(PlayerGestures gesture)
         {
-            onGesture?.Invoke(this, gesture);
+            gestureDetectedAction(gesture);
         }
 
 
         Action<int> debouceWrapp = null;
         private Dictionary<SkeletonDataType, Point> Skeleton;
+        private bool gestureDetected = false;
         public void update(IKinectFrame frame)
         {
+            if (gestureDetected) return;
             this.Skeleton = frame.UserSkeleton;
-            if(State == GesturesDetectorState.ACTIVE)
+            if (State == GesturesDetectorState.ACTIVE)
             {
-                if(debouceWrapp == null)
-                {
-                    debouceWrapp = rmLabel.Debounce<int>();
-                }
-                
                 foreach (PlayerGestures gesture in Enum.GetValues(typeof(PlayerGestures)))
                 {
-                    if (detect(gesture))
+                    if (checkSkeleton(gesture))
                     {
-                        LastDetectedGesture = gesture.ToString();
-                        onGesture?.Invoke(this, gesture);
-                        debouceWrapp(1000);
+                        gestureDetectedAction(gesture);
+                        return;
                     }
                 }
             }
+        }
+
+        private void gestureDetectedAction(PlayerGestures gesture)
+        {
+            if (debouceWrapp == null)
+            {
+                debouceWrapp = rmLabel.Debounce<int>();
+            }
+            gestureDetected = true;
+            LastDetectedGesture = gesture.ToString();
+            onGesture?.Invoke(this, gesture);
+            Console.WriteLine("debouce start");
+            debouceWrapp(1000);
         }
 
 
@@ -92,7 +99,8 @@ namespace Kinect_Wrapper.gestures
         public string LastDetectedGesture
         {
             get { return _lastDetectedGesture; }
-            private set {
+            private set
+            {
                 OnPropertyChanged();
                 _lastDetectedGesture = value;
             }
