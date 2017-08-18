@@ -48,6 +48,7 @@ namespace Kinect_Wrapper.wrapper
             initStreams();
             initDevices();
             initWorker();
+            initGestures();
         }
 
         
@@ -55,7 +56,18 @@ namespace Kinect_Wrapper.wrapper
         public event PropertyChangedEventHandler PropertyChanged;
 
         public event EventHandler<ImageSource> DisplayImageReady;
-        public event EventHandler<PlayerGestures> Gestures;
+        public IGesturesDetector Gestures { get; private set; }
+
+
+        private void initGestures()
+        {
+            Gestures = new GesturesDetector();
+            Video.FrameReady += (e, frame) =>
+             {
+                 Gestures.update(frame);
+             };
+        }
+
 
 
         virtual protected void OnPropertyChanged(string propName)

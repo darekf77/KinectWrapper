@@ -25,6 +25,7 @@ namespace Kinect_Wrapper.app
     public partial class PageKinectWrapperList : Page
     {
         private IKinectWrapper _kinect;
+
         public PageKinectWrapperList(IKinectWrapper kinect)
         {
             InitializeComponent();
@@ -33,7 +34,8 @@ namespace Kinect_Wrapper.app
             {
                 kinectWrap = _kinect,
                 video = _kinect.Video,
-                audio = _kinect.Audio
+                audio = _kinect.Audio,
+                gestures = kinect.Gestures
             };
 
         }

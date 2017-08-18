@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Apex, Version=1.5.0.0, Culture=neutral, PublicKeyToken=98d06957926c086d, processorArchitecture=MSIL">
+      <HintPath>..\packages\Apex.1.5.0\lib\net40\Apex.dll</HintPath>
+    </Reference>
     <Reference Include="CalcBinding">
       <HintPath>..\packages\CalcBinding.2.2.5.0\lib\net45\CalcBinding.dll</HintPath>
     </Reference>
@@ -94,6 +97,9 @@
     <Compile Include="device\video\VideoRecord.cs" />
     <Compile Include="frame\KinectFrameValidation.cs" />
     <Compile Include="frame\KinectFrameCreation.cs" />
+    <Compile Include="gestures\GesturesDetectorAlgorithms.cs" />
+    <Compile Include="gestures\GesturesDetector.cs" />
+    <Compile Include="gestures\IGesturesDetector.cs" />
     <Compile Include="gestures\PlayerGestures.cs" />
     <Compile Include="statistic\FrameType.cs" />
     <Compile Include="statistic\IStatistics.cs" />

@@ -52,8 +52,27 @@
                 </ListView>
             </Grid>
         </TabItem>
-        
-        
+        <TabItem Header="Gestures" Name="TabGestures" Margin="-2,-2,2,0">
+            <Grid >
+                <StackPanel Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                    <Label Content="{Binding gestures.LastDetectedGesture}" >
+                        <Label.ContentStringFormat>
+                             Triggered gesture: #{0}
+                        </Label.ContentStringFormat>
+                    </Label>
+                    <Button  Content="Both hands up" Margin="0,0,0,5" Command="{Binding gestures.BothHandsUp}" ></Button>
+                    <Button  Content="Cross with hands" Margin="0,0,0,5" Command="{Binding gestures.Aeroplane}" ></Button>
+                    <Button  Content="Swipe left" Margin="0,0,0,5" Command="{Binding gestures.SwipeLeft}" ></Button>
+                    <Button  Content="Swipe right" Margin="0,0,0,5" Command="{Binding gestures.SwipeRight}" ></Button>
+                    <Button  Content="Right hand above head" Margin="0,0,0,5" Command="{Binding gestures.RightHandAboveHead}" ></Button>
+                    <Button  Content="Left hand above head" Margin="0,0,0,5" Command="{Binding gestures.LeftHandAboveHead}" ></Button>
+
+
+                </StackPanel>
+            </Grid>
+        </TabItem>
+
+
     </TabControl>
 
 

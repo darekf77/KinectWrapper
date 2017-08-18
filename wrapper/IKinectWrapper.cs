@@ -23,6 +23,8 @@ namespace Kinect_Wrapper.wrapper
 
         VideoBase Video { get; }
 
+        IGesturesDetector Gestures { get; }
+
         Boolean IsStopped { get; }
         
         ObservableCollection<DeviceBase> Devices { get; }
@@ -42,8 +44,7 @@ namespace Kinect_Wrapper.wrapper
         void commit(Bitmap frame);
 
         ObservableCollection<InfoRow> Info { get; }
-
-        event EventHandler<PlayerGestures> Gestures;
+        
 
         event EventHandler<ImageSource> DisplayImageReady;
 
