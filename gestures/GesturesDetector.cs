@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Kinect_Wrapper.frame;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using SharedLibJG.models;
+using System.Drawing;
 
 namespace Kinect_Wrapper.gestures
 {
@@ -61,8 +63,10 @@ namespace Kinect_Wrapper.gestures
 
 
         Action<int> debouceWrapp = null;
+        private Dictionary<SkeletonDataType, Point> Skeleton;
         public void update(IKinectFrame frame)
         {
+            this.Skeleton = frame.UserSkeleton;
             if(State == GesturesDetectorState.ACTIVE)
             {
                 if(debouceWrapp == null)

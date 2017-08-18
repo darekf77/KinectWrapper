@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kinect_Wrapper.frame;
+using SharedLibJG.models;
 
 namespace Kinect_Wrapper.gestures
 {
@@ -15,6 +16,10 @@ namespace Kinect_Wrapper.gestures
             switch (gesture)
             {
                 case PlayerGestures.BOTH_HAND_ABOVE_HEAD:
+                    var left = Skeleton[SkeletonDataType.HandLeft];
+                    var right = Skeleton[SkeletonDataType.HandRight];
+
+
                     break;
                 case PlayerGestures.LEFT_HAND_ABOVE_HEAD:
                     break;
