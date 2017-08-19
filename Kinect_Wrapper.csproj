@@ -99,6 +99,7 @@
     <Compile Include="frame\KinectFrameCreation.cs" />
     <Compile Include="gestures\GesturesDetectorAlgorithms.cs" />
     <Compile Include="gestures\GesturesDetector.cs" />
+    <Compile Include="gestures\GesturesDetectorBindings.cs" />
     <Compile Include="gestures\IGesturesDetector.cs" />
     <Compile Include="gestures\PlayerGestures.cs" />
     <Compile Include="statistic\FrameType.cs" />
