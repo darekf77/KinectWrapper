@@ -108,9 +108,21 @@ namespace Kinect_Wrapper.gestures
                         return true;
                     }
                     break;
-                //case PlayerGestures.RESIZING
+                case PlayerGestures.RESIZING:
+                    if (
+                        !isEmpty(shoudlerCenter, shoulderLeft, shoulderRight,
+                        handLeft, handRight, elbowLeft, elbowRight, wristLeft, wristRight) &&
 
-                //    return
+                        check(shoulderLeft.Y, Operator.GreaterYThan, elbowLeft, wristLeft, handLeft) &&
+                        check(shoulderRight.Y, Operator.GreaterYThan, elbowRight, wristRight, handRight) &&
+
+                        check(elbowLeft.X, Operator.LowerXThan, wristLeft, handLeft) &&
+                        check(elbowRight.X, Operator.GreaterXThan, wristRight, handRight)
+                        )
+                    {
+                        return true;
+                    }
+                    break;
                 default:
                     break;
             }

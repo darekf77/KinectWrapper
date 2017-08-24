@@ -29,17 +29,26 @@ namespace Kinect_Wrapper.gestures
 
         private float calculateResizeGesture()
         {
-            var head = Skeleton[SkeletonDataType.Head];
-            var shoudlerCenter = Skeleton[SkeletonDataType.ShoulderCenter];
-            var shoulderLeft = Skeleton[SkeletonDataType.ShoulderLeft];
-            var shoulderRight = Skeleton[SkeletonDataType.ShoulderRight];
             var handLeft = Skeleton[SkeletonDataType.HandLeft];
             var handRight = Skeleton[SkeletonDataType.HandRight];
+            var shoulderLeft = Skeleton[SkeletonDataType.ShoulderLeft];
+            var shoulderRight = Skeleton[SkeletonDataType.ShoulderRight];
             var wristLeft = Skeleton[SkeletonDataType.WristLeft];
             var wristRight = Skeleton[SkeletonDataType.WristRight];
-            var elbowLeft = Skeleton[SkeletonDataType.ElbowLeft];
-            var elbowRight = Skeleton[SkeletonDataType.ElbowRight];
-            return 0.0F;
+
+            var maxS = Math.Max(shoulderLeft.X, shoulderRight.X);
+            var minS = Math.Min(shoulderLeft.X, shoulderRight.X);
+            var s = Math.Abs(maxS - minS);
+
+
+            var maxW = Math.Max(wristLeft.X, wristRight.X);
+            var minW = Math.Min(wristLeft.X, wristRight.X);
+            var w = Math.Abs(maxW - minW);
+
+            var res = (w * 100) / s;
+
+
+            return (res / 100);
         }
 
     }

@@ -37,7 +37,13 @@ namespace Kinect_Wrapper.app
                 audio = _kinect.Audio,
                 gestures = kinect.Gestures
             };
-
+            kinect.Gestures.onResizeGesture += (e, v) =>
+             {
+                 if (float.Parse(InputResize.Text) != v)
+                 {
+                     InputResize.Text = v.ToString();
+                 }
+             };
         }
 
         private void ListViewDevices_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

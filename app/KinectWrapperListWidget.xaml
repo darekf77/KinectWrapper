@@ -25,7 +25,7 @@
                     <Button Content="+ Add from hard drive" Margin="0,0,26,-4" Click="add_device_from_hard_drive"  />
                     <Button Content="-" HorizontalContentAlignment="Center" Margin="140,0,0,-4" Click="remove_device_from_list" />
                 </Grid>
-                
+
             </StackPanel>
         </TabItem>
         <TabItem Header="Info" Name="TabSkeleton">
@@ -57,7 +57,7 @@
                 <StackPanel Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
                     <Label Height="40" Content="{Binding gestures.LastDetectedGesture}" >
                         <Label.ContentStringFormat>
-                             Gesture: #{0}
+                            Gesture: #{0}
                         </Label.ContentStringFormat>
                     </Label>
                     <Button FontSize="10" Content="Both hands up" Margin="0,0,0,5" Command="{Binding gestures.BothHandsUp}" ></Button>
@@ -68,10 +68,12 @@
                     <Button FontSize="10"   Content="Left hand above head" Margin="0,0,0,5" Command="{Binding gestures.LeftHandAboveHead}" ></Button>
                     <StackPanel Orientation="Horizontal">
                         <Label  Content="Resize gesture" ></Label>
-                        <TextBox  Name="InputResize" Text="0" Width="40"  KeyUp="gestureEntererd" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" ></TextBox>
+                        <TextBox  Name="InputResize" Text="0" Width="40"  
+                                  KeyUp="gestureEntererd" VerticalContentAlignment="Center"
+                                  HorizontalContentAlignment="Right" ></TextBox>
                         <Label FontSize="10"  Content="%" ></Label>
                     </StackPanel>
-                    
+
 
                 </StackPanel>
             </Grid>
