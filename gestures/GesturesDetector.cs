@@ -26,6 +26,7 @@ namespace Kinect_Wrapper.gestures
 
         public GesturesDetectorState State { get; private set; }
         public event EventHandler<PlayerGestures> onGesture;
+        public event EventHandler<float> onResizeGesture;
 
         public GesturesDetector()
         {
@@ -93,6 +94,7 @@ namespace Kinect_Wrapper.gestures
             debouceWrapp(1000);
         }
 
+        
 
         private string _lastDetectedGesture;
 

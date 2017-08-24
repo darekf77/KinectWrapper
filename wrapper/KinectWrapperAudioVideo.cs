@@ -29,19 +29,19 @@ namespace Kinect_Wrapper.wrapper
             Video.FrameReady += Video_FramesReady;
             Video.RecordComplete += Video_RecordComplete;
         }
-        
+
 
         void Video_FramesReady(object sender, IKinectFrame e)
         {
             if (UIEnable && e.IsSkeletonDetected)
             {
-                App.Current.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    _infoLeftHand.Value = e.UserSkeleton[SkeletonDataType.HandLeft].ToString();
-                    _infoRightHand.Value = e.UserSkeleton[SkeletonDataType.HandRight].ToString();
-                    _infoSpine.Value = e.UserSkeleton[SkeletonDataType.Spine].ToString();
-                    _infoIsSkeletonDetected.Value = e.IsSkeletonDetected.ToString();
-                }));
+                if (App.Current != null) App.Current.Dispatcher.BeginInvoke(new Action(() =>
+                   {
+                       _infoLeftHand.Value = e.UserSkeleton[SkeletonDataType.HandLeft].ToString();
+                       _infoRightHand.Value = e.UserSkeleton[SkeletonDataType.HandRight].ToString();
+                       _infoSpine.Value = e.UserSkeleton[SkeletonDataType.Spine].ToString();
+                       _infoIsSkeletonDetected.Value = e.IsSkeletonDetected.ToString();
+                   }));
             }
         }
 
@@ -49,6 +49,6 @@ namespace Kinect_Wrapper.wrapper
         {
             _devices.Add(new Device(Audio, Video, path));
         }
-        
+
     }
 }

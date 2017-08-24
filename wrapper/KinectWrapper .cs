@@ -21,7 +21,7 @@ using Kinect_Wrapper.gestures;
 
 namespace Kinect_Wrapper.wrapper
 {
-    public partial class KinectWrapper: IKinectWrapper, INotifyPropertyChanged
+    public partial class KinectWrapper : IKinectWrapper, INotifyPropertyChanged
     {
         #region singleton 
         private static IKinectWrapper _instance;
@@ -38,8 +38,8 @@ namespace Kinect_Wrapper.wrapper
             }
         }
         #endregion
-        
-        
+
+
         private KinectWrapper()
         {
             initAudioVideo();
@@ -51,7 +51,7 @@ namespace Kinect_Wrapper.wrapper
             initGestures();
         }
 
-        
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -64,7 +64,10 @@ namespace Kinect_Wrapper.wrapper
             Gestures = new GesturesDetector();
             Video.FrameReady += (e, frame) =>
              {
-                 Gestures.update(frame);
+                 if (Device.Type != DeviceType.NO_DEVICE)
+                 {
+                     Gestures.update(frame);
+                 }
              };
         }
 

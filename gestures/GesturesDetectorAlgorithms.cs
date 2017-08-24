@@ -47,6 +47,15 @@ namespace Kinect_Wrapper.gestures
             return true;
         }
 
+        bool isEmpty(params Point[] points)
+        {
+            foreach (var p in points)
+            {
+                if (p.IsEmpty) return true;
+            }
+            return false;
+        }
+
         #endregion
 
         bool checkSkeleton(PlayerGestures gesture)
@@ -64,25 +73,34 @@ namespace Kinect_Wrapper.gestures
 
             switch (gesture)
             {
-                case PlayerGestures.BOTH_HAND_ABOVE_HEAD:
-                    if (check(head.Y, Operator.GreaterYThan, handLeft, handRight, wristLeft, wristRight)) return true;
+                case PlayerGestures.HANDS_ABOVE_HEAD:
+                    if (!isEmpty(head, handLeft, handRight, wristLeft, wristRight) &&
+                        check(head.Y, Operator.GreaterYThan, handLeft, handRight, wristLeft, wristRight)) return true;
                     break;
                 case PlayerGestures.LEFT_HAND_ABOVE_HEAD:
-                    if (check(head.Y, Operator.GreaterYThan, handLeft, wristLeft) &&
+                    if (!isEmpty(head, handLeft, handRight, wristLeft, wristRight) &&
+                        check(head.Y, Operator.GreaterYThan, handLeft, wristLeft) &&
                         check(head.Y, Operator.LowerYThan, handRight, wristRight)) return true;
                     break;
                 case PlayerGestures.RIGHT_HAND_ABOVE_HEAD:
-                    if (check(head.Y, Operator.LowerYThan, handLeft, wristLeft) &&
+                    if (!isEmpty(head, handLeft, handRight, wristLeft, wristRight) &&
+                        check(head.Y, Operator.LowerYThan, handLeft, wristLeft) &&
                         check(head.Y, Operator.GreaterYThan, handRight, wristRight)) return true;
                     break;
                 case PlayerGestures.SWIPE_LEFT:
-                    if (check(shoudlerCenter.X, Operator.GreaterXThan, handLeft, wristLeft)) return true;
+                    if (!isEmpty(shoudlerCenter, handLeft, wristLeft, handRight, wristRight) &&
+                        check(shoudlerCenter.X, Operator.GreaterXThan, handLeft, wristLeft) &&
+                        check(shoudlerCenter.X, Operator.GreaterXThan, handRight, wristRight)
+                        ) return true;
                     break;
                 case PlayerGestures.SWIPE_RIGHT:
-                    if (check(shoudlerCenter.X, Operator.LowerXThan, handRight, wristRight)) return true;
+                    if (!isEmpty(shoudlerCenter, handRight, wristRight, handLeft, wristLeft) &&
+                        check(shoudlerCenter.X, Operator.LowerXThan, handRight, wristRight) &&
+                        check(shoudlerCenter.X, Operator.LowerXThan, handLeft, wristLeft)
+                        ) return true;
                     break;
-                case PlayerGestures.BOTH_HANDS_WIDE:
-                    if (
+                case PlayerGestures.HANDS_WIDE:
+                    if (!isEmpty(head, shoulderLeft, shoulderRight, handLeft, handRight, elbowLeft, elbowRight, wristLeft, wristRight) &&
                         check(head.Y, Operator.LowerYThan, handLeft, handRight, elbowLeft, elbowRight, wristLeft, wristRight) &&
                         check(shoulderLeft.Y, Operator.GreaterYThan, handLeft, handRight, elbowLeft, elbowRight, wristLeft, wristRight) &&
                         check(shoulderRight.Y, Operator.GreaterYThan, handLeft, handRight, elbowLeft, elbowRight, wristLeft, wristRight))
@@ -90,6 +108,9 @@ namespace Kinect_Wrapper.gestures
                         return true;
                     }
                     break;
+                //case PlayerGestures.RESIZING
+
+                //    return
                 default:
                     break;
             }

@@ -20,7 +20,7 @@ namespace Kinect_Wrapper.gestures
             {
                 return new Command(() =>
                 {
-                    trigger(PlayerGestures.BOTH_HAND_ABOVE_HEAD);
+                    trigger(PlayerGestures.HANDS_ABOVE_HEAD);
                 });
             }
         }
@@ -35,7 +35,7 @@ namespace Kinect_Wrapper.gestures
             {
                 return new Command(() =>
                 {
-                    trigger(PlayerGestures.BOTH_HANDS_WIDE);
+                    trigger(PlayerGestures.HANDS_WIDE);
                 });
             }
         }

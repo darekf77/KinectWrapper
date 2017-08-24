@@ -55,18 +55,23 @@
         <TabItem Header="Gestures" Name="TabGestures" Margin="-2,-2,2,0">
             <Grid >
                 <StackPanel Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
-                    <Label Content="{Binding gestures.LastDetectedGesture}" >
+                    <Label Height="40" Content="{Binding gestures.LastDetectedGesture}" >
                         <Label.ContentStringFormat>
-                             Triggered gesture: #{0}
+                             Gesture: #{0}
                         </Label.ContentStringFormat>
                     </Label>
-                    <Button  Content="Both hands up" Margin="0,0,0,5" Command="{Binding gestures.BothHandsUp}" ></Button>
-                    <Button  Content="Cross with hands" Margin="0,0,0,5" Command="{Binding gestures.Aeroplane}" ></Button>
-                    <Button  Content="Swipe left" Margin="0,0,0,5" Command="{Binding gestures.SwipeLeft}" ></Button>
-                    <Button  Content="Swipe right" Margin="0,0,0,5" Command="{Binding gestures.SwipeRight}" ></Button>
-                    <Button  Content="Right hand above head" Margin="0,0,0,5" Command="{Binding gestures.RightHandAboveHead}" ></Button>
-                    <Button  Content="Left hand above head" Margin="0,0,0,5" Command="{Binding gestures.LeftHandAboveHead}" ></Button>
-
+                    <Button FontSize="10" Content="Both hands up" Margin="0,0,0,5" Command="{Binding gestures.BothHandsUp}" ></Button>
+                    <Button FontSize="10"   Content="Cross with hands" Margin="0,0,0,5" Command="{Binding gestures.Aeroplane}" ></Button>
+                    <Button FontSize="10"   Content="Swipe left" Margin="0,0,0,5" Command="{Binding gestures.SwipeLeft}" ></Button>
+                    <Button FontSize="10"  Content="Swipe right" Margin="0,0,0,5" Command="{Binding gestures.SwipeRight}" ></Button>
+                    <Button FontSize="10"   Content="Right hand above head" Margin="0,0,0,5" Command="{Binding gestures.RightHandAboveHead}" ></Button>
+                    <Button FontSize="10"   Content="Left hand above head" Margin="0,0,0,5" Command="{Binding gestures.LeftHandAboveHead}" ></Button>
+                    <StackPanel Orientation="Horizontal">
+                        <Label  Content="Resize gesture" ></Label>
+                        <TextBox  Name="InputResize" Text="0" Width="40"  KeyUp="gestureEntererd" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" ></TextBox>
+                        <Label FontSize="10"  Content="%" ></Label>
+                    </StackPanel>
+                    
 
                 </StackPanel>
             </Grid>

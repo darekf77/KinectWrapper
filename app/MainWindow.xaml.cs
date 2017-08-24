@@ -47,9 +47,10 @@ namespace Kinect_Wrapper
         {
             kinect.Video.FrameReady += kinect_ReadyFrame;
             kinect.DisplayImageReady += kinect_ReadyDisplayImage;
+            kinect.Gestures.start();
         }
 
-        
+
         void kinect_ReadyFrame(object sender, frame.IKinectFrame e)
         {
             this.Dispatcher.BeginInvoke(new Action(() =>
@@ -67,6 +68,6 @@ namespace Kinect_Wrapper
 
         }
 
-        
+
     }
 }

@@ -8,11 +8,12 @@ namespace Kinect_Wrapper.gestures
 {
     public enum PlayerGestures
     {
-        BOTH_HAND_ABOVE_HEAD,
+        HANDS_ABOVE_HEAD,
         LEFT_HAND_ABOVE_HEAD,
         RIGHT_HAND_ABOVE_HEAD,
         SWIPE_LEFT,
         SWIPE_RIGHT,
-        BOTH_HANDS_WIDE
+        HANDS_WIDE,
+        RESIZING
     }
 }
