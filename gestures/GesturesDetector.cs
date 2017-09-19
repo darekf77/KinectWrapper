@@ -38,7 +38,7 @@ namespace Kinect_Wrapper.gestures
                 this.LastDetectedGesture = "-";
                 debouceWrapp = null;
                 gestureDetected = false;
-                Console.WriteLine("debouce successs");
+                //Console.WriteLine("debouce successs");
             };
         }
 
@@ -67,6 +67,7 @@ namespace Kinect_Wrapper.gestures
         public void update(IKinectFrame frame)
         {
             if (gestureDetected) return;
+            if (!frame.IsSkeletonDetected) return;
             this.Skeleton = frame.UserSkeleton;
             if (State == GesturesDetectorState.ACTIVE)
             {
@@ -90,11 +91,11 @@ namespace Kinect_Wrapper.gestures
             gestureDetected = true;
             LastDetectedGesture = gesture.ToString();
             onGesture?.Invoke(this, gesture);
-            Console.WriteLine("debouce start");
+            //Console.WriteLine("debouce start");
             debouceWrapp(1000);
         }
 
-        
+
 
         private string _lastDetectedGesture;
 

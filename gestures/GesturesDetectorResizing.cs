@@ -15,7 +15,7 @@ namespace Kinect_Wrapper.gestures
         public void triggerResizeGesture(float percentage = -1)
         {
             var res = (percentage == -1) ? calculateResizeGesture() : percentage;
-            if (percentage >= 0 && percentage <= 1)
+            if (res >= 0 && res <= 1)
             {
                 onResizeGesture?.Invoke(this, res);
             }
@@ -38,7 +38,7 @@ namespace Kinect_Wrapper.gestures
 
             var maxS = Math.Max(shoulderLeft.X, shoulderRight.X);
             var minS = Math.Min(shoulderLeft.X, shoulderRight.X);
-            var s = Math.Abs(maxS - minS);
+            var s = Math.Abs(maxS - minS) * 2; /// QUICK_FIX
 
 
             var maxW = Math.Max(wristLeft.X, wristRight.X);
@@ -47,6 +47,11 @@ namespace Kinect_Wrapper.gestures
 
             var res = (w * 100) / s;
 
+            if (res < 50) res = 50;
+            if (res > 100) res = 100;
+            res -= 50;
+            res *= 2;
+            Console.WriteLine("res: " + res);
 
             return (res / 100);
         }

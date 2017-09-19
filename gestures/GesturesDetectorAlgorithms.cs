@@ -120,6 +120,7 @@ namespace Kinect_Wrapper.gestures
                         check(elbowRight.X, Operator.GreaterXThan, wristRight, handRight)
                         )
                     {
+                        triggerResizeGesture();
                         return true;
                     }
                     break;

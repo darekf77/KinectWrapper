@@ -39,10 +39,14 @@ namespace Kinect_Wrapper.app
             };
             kinect.Gestures.onResizeGesture += (e, v) =>
              {
-                 if (float.Parse(InputResize.Text) != v)
+                 App.Current.Dispatcher.BeginInvoke(new Action(() =>
                  {
-                     InputResize.Text = v.ToString();
-                 }
+                     if (float.Parse(InputResize.Text) != v)
+                     {
+                         InputResize.Text = v.ToString();
+                     }
+                 }));
+
              };
         }
 
