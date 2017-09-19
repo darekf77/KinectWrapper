@@ -47,7 +47,6 @@ namespace Kinect_Wrapper
         {
             kinect.Video.FrameReady += kinect_ReadyFrame;
             kinect.DisplayImageReady += kinect_ReadyDisplayImage;
-            kinect.Gestures.start();
         }
 
 

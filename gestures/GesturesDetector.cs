@@ -92,7 +92,16 @@ namespace Kinect_Wrapper.gestures
             LastDetectedGesture = gesture.ToString();
             onGesture?.Invoke(this, gesture);
             //Console.WriteLine("debouce start");
-            debouceWrapp(1000);
+            if (gesture == PlayerGestures.RESIZING)
+            {
+                debouceWrapp(100);
+            }
+            else
+            {
+                debouceWrapp(3000);
+            }
+
+
         }
 
 

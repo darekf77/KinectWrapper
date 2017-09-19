@@ -64,11 +64,12 @@ namespace Kinect_Wrapper.wrapper
             Gestures = new GesturesDetector();
             Video.FrameReady += (e, frame) =>
              {
-                 if (Device.Type != DeviceType.NO_DEVICE)
+                 if (Device.Type == DeviceType.KINECT_1)
                  {
                      Gestures.update(frame);
                  }
              };
+            Gestures.start();
         }
 
 
