@@ -1,5 +1,6 @@
 ﻿using Kinect_Wrapper.device;
 using Kinect_Wrapper.device.list;
+using Kinect_Wrapper.structures;
 using Microsoft.Kinect;
 using SharedLibJG.Helpers;
 using System;
@@ -17,7 +18,60 @@ namespace Kinect_Wrapper.wrapper
         private DeviceBase _currentDevice;
         public DeviceBase SelectedDevice { get; set; }
 
-        public static Boolean AutoPickUpFirstKinect = true;
+        #region autopickup devoce
+
+        public DeviceType AutopickupDeviceType { get; private set; }
+        private DeviceType _autopickupDeviceType = DeviceType.NO_DEVICE;
+        public bool AutopickupDevice
+        {
+            get
+            {
+                return AutoPickUpFirstKinect;
+            }
+            set
+            {
+                if (AutoPickUpFirstKinectIsSet)
+                {
+                    throw new Exception("Device autopickup already set");
+                }
+                AutoPickUpFirstKinect = value;
+                AutoPickUpFirstKinectIsSet = true;
+            }
+        }
+
+        private static Boolean AutoPickUpFirstKinect = true;
+        private static Boolean AutoPickUpFirstKinectIsSet = false;
+        private void autopickupDeveic()
+        {
+            if (!AutoPickUpFirstKinect) return;
+            var kinectFounded = false;
+            foreach (var device in Devices)
+            {
+                if (device.Type == structures.DeviceType.KINECT_1)
+                {
+                    kinectFounded = true;
+                    AutopickupDeviceType = DeviceType.KINECT_1;
+                    Device = device;
+                    Device.start();
+                    break;
+                }
+            }
+            if (!kinectFounded)
+            {
+                foreach (var device in Devices)
+                {
+                    if (device.Type == structures.DeviceType.RECORD_FILE_KINECT_1)
+                    {
+                        AutopickupDeviceType = DeviceType.RECORD_FILE_KINECT_1;
+                        Device = device;
+                        Device.start();
+                        break;
+                    }
+                }
+            }
+            OnAutopickupDeviceChanged?.Invoke(this, EventArgs.Empty);
+        }
+        #endregion
 
         private void initDevices()
         {
@@ -28,7 +82,7 @@ namespace Kinect_Wrapper.wrapper
             Device.start();
             checkPotentialSensor();
             checkPotentialFiles();
-
+            autopickupDeveic();
             KinectSensor.KinectSensors.StatusChanged += KinectSensors_StatusChanged; ;
         }
 
@@ -36,7 +90,7 @@ namespace Kinect_Wrapper.wrapper
         {
             foreach (var device in Devices)
             {
-                if (device.sensor!=null && device.sensor.UniqueKinectId.Equals(e.Sensor.UniqueKinectId)) return;
+                if (device.sensor != null && device.sensor.UniqueKinectId.Equals(e.Sensor.UniqueKinectId)) return;
             }
             Devices.Add(new Device(Audio, Video, e.Sensor));
         }

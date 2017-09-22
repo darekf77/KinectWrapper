@@ -52,6 +52,7 @@ namespace Kinect_Wrapper.wrapper
         }
 
 
+        public event EventHandler OnAutopickupDeviceChanged;
 
         public event PropertyChangedEventHandler PropertyChanged;
 

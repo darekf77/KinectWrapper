@@ -16,7 +16,7 @@ using System.Windows.Media.Imaging;
 
 namespace Kinect_Wrapper.wrapper
 {
-    
+
     public interface IKinectWrapper
     {
         AudioBase Audio { get; }
@@ -26,16 +26,19 @@ namespace Kinect_Wrapper.wrapper
         IGesturesDetector Gestures { get; }
 
         Boolean IsStopped { get; }
-        
+
         ObservableCollection<DeviceBase> Devices { get; }
-        
+
         DeviceBase Device { get; set; }
 
         DeviceBase SelectedDevice { get; set; }
-        
+
         StreamBase Stream { get; set; }
-        
+
         ObservableCollection<StreamBase> Streams { get; set; }
+
+        bool AutopickupDevice { get; set; }
+        DeviceType AutopickupDeviceType { get; }
 
         Boolean UIEnable { get; set; }
 
@@ -44,13 +47,14 @@ namespace Kinect_Wrapper.wrapper
         void commit(Bitmap frame);
 
         ObservableCollection<InfoRow> Info { get; }
-        
+
 
         event EventHandler<ImageSource> DisplayImageReady;
 
         event EventHandler<StreamBase> StreamChanged;
 
         event EventHandler DeviceChanged;
-        
+
+        event EventHandler OnAutopickupDeviceChanged;
     }
 }

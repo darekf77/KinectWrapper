@@ -36,18 +36,6 @@ namespace Kinect_Wrapper.wrapper
                     Device.update();
                     if (Device.Type == DeviceType.NO_DEVICE)
                     {
-                        if (AutoPickUpFirstKinect)
-                        {
-                            foreach (var dev in Devices)
-                            {
-                                if (dev.Type == DeviceType.KINECT_1 && dev.State == DeviceState.READY)
-                                {
-                                    Device = dev;                                    
-                                    Device.start();
-                                    break;
-                                }
-                            }
-                        }
                         Thread.Sleep(1000);
                     }
                     else if (Device.State == DeviceState.READY || Device.State == DeviceState.NOT_READY)
