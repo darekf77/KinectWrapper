@@ -13,12 +13,12 @@ namespace Kinect_Wrapper.device.audio
 {
     public abstract partial class AudioBase
     {
-        
+
 
         private void worker_DoWork(object sender, DoWorkEventArgs e)
         {
             Thread.CurrentThread.Name = "Kinect audio thread";
-            if(_device.Type == DeviceType.KINECT_1)
+            if (_device.Type == DeviceType.KINECT_1)
             {
                 try
                 {
@@ -49,12 +49,10 @@ namespace Kinect_Wrapper.device.audio
                 {
                     Console.WriteLine(ex.Message);
                 }
-                
             }
-            Console.WriteLine("END OF WORKER AUDIO");            
-        }      
+        }
 
-        
+
 
     }
 }

@@ -37,7 +37,6 @@ namespace Kinect_Wrapper.wrapper
 
         ObservableCollection<StreamBase> Streams { get; set; }
 
-        bool AutopickupDevice { get; set; }
         DeviceType AutopickupDeviceType { get; }
 
         Boolean UIEnable { get; set; }

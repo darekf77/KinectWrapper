@@ -26,16 +26,15 @@ namespace Kinect_Wrapper.wrapper
         #region singleton 
         private static IKinectWrapper _instance;
         static readonly object _locker = new object();
-        public static IKinectWrapper Instance
+        public static IKinectWrapper Instance(bool autopickupKinect = true)
         {
-            get
+            AutopickupDevice = autopickupKinect;
+            if (_instance == null)
             {
-                if (_instance == null)
-                {
-                    _instance = new KinectWrapper();
-                }
-                return _instance;
+                _instance = new KinectWrapper();
             }
+            return _instance;
+
         }
         #endregion
 
@@ -52,7 +51,7 @@ namespace Kinect_Wrapper.wrapper
         }
 
 
-        public event EventHandler OnAutopickupDeviceChanged;
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 

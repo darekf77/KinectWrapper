@@ -13,10 +13,10 @@ using System.Threading;
 
 namespace Kinect_Wrapper.device.audio
 {
-    public abstract partial class AudioBase:IAudio,INotifyPropertyChanged
-    {        
-        private BackgroundWorker worker;     
-        
+    public abstract partial class AudioBase : IAudio, INotifyPropertyChanged
+    {
+        private BackgroundWorker worker;
+
         public SpeechRecognitionEngine SpeechRecognizer { get; private set; }
         public ObservableCollection<String> Grammar { get; set; }
 
@@ -41,7 +41,7 @@ namespace Kinect_Wrapper.device.audio
             {
                 return _isRecordingPossible;
             }
-             private set
+            private set
             {
                 _isRecordingPossible = value;
                 OnPropertyChanged("IsRecordingPossible");
@@ -84,14 +84,16 @@ namespace Kinect_Wrapper.device.audio
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public AudioBase() {
+        public AudioBase()
+        {
             Grammar = new ObservableCollection<String>();
             Grammar.CollectionChanged += Grammar_CollectionChanged;
+            Grammar.Add("test");
         }
 
         private void Grammar_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if(audioStarted) SpeechRecognizer.LoadGrammarAsync(GetCurrentGrammar());
+            if (audioStarted) SpeechRecognizer.LoadGrammarAsync(GetCurrentGrammar());
         }
 
         private Grammar GetCurrentGrammar()
@@ -107,7 +109,7 @@ namespace Kinect_Wrapper.device.audio
             return new Grammar(gb);
         }
 
-       
+
 
         private static RecognizerInfo GetRecognizer()
         {

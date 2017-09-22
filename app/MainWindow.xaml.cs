@@ -25,7 +25,7 @@ namespace Kinect_Wrapper
     /// </summary>
     public partial class MainWindow : Window
     {
-        private IKinectWrapper kinect = KinectWrapper.Instance;
+        private IKinectWrapper kinect = KinectWrapper.Instance();
         private PageKinectWrapperList _devicesList;
         private PageKinectWrapperControl _kinectControls;
         private Thread _worker;

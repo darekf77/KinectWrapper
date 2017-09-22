@@ -19,10 +19,17 @@ namespace Kinect_Wrapper.wrapper
         public DeviceBase SelectedDevice { get; set; }
 
         #region autopickup devoce
-
-        public DeviceType AutopickupDeviceType { get; private set; }
+        public event EventHandler OnAutopickupDeviceChanged;
+        public DeviceType AutopickupDeviceType
+        {
+            get { return _autopickupDeviceType; }
+            private set
+            {
+                _autopickupDeviceType = value;
+            }
+        }
         private DeviceType _autopickupDeviceType = DeviceType.NO_DEVICE;
-        public bool AutopickupDevice
+        private static bool AutopickupDevice
         {
             get
             {
@@ -30,12 +37,12 @@ namespace Kinect_Wrapper.wrapper
             }
             set
             {
-                if (AutoPickUpFirstKinectIsSet)
+                if (!AutoPickUpFirstKinectIsSet)
                 {
-                    throw new Exception("Device autopickup already set");
+                    AutoPickUpFirstKinect = value;
+                    AutoPickUpFirstKinectIsSet = true;
+                    Console.WriteLine("[KinectWrapper] - device autopickup already set");
                 }
-                AutoPickUpFirstKinect = value;
-                AutoPickUpFirstKinectIsSet = true;
             }
         }
 
