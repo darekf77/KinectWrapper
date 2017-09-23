@@ -99,7 +99,7 @@ namespace Kinect_Wrapper.gestures
                         check(shoudlerCenter.X, Operator.LowerXThan, handLeft, wristLeft)
                         ) return true;
                     break;
-                case PlayerGestures.HANDS_WIDE:
+                case PlayerGestures.HANDS_AEROPLAN:
                     if (!isEmpty(head, shoulderLeft, shoulderRight, handLeft, handRight, elbowLeft, elbowRight, wristLeft, wristRight) &&
                         check(head.Y, Operator.LowerYThan, handLeft, handRight, elbowLeft, elbowRight, wristLeft, wristRight) &&
                         check(shoulderLeft.Y, Operator.GreaterYThan, handLeft, handRight, elbowLeft, elbowRight, wristLeft, wristRight) &&

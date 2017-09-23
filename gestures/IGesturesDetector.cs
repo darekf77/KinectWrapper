@@ -17,7 +17,7 @@ namespace Kinect_Wrapper.gestures
 
     public interface IGesturesDetector : IGesturesDetectorVM
     {
-        string LastDetectedGesture { get; }
+        string LastDetectedGestureName { get; }
 
         GesturesDetectorState State { get; }
 

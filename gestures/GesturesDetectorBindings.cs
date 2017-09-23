@@ -35,7 +35,7 @@ namespace Kinect_Wrapper.gestures
             {
                 return new Command(() =>
                 {
-                    trigger(PlayerGestures.HANDS_WIDE);
+                    trigger(PlayerGestures.HANDS_AEROPLAN);
                 });
             }
         }

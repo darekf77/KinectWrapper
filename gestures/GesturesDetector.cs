@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using SharedLibJG.models;
 using System.Drawing;
+using SharedLibJG.Helpers;
 
 namespace Kinect_Wrapper.gestures
 {
@@ -27,27 +28,43 @@ namespace Kinect_Wrapper.gestures
         public GesturesDetectorState State { get; private set; }
         public event EventHandler<PlayerGestures> onGesture;
         public event EventHandler<float> onResizeGesture;
+        private Dictionary<PlayerGestures, int> debouceTimes = new Dictionary<PlayerGestures, int>();
+        Action<int> gestureAction;
+        Action<int> debouceWrapp = null;
 
         public GesturesDetector()
         {
             State = GesturesDetectorState.UNACTIVE;
+            LastDetectedGesture = PlayerGestures.__NOTHING;
+
+            #region debuce gestures
+
+            debouceTimes[PlayerGestures.__NOTHING] = 0;
+            debouceTimes[PlayerGestures.RESIZING] = 100;
+            //debouceTimes[PlayerGestures.HANDS_ABOVE_HEAD] = 1000;
+            //debouceTimes[PlayerGestures.HANDS_AEROPLAN] = 1000;
+            debouceTimes[PlayerGestures.LEFT_HAND_ABOVE_HEAD] = 500;
+            debouceTimes[PlayerGestures.RIGHT_HAND_ABOVE_HEAD] = 500;
+            debouceTimes[PlayerGestures.SWIPE_LEFT] = 1000;
+            debouceTimes[PlayerGestures.SWIPE_RIGHT] = 1000;
 
 
-            rmLabel = (arg) =>
+            gestureAction = (arg) =>
             {
-                this.LastDetectedGesture = "-";
-                debouceWrapp = null;
-                gestureDetected = false;
-                //Console.WriteLine("debouce successs");
+                onGesture?.Invoke(this, LastDetectedGesture);
+                LastDetectedGesture = PlayerGestures.__NOTHING;
             };
+            debouceWrapp = gestureAction.Debounce<int>();
+
+            #endregion
         }
 
-        Action<int> rmLabel;
-
+        #region start / stpop
 
         public void start()
         {
             State = GesturesDetectorState.ACTIVE;
+            LastDetectedGesture = PlayerGestures.__NOTHING;
         }
 
         public void stop()
@@ -55,20 +72,30 @@ namespace Kinect_Wrapper.gestures
             State = GesturesDetectorState.UNACTIVE;
         }
 
+        #endregion
+
+        #region manual trigger
         public void trigger(PlayerGestures gesture)
         {
             gestureDetectedAction(gesture);
         }
+        #endregion
 
+        #region is gesture detected function        
+        private bool gestureDetected()
+        {
+            return LastDetectedGesture != PlayerGestures.__NOTHING;
+        }
+        #endregion
 
-        Action<int> debouceWrapp = null;
+        #region update
         private Dictionary<SkeletonDataType, Point> Skeleton;
-        private bool gestureDetected = false;
         public void update(IKinectFrame frame)
         {
-            if (gestureDetected) return;
-            if (!frame.IsSkeletonDetected) return;
+            if (gestureDetected() && !frame.IsSkeletonDetected) return;
+
             this.Skeleton = frame.UserSkeleton;
+
             if (State == GesturesDetectorState.ACTIVE)
             {
                 foreach (PlayerGestures gesture in Enum.GetValues(typeof(PlayerGestures)))
@@ -81,43 +108,57 @@ namespace Kinect_Wrapper.gestures
                 }
             }
         }
+        #endregion
 
         private void gestureDetectedAction(PlayerGestures gesture)
         {
-            if (debouceWrapp == null)
+            LastDetectedGesture = gesture;
+            if (gesture == PlayerGestures.LEFT_HAND_ABOVE_HEAD || gesture == PlayerGestures.RIGHT_HAND_ABOVE_HEAD)
             {
-                debouceWrapp = rmLabel.Debounce<int>();
-            }
-            gestureDetected = true;
-            LastDetectedGesture = gesture.ToString();
-            onGesture?.Invoke(this, gesture);
-            //Console.WriteLine("debouce start");
-            if (gesture == PlayerGestures.RESIZING)
-            {
-                debouceWrapp(100);
+                onGesture?.Invoke(this, LastDetectedGesture);
+                Helpers.SetTimeout(() =>
+                {
+                    LastDetectedGesture = PlayerGestures.__NOTHING;
+                }, 500);
             }
             else
             {
-                debouceWrapp(3000);
+                debouceWrapp(debouceTimes[gesture]);
             }
+        }
 
 
+        #region last detected gesture
+
+        private PlayerGestures _lastDetectedGesture;
+
+        public PlayerGestures LastDetectedGesture
+        {
+            get { return _lastDetectedGesture; }
+            set
+            {
+                _lastDetectedGesture = value;
+
+                LastDetectedGestureName = (value == PlayerGestures.__NOTHING ? "-" : value.ToString());
+            }
         }
 
 
 
-        private string _lastDetectedGesture;
 
-        public string LastDetectedGesture
+        private string _lastDetectedGestureName;
+
+        public string LastDetectedGestureName
         {
-            get { return _lastDetectedGesture; }
+            get { return _lastDetectedGestureName; }
             private set
             {
                 OnPropertyChanged();
-                _lastDetectedGesture = value;
+                _lastDetectedGestureName = value;
             }
         }
 
+        #endregion last detected gesture
 
 
 

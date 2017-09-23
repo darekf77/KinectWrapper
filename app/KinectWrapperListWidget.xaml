@@ -55,7 +55,7 @@
         <TabItem Header="Gestures" Name="TabGestures" Margin="-2,-2,2,0">
             <Grid >
                 <StackPanel Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
-                    <Label Height="40" Content="{Binding gestures.LastDetectedGesture}" >
+                    <Label Height="40" Content="{Binding gestures.LastDetectedGestureName}" >
                         <Label.ContentStringFormat>
                             Gesture: #{0}
                         </Label.ContentStringFormat>
