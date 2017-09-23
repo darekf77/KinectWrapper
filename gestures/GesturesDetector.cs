@@ -129,7 +129,7 @@ namespace Kinect_Wrapper.gestures
                 Helpers.SetTimeout(() =>
                 {
                     LastDetectedGesture = PlayerGestures.__NOTHING;
-                }, 300);
+                }, 100);
             }
             else
             {
