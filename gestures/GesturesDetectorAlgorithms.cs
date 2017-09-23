@@ -73,9 +73,38 @@ namespace Kinect_Wrapper.gestures
 
             switch (gesture)
             {
+                case PlayerGestures.RESIZING:
+                    if (
+                        !isEmpty(shoudlerCenter, shoulderLeft, shoulderRight,
+                        handLeft, handRight, elbowLeft, elbowRight, wristLeft, wristRight) &&
+
+                        check(shoulderLeft.Y, Operator.GreaterYThan, elbowLeft, wristLeft, handLeft) &&
+                        check(shoulderRight.Y, Operator.GreaterYThan, elbowRight, wristRight, handRight) &&
+
+                        check(elbowLeft.X, Operator.LowerXThan, wristLeft, handLeft) &&
+                        check(elbowRight.X, Operator.GreaterXThan, wristRight, handRight)
+                        )
+                    {
+                        return true;
+                    }
+                    break;
                 case PlayerGestures.HANDS_ABOVE_HEAD:
                     if (!isEmpty(head, handLeft, handRight, wristLeft, wristRight) &&
-                        check(head.Y, Operator.GreaterYThan, handLeft, handRight, wristLeft, wristRight)) return true;
+                        check(head.Y, Operator.GreaterYThan, handLeft, handRight, wristLeft, wristRight) &&
+                        check(elbowLeft.X, Operator.GreaterXThan, wristLeft, handLeft) &&
+                        check(elbowRight.X, Operator.LowerXThan, wristRight, handRight)
+                        ) return true;
+                    break;
+                case PlayerGestures.HANDS_AEROPLAN:
+                    if (!isEmpty(head, shoulderLeft, shoulderRight, handLeft, handRight, elbowLeft, elbowRight, wristLeft, wristRight) &&
+                        check(head.Y, Operator.LowerYThan, handLeft, handRight, elbowLeft, elbowRight, wristLeft, wristRight) &&
+                        check(shoulderLeft.Y, Operator.GreaterYThan, handLeft, handRight, elbowLeft, elbowRight, wristLeft, wristRight) &&
+                        check(shoulderRight.Y, Operator.GreaterYThan, handLeft, handRight, elbowLeft, elbowRight, wristLeft, wristRight) &&
+                        check(elbowLeft.X, Operator.GreaterXThan, wristLeft, handLeft) &&
+                        check(elbowRight.X, Operator.LowerXThan, wristRight, handRight))
+                    {
+                        return true;
+                    }
                     break;
                 case PlayerGestures.LEFT_HAND_ABOVE_HEAD:
                     if (!isEmpty(head, handLeft, handRight, wristLeft, wristRight) &&
@@ -99,31 +128,7 @@ namespace Kinect_Wrapper.gestures
                         check(shoudlerCenter.X, Operator.LowerXThan, handLeft, wristLeft)
                         ) return true;
                     break;
-                case PlayerGestures.HANDS_AEROPLAN:
-                    if (!isEmpty(head, shoulderLeft, shoulderRight, handLeft, handRight, elbowLeft, elbowRight, wristLeft, wristRight) &&
-                        check(head.Y, Operator.LowerYThan, handLeft, handRight, elbowLeft, elbowRight, wristLeft, wristRight) &&
-                        check(shoulderLeft.Y, Operator.GreaterYThan, handLeft, handRight, elbowLeft, elbowRight, wristLeft, wristRight) &&
-                        check(shoulderRight.Y, Operator.GreaterYThan, handLeft, handRight, elbowLeft, elbowRight, wristLeft, wristRight))
-                    {
-                        return true;
-                    }
-                    break;
-                case PlayerGestures.RESIZING:
-                    if (
-                        !isEmpty(shoudlerCenter, shoulderLeft, shoulderRight,
-                        handLeft, handRight, elbowLeft, elbowRight, wristLeft, wristRight) &&
 
-                        check(shoulderLeft.Y, Operator.GreaterYThan, elbowLeft, wristLeft, handLeft) &&
-                        check(shoulderRight.Y, Operator.GreaterYThan, elbowRight, wristRight, handRight) &&
-
-                        check(elbowLeft.X, Operator.LowerXThan, wristLeft, handLeft) &&
-                        check(elbowRight.X, Operator.GreaterXThan, wristRight, handRight)
-                        )
-                    {
-                        triggerResizeGesture();
-                        return true;
-                    }
-                    break;
                 default:
                     break;
             }

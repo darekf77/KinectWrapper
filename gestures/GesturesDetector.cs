@@ -115,7 +115,15 @@ namespace Kinect_Wrapper.gestures
         {
             if (debouceTime && LastDetectedGesture != gesture) return;
             LastDetectedGesture = gesture;
-            if (gesture == PlayerGestures.LEFT_HAND_ABOVE_HEAD || gesture == PlayerGestures.RIGHT_HAND_ABOVE_HEAD)
+            if (gesture == PlayerGestures.RESIZING)
+            {
+                triggerResizeGesture();
+                Helpers.SetTimeout(() =>
+                {
+                    LastDetectedGesture = PlayerGestures.__NOTHING;
+                }, 100);
+            }
+            else if (gesture == PlayerGestures.LEFT_HAND_ABOVE_HEAD || gesture == PlayerGestures.RIGHT_HAND_ABOVE_HEAD)
             {
                 onGesture?.Invoke(this, LastDetectedGesture);
                 Helpers.SetTimeout(() =>

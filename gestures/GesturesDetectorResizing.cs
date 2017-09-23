@@ -51,9 +51,9 @@ namespace Kinect_Wrapper.gestures
             if (res > 100) res = 100;
             res -= 50;
             res *= 2;
-            Console.WriteLine("res: " + res);
+            //Console.WriteLine("res: " + res);
 
-            return (res / 100);
+            return ((float)res / 100F);
         }
 
     }
