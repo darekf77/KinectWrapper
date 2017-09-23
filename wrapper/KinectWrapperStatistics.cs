@@ -43,7 +43,13 @@ namespace Kinect_Wrapper.wrapper
             Info.Add(_infoWastedFrames);
         }
 
-        
+        public int fps
+        {
+            get
+            {
+                return (_statistic != null) ? _statistic.FramesPerSecond(FrameType.NORMAL) : -1;
+            }
+        }
 
 
     }

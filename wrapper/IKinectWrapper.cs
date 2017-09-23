@@ -47,6 +47,8 @@ namespace Kinect_Wrapper.wrapper
 
         ObservableCollection<InfoRow> Info { get; }
 
+        int fps { get; }
+
 
         event EventHandler<ImageSource> DisplayImageReady;
 
