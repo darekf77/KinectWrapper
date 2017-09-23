@@ -14,7 +14,7 @@ namespace Kinect_Wrapper.frame
     public partial class KinectFrame : EventArgs, IKinectFrame
     {
         private byte[] _colorByte = new byte[_pixelColorDataLength];
-        private byte[] _depthByte = new byte[_pixelColorDataLength];
+        private byte[] _depthByte = new byte[_pixelDepthDataLength];
         public int MaxDepth = 0;
         public int MinDepth = 0;
         private short[] _depthShort = new short[_pixelDepthDataLength];
@@ -37,7 +37,7 @@ namespace Kinect_Wrapper.frame
             foreach (var joint in SkeletonRecorder.neeededJoints)
             {
                 UserSkeleton[(SkeletonDataType)joint] = new Point();
-            }            
+            }
         }
 
         public KinectFrame()
