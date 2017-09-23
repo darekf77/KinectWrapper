@@ -52,7 +52,6 @@ namespace Kinect_Wrapper.gestures
 
             gestureAction = (arg) =>
             {
-                onGesture?.Invoke(this, LastDetectedGesture);
                 LastDetectedGesture = PlayerGestures.__NOTHING;
                 debouceTime = false;
             };
@@ -126,7 +125,11 @@ namespace Kinect_Wrapper.gestures
             }
             else
             {
-                debouceTime = true;
+                if (!debouceTime)
+                {
+                    debouceTime = true;
+                    onGesture?.Invoke(this, LastDetectedGesture);
+                }
                 debouceWrapp(debouceTimes[gesture]);
             }
         }
