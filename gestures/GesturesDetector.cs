@@ -31,6 +31,7 @@ namespace Kinect_Wrapper.gestures
         private Dictionary<PlayerGestures, int> debouceTimes = new Dictionary<PlayerGestures, int>();
         Action<int> gestureAction;
         Action<int> debouceWrapp = null;
+        bool debouceTime = false;
 
         public GesturesDetector()
         {
@@ -41,10 +42,10 @@ namespace Kinect_Wrapper.gestures
 
             debouceTimes[PlayerGestures.__NOTHING] = 0;
             debouceTimes[PlayerGestures.RESIZING] = 100;
-            //debouceTimes[PlayerGestures.HANDS_ABOVE_HEAD] = 1000;
-            //debouceTimes[PlayerGestures.HANDS_AEROPLAN] = 1000;
-            debouceTimes[PlayerGestures.LEFT_HAND_ABOVE_HEAD] = 500;
-            debouceTimes[PlayerGestures.RIGHT_HAND_ABOVE_HEAD] = 500;
+            debouceTimes[PlayerGestures.HANDS_ABOVE_HEAD] = 1000;
+            debouceTimes[PlayerGestures.HANDS_AEROPLAN] = 1000;
+            //debouceTimes[PlayerGestures.LEFT_HAND_ABOVE_HEAD] = 500;
+            //debouceTimes[PlayerGestures.RIGHT_HAND_ABOVE_HEAD] = 500;
             debouceTimes[PlayerGestures.SWIPE_LEFT] = 1000;
             debouceTimes[PlayerGestures.SWIPE_RIGHT] = 1000;
 
@@ -53,6 +54,7 @@ namespace Kinect_Wrapper.gestures
             {
                 onGesture?.Invoke(this, LastDetectedGesture);
                 LastDetectedGesture = PlayerGestures.__NOTHING;
+                debouceTime = false;
             };
             debouceWrapp = gestureAction.Debounce<int>();
 
@@ -84,7 +86,7 @@ namespace Kinect_Wrapper.gestures
         #region is gesture detected function        
         private bool gestureDetected()
         {
-            return LastDetectedGesture != PlayerGestures.__NOTHING;
+            return LastDetectedGesture != PlayerGestures.__NOTHING && !debouceTime;
         }
         #endregion
 
@@ -92,7 +94,7 @@ namespace Kinect_Wrapper.gestures
         private Dictionary<SkeletonDataType, Point> Skeleton;
         public void update(IKinectFrame frame)
         {
-            if (gestureDetected() && !frame.IsSkeletonDetected) return;
+            if (gestureDetected() || !frame.IsSkeletonDetected) return;
 
             this.Skeleton = frame.UserSkeleton;
 
@@ -112,6 +114,7 @@ namespace Kinect_Wrapper.gestures
 
         private void gestureDetectedAction(PlayerGestures gesture)
         {
+            if (debouceTime && LastDetectedGesture != gesture) return;
             LastDetectedGesture = gesture;
             if (gesture == PlayerGestures.LEFT_HAND_ABOVE_HEAD || gesture == PlayerGestures.RIGHT_HAND_ABOVE_HEAD)
             {
@@ -119,10 +122,11 @@ namespace Kinect_Wrapper.gestures
                 Helpers.SetTimeout(() =>
                 {
                     LastDetectedGesture = PlayerGestures.__NOTHING;
-                }, 500);
+                }, 300);
             }
             else
             {
+                debouceTime = true;
                 debouceWrapp(debouceTimes[gesture]);
             }
         }
