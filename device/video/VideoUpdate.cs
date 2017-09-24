@@ -6,6 +6,7 @@ using Kinect.Replay.Replay.Skeletons;
 using Kinect_Wrapper.frame;
 using Kinect_Wrapper.structures;
 using Microsoft.Kinect;
+using Microsoft.Kinect.Toolkit.BackgroundRemoval;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -32,7 +33,7 @@ namespace Kinect_Wrapper.device.video
             {
                 var before = _isStreaming;
                 _isStreaming = value;
-                if(value && !before && StreamingStarted!=null)
+                if (value && !before && StreamingStarted != null)
                 {
                     StreamingStarted(this, EventArgs.Empty);
                 }
@@ -50,7 +51,7 @@ namespace Kinect_Wrapper.device.video
             }
             else if (_device != null && _device.Type == DeviceType.RECORD_FILE_KINECT_1)
             {
-                IsStreaming = (_device!=null &&_device.replay.Started && !_device.replay.IsFinished);
+                IsStreaming = (_device != null && _device.replay.Started && !_device.replay.IsFinished);
             }
             else if (_device != null && _device.Type == DeviceType.NO_DEVICE)
             {
@@ -79,10 +80,13 @@ namespace Kinect_Wrapper.device.video
             if (color != null && skeleton != null && depth != null)
             {
                 _frame.synchronize(depth, color, skeleton, _isPaused);
-                if(FrameReady!=null)
-                FrameReady(this, _frame);
+                if (FrameReady != null)
+                    FrameReady(this, _frame);
             }
         }
+
+        private BackgroundRemovedColorStream backgroundRemovedColorStream;
+        public BackgroundRemovedColorStream Remover { get { return backgroundRemovedColorStream; } }
 
         private Boolean updateFrames()
         {
@@ -109,37 +113,40 @@ namespace Kinect_Wrapper.device.video
                     _isNextFrameSensor = false;
                 }
             }
+
             using (DepthImageFrame depthFrame = sensor.IsRunning ? sensor.DepthStream.OpenNextFrame(0) : null)
-            using (SkeletonFrame skeletonFrame = sensor.IsRunning?sensor.SkeletonStream.OpenNextFrame(100):null)
-            using (ColorImageFrame colorFrame = sensor.IsRunning?sensor.ColorStream.OpenNextFrame(100):null)
+            using (SkeletonFrame skeletonFrame = sensor.IsRunning ? sensor.SkeletonStream.OpenNextFrame(100) : null)
+            using (ColorImageFrame colorFrame = sensor.IsRunning ? sensor.ColorStream.OpenNextFrame(10) : null)
             {
 
-                if (depthFrame != null && colorFrame != null && skeletonFrame != null)
+
+                if (depthFrame != null && colorFrame != null && skeletonFrame != null && backgroundRemovedColorStream != null)
                 {
-                    _frame.synchronize(depthFrame, colorFrame, skeletonFrame,_isPaused);
+                    _frame.synchronize(depthFrame, colorFrame, skeletonFrame, backgroundRemovedColorStream, _isPaused);
                     if (_recorder != null && _recorder.isRecording && !_isStoppingRecorder)
                     {
-                        if(_recorder != null) _recorder.Record(colorFrame);
-                        if(_recorder != null) _recorder.Record(depthFrame);
-                        if(_recorder != null) _recorder.Record(skeletonFrame,sensor);
+                        if (_recorder != null) _recorder.Record(colorFrame);
+                        if (_recorder != null) _recorder.Record(depthFrame);
+                        if (_recorder != null) _recorder.Record(skeletonFrame, sensor);
                     }
                     FrameReady(this, _frame);
                     return true;
-                }                
+                }
             }
             return false;
         }
 
         private Boolean toogleVisibleMessage = false;
-        private void updateFramesNoDevice() {
-            _frame.synchronize(_device.Name,toogleVisibleMessage, _isPaused);
+        private void updateFramesNoDevice()
+        {
+            _frame.synchronize(_device.Name, toogleVisibleMessage, _isPaused);
             toogleVisibleMessage = !toogleVisibleMessage;
-            if (FrameReady!=null) FrameReady(this, _frame);
+            if (FrameReady != null) FrameReady(this, _frame);
         }
-        
 
-        
 
-        
+
+
+
     }
 }

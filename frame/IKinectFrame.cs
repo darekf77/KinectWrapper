@@ -4,6 +4,7 @@ using Kinect.Replay.Replay.Depth;
 using Kinect.Replay.Replay.Skeletons;
 using Kinect_Wrapper.structures;
 using Microsoft.Kinect;
+using Microsoft.Kinect.Toolkit.BackgroundRemoval;
 using SharedLibJG.models;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,7 @@ namespace Kinect_Wrapper.frame
             DepthImageFrame depthFrame,
             ColorImageFrame colorFrame,
             SkeletonFrame skletonFrame,
+            BackgroundRemovedColorStream backgroundRemovedColorStream,
             Boolean isPauseMode
             );
         void synchronize(String message, Boolean isVisible, Boolean isPauseMode);

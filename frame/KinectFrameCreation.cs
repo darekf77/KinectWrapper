@@ -5,6 +5,7 @@ using Kinect.Replay.Replay.Depth;
 using Kinect.Replay.Replay.Skeletons;
 using Kinect_Wrapper.structures;
 using Microsoft.Kinect;
+using Microsoft.Kinect.Toolkit.BackgroundRemoval;
 using SharedLibJG.Helpers;
 using SharedLibJG.models;
 using System;
@@ -57,10 +58,12 @@ namespace Kinect_Wrapper.frame
         }
 
 
+
         public void synchronize(
             DepthImageFrame depthFrame,
             ColorImageFrame colorFrame,
             SkeletonFrame skletonFrame,
+            BackgroundRemovedColorStream backgroundRemovedColorStream,
             Boolean isPauseMode
             )
         {
@@ -77,10 +80,10 @@ namespace Kinect_Wrapper.frame
                 _depthPoint
                 );
 
+
             for (int i = 0; i < _pixelDepthDataLength; i++)
             {
                 _depthShort[i] = (short)_depthPoint[i].Depth;
-                //_playerIsolated[i] = (byte)((_depthPoint[i].PlayerIndex > 0) ? 255 : 0);
                 _depthByte[i] = getDepth(_depthPoint[i].Depth);
             }
 
@@ -90,9 +93,25 @@ namespace Kinect_Wrapper.frame
                                       where trackskeleton.TrackingState == SkeletonTrackingState.Tracked
                                       select trackskeleton).FirstOrDefault();
 
+
             _isCreation = true;
             if (firstSkeleton != null)
             {
+                //backgroundRemovedColorStream.SetTrackedPlayer(firstSkeleton.TrackingId);
+                //backgroundRemovedColorStream.ProcessColor(_colorByte, colorFrame.Timestamp);
+                //backgroundRemovedColorStream.ProcessDepth(_depthPixels, depthFrame.Timestamp);
+                //backgroundRemovedColorStream.ProcessSkeleton(totalSkeleton, skletonFrame.Timestamp);
+                //backgroundRemovedColorStream.SetTrackedPlayer(firstSkeleton.TrackingId);
+
+                //using (BackgroundRemovedColorFrame rmf = backgroundRemovedColorStream.OpenNextFrame(100))
+                //{
+                //    if (rmf != null)
+                //    {
+                //        rmf.CopyPixelDataTo(PlayerIsolated);
+                //    }
+
+                //}
+
                 if (firstSkeleton.Joints[JointType.Spine].TrackingState == JointTrackingState.Tracked)
                 {
                     IsSkeletonDetected = true;

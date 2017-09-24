@@ -1,5 +1,7 @@
 ﻿using Kinect_Wrapper.frame;
 using Kinect_Wrapper.structures;
+using Microsoft.Kinect;
+using Microsoft.Kinect.Toolkit.BackgroundRemoval;
 using SharedLibJG.Helpers;
 using System;
 using System.IO;
@@ -9,15 +11,15 @@ namespace Kinect_Wrapper.device.video
 {
     public abstract partial class VideoBase
     {
-        private IDevice _device;                
+        private IDevice _device;
         private IKinectFrame _frame;
-        
+
 
         public IDevice CurrentDevice
         {
             set
             {
-                if(value == null)
+                if (value == null)
                 {
                     if (_device != null)
                     {
@@ -47,6 +49,8 @@ namespace Kinect_Wrapper.device.video
                 StreamingFilePath = _device.Path;
                 if (_device.Type == DeviceType.KINECT_1)
                 {
+                    backgroundRemovedColorStream = new BackgroundRemovedColorStream(_device.sensor);
+                    //backgroundRemovedColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30, DepthImageFormat.Resolution640x480Fps30);
                     _frame = new KinectFrame(_device.sensor);
                     IsRecordingPossible = true;
                 }
@@ -67,16 +71,16 @@ namespace Kinect_Wrapper.device.video
                     bi.BeginInit();
                     bi.CreateOptions = BitmapCreateOptions.IgnoreColorProfile;
                     bi.UriSource = new Uri(dir + @"\..\..\assets\img\nosignalw640.png", UriKind.Relative);
-                    bi.EndInit();                    
+                    bi.EndInit();
                     //var bitmapScale = new TransformedBitmap(bi,
                     //     new ScaleTransform(640 / bi.Width,
                     //                        480 / bi.Height));
                     _frame = new KinectFrame(HelpersConverters.BitmapImage2Bitmap(bi));
-                }                
+                }
 
             }
-            get { return _device;  }
+            get { return _device; }
         }
-        
+
     }
 }

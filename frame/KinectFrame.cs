@@ -15,7 +15,7 @@ namespace Kinect_Wrapper.frame
     {
         private byte[] _colorByte = new byte[_pixelColorDataLength];
         private byte[] _depthByte = new byte[_pixelDepthDataLength];
-        private byte[] _playerIsolated = new byte[_pixelDepthDataLength];
+        private byte[] _playerIsolated = new byte[_pixelColorDataLength];
         public int MaxDepth = 0;
         public int MinDepth = 0;
         private short[] _depthShort = new short[_pixelDepthDataLength];

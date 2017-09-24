@@ -16,7 +16,7 @@ using System.Windows.Media.Imaging;
 
 namespace Kinect_Wrapper.device
 {
-    public abstract partial class DeviceBase :IDevice,INotifyPropertyChanged
+    public abstract partial class DeviceBase : IDevice, INotifyPropertyChanged
     {
         public KinectSensor sensor { get; private set; }
         public KinectReplay replay { get; private set; }
@@ -25,7 +25,7 @@ namespace Kinect_Wrapper.device
 
         private String _filePath;
 
-        private AudioBase _audio; 
+        private AudioBase _audio;
         private VideoBase _video;
         private String _name;
         virtual protected void OnPropertyChanged(string propName)
@@ -40,12 +40,13 @@ namespace Kinect_Wrapper.device
         {
             _audio = audio;
             _video = video;
-            sensor = sensor_xbox360;            
+            sensor = sensor_xbox360;
             _deviceType = DeviceType.KINECT_1;
-            _name = "K360-" + sensor.UniqueKinectId;        
+            _name = "K360-" + sensor.UniqueKinectId;
         }
-        
-        public DeviceBase(AudioBase audio, VideoBase video, String filePath) {
+
+        public DeviceBase(AudioBase audio, VideoBase video, String filePath)
+        {
             _audio = audio;
             _video = video;
             _filePath = filePath;
@@ -54,7 +55,7 @@ namespace Kinect_Wrapper.device
             replay = new KinectReplay(_filePath);
             replay.ReplayFinished += Replay_ReplayFinished;
         }
-                
+
         public DeviceBase(AudioBase audio, VideoBase video)
         {
             _audio = audio;
@@ -64,7 +65,7 @@ namespace Kinect_Wrapper.device
         }
 
         private Boolean _initializingDevice = false;
-        
+
         public void start()
         {
             _initializingDevice = true;
@@ -78,6 +79,7 @@ namespace Kinect_Wrapper.device
                     sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
                     sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
                     sensor.SkeletonStream.Enable();
+
 
                     _video.CurrentDevice = this;
                     _audio.CurrentDevice = this;
@@ -93,15 +95,15 @@ namespace Kinect_Wrapper.device
                 _video.CurrentDevice = this;
                 _audio.CurrentDevice = this;
             }
-            if(Type == DeviceType.NO_DEVICE)
+            if (Type == DeviceType.NO_DEVICE)
             {
                 _video.CurrentDevice = this;
                 _audio.CurrentDevice = this;
                 _initializingDevice = false;
-            }           
+            }
         }
 
-        
+
 
         private Boolean _stoppingDevice = false;
         public void stop()
@@ -111,6 +113,11 @@ namespace Kinect_Wrapper.device
             _video.CurrentDevice = null;
             _audio.CurrentDevice = null;
             _stoppingDevice = false;
+            if (this._video != null && this._video.Remover != null)
+            {
+                _video.Remover.Disable();
+                _video.Remover.Dispose();
+            }
             if (StateChanged != null)
             {
                 StateChanged(this, EventArgs.Empty);
@@ -138,7 +145,7 @@ namespace Kinect_Wrapper.device
         {
             get { return _deviceType; }
         }
-          
+
 
         public override string ToString()
         {
@@ -149,7 +156,7 @@ namespace Kinect_Wrapper.device
         {
             if (_video != null) _video.update();
         }
-        
+
 
 
     }
