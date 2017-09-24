@@ -77,7 +77,6 @@ namespace Kinect_Wrapper.frame
                 _depthPoint
                 );
 
-            var ok = 0;
             for (int i = 0; i < _pixelDepthDataLength; i++)
             {
                 _depthShort[i] = (short)_depthPoint[i].Depth;
