@@ -30,6 +30,7 @@ namespace Kinect_Wrapper.frame
             Boolean isPauseMode
             )
         {
+
             IsPauseMode = isPauseMode;
             colorFrame.CopyPixelDataTo(_colorByte);
             depthFrame.CopyPixelDataTo(_depthShort);
@@ -76,11 +77,14 @@ namespace Kinect_Wrapper.frame
                 _depthPoint
                 );
 
+            var ok = 0;
             for (int i = 0; i < _pixelDepthDataLength; i++)
             {
                 _depthShort[i] = (short)_depthPoint[i].Depth;
+                //_playerIsolated[i] = (byte)((_depthPoint[i].PlayerIndex > 0) ? 255 : 0);
                 _depthByte[i] = getDepth(_depthPoint[i].Depth);
             }
+
 
             skletonFrame.CopySkeletonDataTo(totalSkeleton);
             Skeleton firstSkeleton = (from trackskeleton in totalSkeleton

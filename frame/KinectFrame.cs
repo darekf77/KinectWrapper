@@ -15,6 +15,7 @@ namespace Kinect_Wrapper.frame
     {
         private byte[] _colorByte = new byte[_pixelColorDataLength];
         private byte[] _depthByte = new byte[_pixelDepthDataLength];
+        private byte[] _playerIsolated = new byte[_pixelDepthDataLength];
         public int MaxDepth = 0;
         public int MinDepth = 0;
         private short[] _depthShort = new short[_pixelDepthDataLength];
@@ -151,6 +152,20 @@ namespace Kinect_Wrapper.frame
                 _depthByte = value;
             }
         }
+
+        public Byte[] PlayerIsolated
+        {
+            get
+            {
+                return _playerIsolated;
+            }
+            set
+            {
+                _playerIsolated = value;
+            }
+        }
+
+
 
         bool _IsIgnoringDepthRange = false;
         public bool IsIgnoringDepthRange
