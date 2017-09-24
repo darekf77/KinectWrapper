@@ -77,11 +77,11 @@ namespace Kinect_Wrapper.wrapper
             if (DisplayImageReady != null)
             {
                 _statistic.commitFrame(FrameType.NORMAL);
-                DisplayImageReady(this, Stream.update(HelpersConverters.ToBitmapSourceSlow(out_frame)));
+                DisplayImageReady(this, Stream.update(HelpersConverters.ToBitmapSourceFast(out_frame)));
                 _infoFramesPerSecond.Value = _statistic.FramesPerSecond(FrameType.NORMAL).ToString() + "/s";
             }
         }
-        
+
 
 
 
