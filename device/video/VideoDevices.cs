@@ -4,6 +4,7 @@ using Microsoft.Kinect;
 using Microsoft.Kinect.Toolkit.BackgroundRemoval;
 using SharedLibJG.Helpers;
 using System;
+using System.Drawing;
 using System.IO;
 using System.Windows.Media.Imaging;
 
@@ -67,15 +68,9 @@ namespace Kinect_Wrapper.device.video
                 {
                     String exePath = System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName;
                     string dir = Path.GetDirectoryName(exePath);
-                    var bi = new BitmapImage();
-                    bi.BeginInit();
-                    bi.CreateOptions = BitmapCreateOptions.IgnoreColorProfile;
-                    bi.UriSource = new Uri(dir + @"\..\..\assets\img\nosignalw640.png", UriKind.Relative);
-                    bi.EndInit();
-                    //var bitmapScale = new TransformedBitmap(bi,
-                    //     new ScaleTransform(640 / bi.Width,
-                    //                        480 / bi.Height));
-                    _frame = new KinectFrame(HelpersConverters.BitmapImage2Bitmap(bi));
+                    var url = dir + "\\..\\..\\assets\\img\\nosignalw640.png";
+                    var bitmap = new Bitmap(url);
+                    _frame = new KinectFrame(bitmap);
                 }
 
             }
