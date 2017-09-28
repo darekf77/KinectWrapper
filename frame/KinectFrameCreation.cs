@@ -132,16 +132,17 @@ namespace Kinect_Wrapper.frame
             //IsPauseMode = isPauseMode;
             if (isVisible)
             {
-                byte fontsize = 20;
                 RectangleF rectBitmap = new RectangleF(0, 0, _bitmap.Width, _bitmap.Height);
-                RectangleF rectf = new RectangleF(200, _bitmap.Height / 2 - fontsize, _bitmap.Width, 3 * fontsize);
+
                 Bitmap bmp = _bitmap.Clone(rectBitmap, _bitmap.PixelFormat);
                 Graphics g = Graphics.FromImage(bmp);
-                g.SmoothingMode = SmoothingMode.AntiAlias;
-                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                g.DrawString(message, new Font("Segoe UI Light", Helpers.getResponsiveFontSize(fontsize)), Brushes.White, rectf);
-                g.Flush();
+
+                StringFormat format = new StringFormat();
+                format.LineAlignment = StringAlignment.Center;
+                format.Alignment = StringAlignment.Center;
+
+                g.DrawString(message, fontMedium, Brushes.White, new PointF(320, 220), format);
+
                 prepareColorPixelsFrom(bmp);
             }
             else
@@ -150,6 +151,8 @@ namespace Kinect_Wrapper.frame
             }
             //_isCreation = false;            
         }
+
+        private static Font fontMedium = new Font("Segoe UI Bold", Helpers.getResponsiveFontSize(15));
 
         private Point ScalePosition(SkeletonPoint skeletonPoint)
         {
