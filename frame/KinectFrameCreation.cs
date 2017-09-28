@@ -20,7 +20,7 @@ namespace Kinect_Wrapper.frame
         public static byte getDepth(int Depth)
         {
             var d = Depth * 0.064 - 1;
-            return (byte)(d >= 0 && d <= 255 ? d : 0);
+            return (byte)(d > 255 ? 255 : d);
         }
 
         public void synchronize(
