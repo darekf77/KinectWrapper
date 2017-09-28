@@ -116,6 +116,12 @@ namespace Kinect_Wrapper.gestures
                         check(head.Y, Operator.LowerYThan, handLeft, wristLeft) &&
                         check(head.Y, Operator.GreaterYThan, handRight, wristRight)) return true;
                     break;
+                case PlayerGestures.HANDS_IN_X:
+                    if (!isEmpty(shoudlerCenter, handLeft, wristLeft, handRight, wristRight) &&
+                        check(shoudlerCenter.X, Operator.LowerXThan, handLeft, wristLeft) &&
+                        check(shoudlerCenter.X, Operator.GreaterXThan, handRight, wristRight)
+                        ) return true;
+                    break;
                 case PlayerGestures.SWIPE_LEFT:
                     if (!isEmpty(shoudlerCenter, handLeft, wristLeft, handRight, wristRight) &&
                         check(shoudlerCenter.X, Operator.GreaterXThan, handLeft, wristLeft) &&

@@ -10,6 +10,7 @@ namespace Kinect_Wrapper.gestures
     {
         __NOTHING,
         HANDS_ABOVE_HEAD,
+        HANDS_IN_X,
         LEFT_HAND_ABOVE_HEAD,
         RIGHT_HAND_ABOVE_HEAD,
         SWIPE_LEFT,

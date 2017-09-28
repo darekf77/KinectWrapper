@@ -96,6 +96,18 @@ namespace Kinect_Wrapper.gestures
         }
 
 
+        public Command HandsX
+        {
+            get
+            {
+                return new Command(() =>
+                {
+                    trigger(PlayerGestures.HANDS_IN_X);
+                });
+            }
+        }
+
+
 
 
 

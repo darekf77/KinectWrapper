@@ -50,6 +50,8 @@ namespace Kinect_Wrapper.gestures
 
         Command LeftHandAboveHead { get; }
 
+        Command HandsX { get; }
+
     }
 
 }

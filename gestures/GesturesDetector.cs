@@ -48,6 +48,7 @@ namespace Kinect_Wrapper.gestures
             //debouceTimes[PlayerGestures.RIGHT_HAND_ABOVE_HEAD] = 500;
             debouceTimes[PlayerGestures.SWIPE_LEFT] = 1000;
             debouceTimes[PlayerGestures.SWIPE_RIGHT] = 1000;
+            debouceTimes[PlayerGestures.HANDS_IN_X] = 1000;
 
 
             gestureAction = (arg) =>
