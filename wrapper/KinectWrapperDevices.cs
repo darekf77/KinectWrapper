@@ -97,7 +97,7 @@ namespace Kinect_Wrapper.wrapper
         {
             foreach (var device in Devices)
             {
-                if (device.sensor != null && device.sensor.UniqueKinectId.Equals(e.Sensor.UniqueKinectId)) return;
+                if (device != null && device.sensor != null && device.sensor.UniqueKinectId.Equals(e.Sensor.UniqueKinectId)) return;
             }
             Devices.Add(new Device(Audio, Video, e.Sensor));
         }
