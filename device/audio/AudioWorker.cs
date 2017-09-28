@@ -41,8 +41,8 @@ namespace Kinect_Wrapper.device.audio
                     //make sure the recognizer does not stop after completing     
                     SpeechRecognizer.RecognizeAsync(RecognizeMode.Multiple);
                     //reduce background and ambient noise for better accuracy
-                    _device.sensor.AudioSource.EchoCancellationMode = EchoCancellationMode.None;
-                    _device.sensor.AudioSource.AutomaticGainControlEnabled = false;
+                    _device.sensor.AudioSource.EchoCancellationMode = EchoCancellationMode.CancellationOnly;
+                    _device.sensor.AudioSource.AutomaticGainControlEnabled = true;
                     audioStarted = true;
                 }
                 catch (Exception ex)
