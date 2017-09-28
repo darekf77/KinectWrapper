@@ -1,7 +1,6 @@
 ﻿using Kinect_Wrapper.frame;
 using Kinect_Wrapper.structures;
 using Microsoft.Kinect;
-using Microsoft.Kinect.Toolkit.BackgroundRemoval;
 using SharedLibJG.Helpers;
 using System;
 using System.Drawing;
@@ -50,8 +49,6 @@ namespace Kinect_Wrapper.device.video
                 StreamingFilePath = _device.Path;
                 if (_device.Type == DeviceType.KINECT_1)
                 {
-                    backgroundRemovedColorStream = new BackgroundRemovedColorStream(_device.sensor);
-                    //backgroundRemovedColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30, DepthImageFormat.Resolution640x480Fps30);
                     _frame = new KinectFrame(_device.sensor);
                     IsRecordingPossible = true;
                 }

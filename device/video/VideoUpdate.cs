@@ -6,7 +6,6 @@ using Kinect.Replay.Replay.Skeletons;
 using Kinect_Wrapper.frame;
 using Kinect_Wrapper.structures;
 using Microsoft.Kinect;
-using Microsoft.Kinect.Toolkit.BackgroundRemoval;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -85,8 +84,6 @@ namespace Kinect_Wrapper.device.video
             }
         }
 
-        private BackgroundRemovedColorStream backgroundRemovedColorStream;
-        public BackgroundRemovedColorStream Remover { get { return backgroundRemovedColorStream; } }
 
         private Boolean updateFrames()
         {
@@ -120,9 +117,9 @@ namespace Kinect_Wrapper.device.video
             {
 
 
-                if (depthFrame != null && colorFrame != null && skeletonFrame != null && backgroundRemovedColorStream != null)
+                if (depthFrame != null && colorFrame != null && skeletonFrame != null)
                 {
-                    _frame.synchronize(depthFrame, colorFrame, skeletonFrame, backgroundRemovedColorStream, _isPaused);
+                    _frame.synchronize(depthFrame, colorFrame, skeletonFrame, _isPaused);
                     if (_recorder != null && _recorder.isRecording && !_isStoppingRecorder)
                     {
                         if (_recorder != null) _recorder.Record(colorFrame);

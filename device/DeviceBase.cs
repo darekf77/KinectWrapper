@@ -113,15 +113,7 @@ namespace Kinect_Wrapper.device
             _video.CurrentDevice = null;
             _audio.CurrentDevice = null;
             _stoppingDevice = false;
-            if (this._video != null && this._video.Remover != null)
-            {
-                _video.Remover.Disable();
-                _video.Remover.Dispose();
-            }
-            if (StateChanged != null)
-            {
-                StateChanged(this, EventArgs.Empty);
-            }
+            StateChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public string Name

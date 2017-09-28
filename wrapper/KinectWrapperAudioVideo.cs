@@ -6,6 +6,7 @@ using Kinect_Wrapper.device.video;
 using Kinect_Wrapper.frame;
 using Kinect_Wrapper.structures;
 using Microsoft.Kinect;
+using SharedLibJG.Helpers;
 using SharedLibJG.models;
 using System;
 using System.Collections.Generic;
@@ -47,7 +48,14 @@ namespace Kinect_Wrapper.wrapper
 
         void Video_RecordComplete(object sender, String path)
         {
-            _devices.Add(new Device(Audio, Video, path));
+            Helpers.SetTimeout(() => // TODO QUICK_FIX
+            {
+                if (App.Current != null) App.Current.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    _devices.Add(new Device(Audio, Video, path));
+                }));
+            }, 2000);
+
         }
 
     }

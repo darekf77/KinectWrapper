@@ -5,7 +5,6 @@ using Kinect.Replay.Replay.Depth;
 using Kinect.Replay.Replay.Skeletons;
 using Kinect_Wrapper.structures;
 using Microsoft.Kinect;
-using Microsoft.Kinect.Toolkit.BackgroundRemoval;
 using SharedLibJG.Helpers;
 using SharedLibJG.models;
 using System;
@@ -63,7 +62,6 @@ namespace Kinect_Wrapper.frame
             DepthImageFrame depthFrame,
             ColorImageFrame colorFrame,
             SkeletonFrame skletonFrame,
-            BackgroundRemovedColorStream backgroundRemovedColorStream,
             Boolean isPauseMode
             )
         {
