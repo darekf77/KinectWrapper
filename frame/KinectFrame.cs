@@ -141,7 +141,7 @@ namespace Kinect_Wrapper.frame
         }
 
 
-        public Byte[] DepthColor
+        public byte[] DepthColor
         {
             get
             {
@@ -153,17 +153,6 @@ namespace Kinect_Wrapper.frame
             }
         }
 
-        public Byte[] PlayerIsolated
-        {
-            get
-            {
-                return _playerIsolated;
-            }
-            set
-            {
-                _playerIsolated = value;
-            }
-        }
 
 
 
