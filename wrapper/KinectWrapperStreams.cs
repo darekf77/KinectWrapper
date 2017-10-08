@@ -67,18 +67,18 @@ namespace Kinect_Wrapper.wrapper
         {
             if (DisplayImageReady != null)
             {
-                _statistic.commitFrame(FrameType.NORMAL);
+                _statistic.commitFrame(StatFrameType.NORMAL);
                 DisplayImageReady(this, Stream.update(out_frame));
-                _infoFramesPerSecond.Value = _statistic.FramesPerSecond(FrameType.NORMAL).ToString() + "/s";
+                _infoFramesPerSecond.Value = _statistic.FramesPerSecond(StatFrameType.NORMAL).ToString() + "/s";
             }
         }
         public void commit(System.Drawing.Bitmap out_frame)
         {
             if (DisplayImageReady != null)
             {
-                _statistic.commitFrame(FrameType.NORMAL);
+                _statistic.commitFrame(StatFrameType.NORMAL);
                 DisplayImageReady(this, Stream.update(HelpersConverters.ToBitmapSourceFast(out_frame)));
-                _infoFramesPerSecond.Value = _statistic.FramesPerSecond(FrameType.NORMAL).ToString() + "/s";
+                _infoFramesPerSecond.Value = _statistic.FramesPerSecond(StatFrameType.NORMAL).ToString() + "/s";
             }
         }
 

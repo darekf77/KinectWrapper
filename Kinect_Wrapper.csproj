@@ -83,6 +83,20 @@
     <Compile Include="app\KinectWrapperListWidget.xaml.cs">
       <DependentUpon>KinectWrapperListWidget.xaml</DependentUpon>
     </Compile>
+    <Compile Include="camera\AudioRecordDevice\AudioRecordDevice.cs" />
+    <Compile Include="camera\AudioRecordDevice\IAudioRecordDevice.cs" />
+    <Compile Include="camera\FrameType.cs" />
+    <Compile Include="camera\IKinectCamera.cs" />
+    <Compile Include="camera\KinectCamera.cs" />
+    <Compile Include="camera\Recorder\AudioRecorder.cs" />
+    <Compile Include="camera\Recorder\ColorRecorder.cs" />
+    <Compile Include="camera\Recorder\DepthRecorder.cs" />
+    <Compile Include="camera\Recorder\IRecorder.cs" />
+    <Compile Include="camera\Recorder\RecorderBase.cs" />
+    <Compile Include="camera\Recorder\SkeletonRecorder.cs" />
+    <Compile Include="camera\VersionDetector\IVersionDetector.cs" />
+    <Compile Include="camera\VersionDetector\VersionDetector.cs" />
+    <Compile Include="camera\VersionDetector\VersionType.cs" />
     <Compile Include="device\audio\AudioDevices.cs" />
     <Compile Include="device\audio\AudioUserSaying.cs" />
     <Compile Include="device\audio\AudioWorker.cs" />
@@ -104,7 +118,7 @@
     <Compile Include="gestures\GesturesDetectorBindings.cs" />
     <Compile Include="gestures\IGesturesDetector.cs" />
     <Compile Include="gestures\PlayerGestures.cs" />
-    <Compile Include="statistic\FrameType.cs" />
+    <Compile Include="statistic\StatFrameType.cs" />
     <Compile Include="statistic\IStatistics.cs" />
     <Compile Include="statistic\Statistics.cs" />
     <Compile Include="structures\InfoRow.cs" />
@@ -193,12 +207,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="assets\img\nosignalw640.png">
+    <Resource Include="app\assets\img\nosignalw640.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="assets\img\nosignalw.jpg" />
+    <Resource Include="app\assets\img\nosignalw.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="KinectBackgroundRemoval180_32.dll">
@@ -207,6 +221,9 @@
     <Content Include="KinectBackgroundRemoval180_64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="camera\Replayer\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

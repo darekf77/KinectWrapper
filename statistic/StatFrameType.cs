@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Kinect_Wrapper.statistic
 {
-    public interface IStatistics
+    public enum StatFrameType
     {
-        int FramesPerSecond(StatFrameType frameType);
-        void commitFrame(StatFrameType frameType);
+        NORMAL,
+        MISSING_TARGET
     }
 }

@@ -47,7 +47,7 @@ namespace Kinect_Wrapper.wrapper
         {
             get
             {
-                return (_statistic != null) ? _statistic.FramesPerSecond(FrameType.NORMAL) : -1;
+                return (_statistic != null) ? _statistic.FramesPerSecond(StatFrameType.NORMAL) : -1;
             }
         }
 

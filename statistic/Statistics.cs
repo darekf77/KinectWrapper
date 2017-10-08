@@ -25,13 +25,13 @@ namespace Kinect_Wrapper.statistic
 
     public class Statistics : IStatistics, INotifyPropertyChanged
     {
-        Dictionary<FrameType, Frame> _frames;
+        Dictionary<StatFrameType, Frame> _frames;
         BackgroundWorker _worker;
         public Statistics()
         {
-            _frames = new Dictionary<FrameType, Frame>();
-            _frames[FrameType.NORMAL] = new Frame();
-            _frames[FrameType.MISSING_TARGET] = new Frame();
+            _frames = new Dictionary<StatFrameType, Frame>();
+            _frames[StatFrameType.NORMAL] = new Frame();
+            _frames[StatFrameType.MISSING_TARGET] = new Frame();
             _worker = new BackgroundWorker();
             _worker.DoWork += _worker_DoWork;
             _worker.RunWorkerAsync();
@@ -54,7 +54,7 @@ namespace Kinect_Wrapper.statistic
         public int NormalFramesPerSecond {
             get
             {
-                return _frames[FrameType.NORMAL].getFrameRate();
+                return _frames[StatFrameType.NORMAL].getFrameRate();
             }
         }
 
@@ -62,16 +62,16 @@ namespace Kinect_Wrapper.statistic
         {
             get
             {
-                return _frames[FrameType.MISSING_TARGET].getFrameRate();
+                return _frames[StatFrameType.MISSING_TARGET].getFrameRate();
             }
         }
 
-        public int FramesPerSecond(FrameType frameType)
+        public int FramesPerSecond(StatFrameType frameType)
         {
             return _frames[frameType].getFrameRate();
         }
 
-        public void commitFrame(FrameType frameType)
+        public void commitFrame(StatFrameType frameType)
         {
             _frames[frameType].commit();
         }

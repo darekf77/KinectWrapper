@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kinect_Wrapper.statistic
+namespace Kinect_Wrapper.camera.Recorder
 {
-    public enum FrameType
+    public interface IRecorder
     {
-        NORMAL,
-        MISSING_TARGET
     }
 }
