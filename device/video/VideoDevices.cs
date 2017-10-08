@@ -9,7 +9,7 @@ using System.Windows.Media.Imaging;
 
 namespace Kinect_Wrapper.device.video
 {
-    public abstract partial class VideoBase
+    public partial class Video
     {
         private IDevice _device;
         private IKinectFrame _frame;

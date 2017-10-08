@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Kinect_Wrapper.device.video
 {
-    public abstract partial class VideoBase
+    public partial class Video
     {
         private Boolean _isStoppingRecorder = false;
         private KinectRecorder _recorder;
@@ -40,7 +40,7 @@ namespace Kinect_Wrapper.device.video
         {
             _isStoppingRecorder = true;
             if (_recorder == null) return;
-            IsRecording = false;            
+            IsRecording = false;
             _recorder.Stop();
             String fileName = _recorder.FileName;
             _recorder = null;
@@ -63,7 +63,8 @@ namespace Kinect_Wrapper.device.video
         }
 
         private bool _isRecording = false;
-        public bool IsRecording {
+        public bool IsRecording
+        {
             get
             {
                 return _isRecording;

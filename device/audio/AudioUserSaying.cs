@@ -13,7 +13,7 @@ using System.Threading;
 
 namespace Kinect_Wrapper.device.audio
 {
-    public abstract partial class AudioBase
+    public partial class Audio
     {
 
         // GOOD SPEACH

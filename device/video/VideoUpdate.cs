@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Kinect_Wrapper.device.video
 {
-    public abstract partial class VideoBase
+    public partial class Video
     {
         public event EventHandler StreamingStarted;
         private Boolean _isStreaming = false;

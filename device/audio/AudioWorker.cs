@@ -11,9 +11,11 @@ using System.Threading;
 
 namespace Kinect_Wrapper.device.audio
 {
-    public abstract partial class AudioBase
+    public partial class Audio
     {
-
+        public SpeechRecognitionEngine SpeechRecognizer { get; private set; }
+        private KinectAudioSource audioSource;
+        private RecognizerInfo recognizerInfo = GetRecognizer();
 
         private void worker_DoWork(object sender, DoWorkEventArgs e)
         {

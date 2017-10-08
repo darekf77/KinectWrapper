@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Kinect_Wrapper.device
 {
-    public partial class DeviceBase
+    public partial class Device
     {
 
         private void Replay_ReplayFinished()
@@ -62,7 +62,7 @@ namespace Kinect_Wrapper.device
                     App.Current.Dispatcher.BeginInvoke(new Action(() =>
                     {
                         OnPropertyChanged("State");
-                    }));                    
+                    }));
                 }
                 return _state;
             }

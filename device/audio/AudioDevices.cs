@@ -13,9 +13,10 @@ using System.Threading;
 
 namespace Kinect_Wrapper.device.audio
 {
-    public abstract partial class AudioBase
+    public partial class Audio
     {
         private IDevice _device;
+        private BackgroundWorker worker;
 
         public IDevice CurrentDevice
         {
@@ -49,7 +50,7 @@ namespace Kinect_Wrapper.device.audio
                         worker.DoWork -= new DoWorkEventHandler(worker_DoWork);
                         //worker.Dispose();
                         worker = null;
-                    }                    
+                    }
                     return;
                 }
                 _device = value;
@@ -70,7 +71,7 @@ namespace Kinect_Wrapper.device.audio
                     IsRecordingEnable = false;
                     IsRecordingPossible = false;
                 }
-
+                initRecordingDevices(value);
             }
         }
 

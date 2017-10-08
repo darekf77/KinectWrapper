@@ -49,6 +49,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\Program Files\Microsoft Speech Platform SDK\Assembly\Microsoft.Speech.dll</HintPath>
     </Reference>
+    <Reference Include="NAudio, Version=1.8.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.1.8.3\lib\net35\NAudio.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -79,20 +83,17 @@
     <Compile Include="app\KinectWrapperListWidget.xaml.cs">
       <DependentUpon>KinectWrapperListWidget.xaml</DependentUpon>
     </Compile>
-    <Compile Include="device\audio\Audio.cs" />
     <Compile Include="device\audio\AudioDevices.cs" />
     <Compile Include="device\audio\AudioUserSaying.cs" />
     <Compile Include="device\audio\AudioWorker.cs" />
     <Compile Include="device\audio\message\AudioMessage.cs" />
     <Compile Include="device\audio\message\IAudioMessage.cs" />
-    <Compile Include="device\Device.cs" />
     <Compile Include="device\DeviceState.cs" />
     <Compile Include="device\list\DeviceList.cs" />
     <Compile Include="device\stream\DepthStream.cs" />
     <Compile Include="device\stream\ColorStream.cs" />
     <Compile Include="device\stream\StreamBase.cs" />
     <Compile Include="device\stream\IStream.cs" />
-    <Compile Include="device\video\Video.cs" />
     <Compile Include="device\video\VideoDevices.cs" />
     <Compile Include="device\video\VideoRecord.cs" />
     <Compile Include="frame\KinectFrameValidation.cs" />
@@ -133,12 +134,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="device\audio\AudioBase.cs" />
+    <Compile Include="device\audio\Audio.cs" />
     <Compile Include="device\audio\IAudio.cs" />
-    <Compile Include="device\DeviceBase.cs" />
+    <Compile Include="device\Device.cs" />
     <Compile Include="device\IDevice.cs" />
     <Compile Include="device\video\IVideo.cs" />
-    <Compile Include="device\video\VideoBase.cs" />
+    <Compile Include="device\video\Video.cs" />
     <Compile Include="device\video\VideoUpdate.cs" />
     <Compile Include="frame\IKinectFrame.cs" />
     <Compile Include="frame\KinectFrame.cs" />
@@ -178,6 +179,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\microsoft.kinect.toolkit\Microsoft.Kinect.Toolkit.csproj">
+      <Project>{C6F9C31B-6130-4443-A5CC-EF0664552ECD}</Project>
+      <Name>Microsoft.Kinect.Toolkit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\sharedlibjg\SharedLibJG.csproj">
       <Project>{95f45d9e-3d43-4a78-9ec4-537e50c29de2}</Project>
       <Name>SharedLibJG</Name>

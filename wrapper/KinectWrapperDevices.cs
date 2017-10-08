@@ -13,10 +13,10 @@ namespace Kinect_Wrapper.wrapper
     public partial class KinectWrapper
     {
         private DevicesList replaysList;
-        private DeviceBase _defaultDevice;
-        private ObservableCollection<DeviceBase> _devices;
-        private DeviceBase _currentDevice;
-        public DeviceBase SelectedDevice { get; set; }
+        private Device _defaultDevice;
+        private ObservableCollection<Device> _devices;
+        private Device _currentDevice;
+        public Device SelectedDevice { get; set; }
 
         #region autopickup devoce
         public event EventHandler OnAutopickupDeviceChanged;
@@ -82,7 +82,7 @@ namespace Kinect_Wrapper.wrapper
 
         private void initDevices()
         {
-            _devices = new TrulyObservableCollection<DeviceBase>();
+            _devices = new TrulyObservableCollection<Device>();
             replaysList = new DevicesList(Devices, Audio, Video);
             _defaultDevice = new Device(Audio, Video);
             Device = _defaultDevice;
@@ -132,14 +132,14 @@ namespace Kinect_Wrapper.wrapper
             get { return _currentDevice.Equals(_defaultDevice); }
         }
 
-        public ObservableCollection<DeviceBase> Devices
+        public ObservableCollection<Device> Devices
         {
             get { return _devices; }
         }
 
         public event EventHandler DeviceChanged;
 
-        public DeviceBase Device
+        public Device Device
         {
             get { return _currentDevice; }
             set

@@ -24,6 +24,8 @@ namespace Kinect_Wrapper.device.audio
 
         ObservableCollection<String> Grammar { get; set; }
 
+        ObservableCollection<string> RecordingDevices { get; }
+
         SpeechRecognitionEngine SpeechRecognizer { get; }
 
         event EventHandler<IAudioMessage> UserSaying;

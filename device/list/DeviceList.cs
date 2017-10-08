@@ -15,12 +15,12 @@ namespace Kinect_Wrapper.device.list
     public class DevicesList
     {
         public static string AppPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-        private ObservableCollection<DeviceBase> Devices;
-        private AudioBase audio;
-        private VideoBase video;
+        private ObservableCollection<Device> Devices;
+        private Audio audio;
+        private Video video;
         private bool isLoadingFiles = false;
 
-        public DevicesList(ObservableCollection<DeviceBase> Devices, AudioBase audio, VideoBase video)
+        public DevicesList(ObservableCollection<Device> Devices, Audio audio, Video video)
         {
             this.Devices = Devices;
             this.video = video;

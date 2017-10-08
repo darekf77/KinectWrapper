@@ -19,19 +19,19 @@ namespace Kinect_Wrapper.wrapper
 
     public interface IKinectWrapper
     {
-        AudioBase Audio { get; }
+        Audio Audio { get; }
 
-        VideoBase Video { get; }
+        Video Video { get; }
 
         IGesturesDetector Gestures { get; }
 
         Boolean IsStopped { get; }
 
-        ObservableCollection<DeviceBase> Devices { get; }
+        ObservableCollection<Device> Devices { get; }
 
-        DeviceBase Device { get; set; }
+        Device Device { get; set; }
 
-        DeviceBase SelectedDevice { get; set; }
+        Device SelectedDevice { get; set; }
 
         StreamBase Stream { get; set; }
 
