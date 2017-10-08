@@ -1,4 +1,5 @@
-﻿using Kinect_Wrapper.device.audio.message;
+﻿using Kinect_Wrapper.camera;
+using Kinect_Wrapper.device.audio.message;
 using Kinect_Wrapper.structures;
 using Microsoft.Speech.Recognition;
 using System;
@@ -24,7 +25,7 @@ namespace Kinect_Wrapper.device.audio
 
         ObservableCollection<String> Grammar { get; set; }
 
-        ObservableCollection<string> RecordingDevices { get; }
+        ObservableCollection<IAudioRecordDevice> RecordingDevices { get; }
 
         SpeechRecognitionEngine SpeechRecognizer { get; }
 

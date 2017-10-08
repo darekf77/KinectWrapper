@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kinect_Wrapper.camera.AudioRecordDevice
+namespace Kinect_Wrapper.camera
 {
     public interface IAudioRecordDevice
     {
         int Id { get; }
+        int guid { get; }
         string Name { get; }
 
     }

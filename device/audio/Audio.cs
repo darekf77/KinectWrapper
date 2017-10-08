@@ -1,4 +1,5 @@
-﻿using Kinect_Wrapper.device.audio.message;
+﻿using Kinect_Wrapper.camera;
+using Kinect_Wrapper.device.audio.message;
 using Kinect_Wrapper.structures;
 using Microsoft.Kinect;
 using Microsoft.Speech.AudioFormat;
@@ -18,29 +19,22 @@ namespace Kinect_Wrapper.device.audio
     public partial class Audio : IAudio, INotifyPropertyChanged
     {
 
-
+        public ObservableCollection<IAudioRecordDevice> RecordingDevices { get; }
 
         private Boolean audioStarted = false;
 
         public Audio()
         {
-            RecordingDevices = new ObservableCollection<string>();
+            RecordingDevices = new ObservableCollection<IAudioRecordDevice>();
             initGrammar();
             initRecordingDevices();
         }
 
         #region recording devices
 
-        public ObservableCollection<string> RecordingDevices { get; private set; }
-
         void initRecordingDevices(IDevice device = null)
         {
             RecordingDevices.Clear();
-            for (int n = 0; n < WaveIn.DeviceCount; n++)
-            {
-                var product = WaveIn.GetCapabilities(n).ProductName;
-                RecordingDevices.Add(product);
-            }
         }
 
         #endregion

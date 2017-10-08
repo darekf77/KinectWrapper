@@ -71,7 +71,7 @@ namespace Kinect_Wrapper.device.audio
                     IsRecordingEnable = false;
                     IsRecordingPossible = false;
                 }
-                initRecordingDevices(value);
+                //camera.refreshRecordingDevices(_device);
             }
         }
 

@@ -7,16 +7,24 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
+using Kinect_Wrapper.device;
 
 namespace Kinect_Wrapper.camera
 {
     public class KinectCamera : IKinectCamera
     {
-        KinectSensor sensor;
+        KinectSensor sensor = null;
         BinaryWriter writer;
         WaveFileWriter waveWrite;
         Stream stream;
-        public KinectCamera(KinectSensor sensor)
+
+        public KinectCamera()
+        {
+            AudioRecordDevice.refresList();
+        }
+
+        public void init(KinectSensor sensor)
         {
             this.sensor = sensor;
         }
@@ -31,6 +39,22 @@ namespace Kinect_Wrapper.camera
         }
         #endregion
 
+        #region recording devices
+
+        public ObservableCollection<IAudioRecordDevice> RecordingDevices
+        {
+            get
+            {
+                return AudioRecordDevice.Devices;
+            }
+        }
+
+        public void refreshRecordingDevices(IDevice currentDevice)
+        {
+            AudioRecordDevice.refresList(currentDevice);
+        }
+        #endregion
+
         public void replay(string replayFile)
         {
             State = CameraState.PLAYING;
@@ -38,10 +62,18 @@ namespace Kinect_Wrapper.camera
 
 
         #region record
+        public bool isRecordingPossible()
+        {
+            return (sensor != null && sensor.IsRunning && sensor.Status == KinectStatus.Connected);
+        }
         public void record(string toFile)
         {
+            if (!isRecordingPossible()) return;
             stream = File.Create(toFile);
             writer = new BinaryWriter(stream);
+
+            //var fileName = 
+            //waveWrite = new WaveFileWriter()
 
             // writer.Write((int)Options); //write version
 
