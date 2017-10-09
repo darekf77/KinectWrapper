@@ -66,8 +66,16 @@ namespace Kinect_Wrapper.device.video
                     String exePath = System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName;
                     string dir = Path.GetDirectoryName(exePath);
                     var url = dir + "\\..\\..\\assets\\img\\nosignalw640.png";
-                    var bitmap = new Bitmap(url);
-                    _frame = new KinectFrame(bitmap);
+                    if (File.Exists(url))
+                    {
+                        var bitmap = new Bitmap(url);
+                        _frame = new KinectFrame(bitmap);
+                    }
+                    else
+                    {
+                        Console.WriteLine("bad url: " + url);
+                    }
+
                 }
 
             }

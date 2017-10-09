@@ -207,12 +207,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="app\assets\img\nosignalw640.png">
+    <Resource Include="assets\img\nosignalw640.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="app\assets\img\nosignalw.jpg" />
+    <Resource Include="assets\img\nosignalw.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="KinectBackgroundRemoval180_32.dll">

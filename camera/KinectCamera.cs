@@ -61,19 +61,24 @@ namespace Kinect_Wrapper.camera
         }
 
 
+
+
         #region record
+
+
         public bool isRecordingPossible()
         {
             return (sensor != null && sensor.IsRunning && sensor.Status == KinectStatus.Connected);
         }
         public void record(string toFile)
         {
+            if (Path.GetExtension(toFile).Trim() != "replay") return;
             if (!isRecordingPossible()) return;
             stream = File.Create(toFile);
             writer = new BinaryWriter(stream);
 
-            //var fileName = 
-            //waveWrite = new WaveFileWriter()
+            var audioFileName = Path.GetFileNameWithoutExtension(toFile) + ".wav";
+            waveWrite = new WaveFileWriter(audioFileName, new WaveFormat());
 
             // writer.Write((int)Options); //write version
 
@@ -94,11 +99,10 @@ namespace Kinect_Wrapper.camera
         private AudioRecorder audioRecorder;
         public void update(ColorImageFrame color, DepthImageFrame depth, SkeletonFrame skeleton, KinectSensor sensor)
         {
-            if (skeletonRecorder == null || colorRecorder == null || depthRecorder == null)
-                return;
-            if (writer == null)
+            if (skeletonRecorder == null || colorRecorder == null ||
+                depthRecorder == null || sensor == null || writer == null)
             {
-                Console.WriteLine("Write should ont be NULL !!!");
+                Console.WriteLine("bad data Kinect.Camera.update");
                 return;
             }
 
@@ -109,8 +113,6 @@ namespace Kinect_Wrapper.camera
             depthRecorder.update(depth);
             Flush();
         }
-        #endregion
-
         #region flush date
         private DateTime previousFlushDate;
         private void Flush()
@@ -123,6 +125,8 @@ namespace Kinect_Wrapper.camera
                 writer.Flush();
             }
         }
+        #endregion
+
         #endregion
 
         #region stop
@@ -139,8 +143,12 @@ namespace Kinect_Wrapper.camera
         {
             if (State == CameraState.RECORDING) stopRecord();
         }
-
         #endregion
+
+        public void pause()
+        {
+            throw new NotImplementedException();
+        }
 
     }
 }

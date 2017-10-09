@@ -27,10 +27,8 @@ namespace Kinect_Wrapper.camera
 
         void replay(string replayFile);
 
-        /// <summary>
-        /// Stop recording or playing
-        /// </summary>
         void stop();
+        void pause();
 
         ObservableCollection<IAudioRecordDevice> RecordingDevices { get; }
 
