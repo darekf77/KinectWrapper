@@ -8,28 +8,13 @@ using System.Threading.Tasks;
 
 namespace Kinect_Wrapper.camera.Replayer
 {
-    class DepthReplayer : ReplayerBase
+    public class FrameDepthReplayer : ReplayFrameBase
     {
         private readonly DepthImageFrame internalFrame;
         public DepthImageFormat Format { get; private set; }
 
         #region constructor
-        public DepthReplayer(DepthImageFrame frame)
-        {
-            Format = frame.Format;
-            BytesPerPixel = frame.BytesPerPixel;
-            FrameNumber = frame.FrameNumber;
-            TimeStamp = frame.Timestamp;
-            Width = frame.Width;
-            Height = frame.Height;
-
-            PixelDataLength = frame.PixelDataLength;
-            internalFrame = frame;
-        }
-        #endregion
-
-        #region create depth from reader
-        internal override void CreateFromReader(BinaryReader reader)
+        public FrameDepthReplayer(BinaryReader reader)
         {
             TimeStamp = reader.ReadInt64();
             BytesPerPixel = reader.ReadInt32();
@@ -45,6 +30,18 @@ namespace Kinect_Wrapper.camera.Replayer
             streamPosition = stream.Position;
 
             stream.Position += PixelDataLength * 2;
+        }
+        public FrameDepthReplayer(DepthImageFrame frame)
+        {
+            Format = frame.Format;
+            BytesPerPixel = frame.BytesPerPixel;
+            FrameNumber = frame.FrameNumber;
+            TimeStamp = frame.Timestamp;
+            Width = frame.Width;
+            Height = frame.Height;
+
+            PixelDataLength = frame.PixelDataLength;
+            internalFrame = frame;
         }
         #endregion
 
@@ -67,9 +64,9 @@ namespace Kinect_Wrapper.camera.Replayer
         }
         #endregion
 
-        public static implicit operator DepthReplayer(DepthImageFrame frame)
+        public static implicit operator FrameDepthReplayer(DepthImageFrame frame)
         {
-            return new DepthReplayer(frame);
+            return new FrameDepthReplayer(frame);
         }
     }
 }

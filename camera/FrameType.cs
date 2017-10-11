@@ -4,7 +4,6 @@
     {
         Color,
         Depth,
-        Skeletons,
-        Audio
+        Skeletons
     }
 }

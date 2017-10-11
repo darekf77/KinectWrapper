@@ -13,6 +13,7 @@ namespace Kinect_Wrapper.camera
     public class AudioRecordDevice : IAudioRecordDevice
     {
         public static ObservableCollection<IAudioRecordDevice> Devices = new ObservableCollection<IAudioRecordDevice>();
+        public static IAudioRecordDevice Device;
 
         public static void refresList(IDevice device = null)
         {
@@ -30,6 +31,10 @@ namespace Kinect_Wrapper.camera
         {
             this.Id = Devices.Count + 1;
             this.Name = c.ProductName;
+            Devices.CollectionChanged += (e, v) =>
+              {
+
+              };
         }
 
 

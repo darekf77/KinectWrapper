@@ -9,17 +9,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using Kinect_Wrapper.device;
+using Kinect_Wrapper.camera.Replayer;
+using System.Threading;
 
 namespace Kinect_Wrapper.camera
 {
     public class KinectCamera : IKinectCamera
     {
-        KinectSensor sensor = null;
+        KinectSensor sensor;
         BinaryWriter writer;
-        WaveFileWriter waveWrite;
+        BinaryReader reader;
         Stream stream;
-        KinectRecordOptions options = KinectRecordOptions.Everything;
+        KinectRecordOptions Options = KinectRecordOptions.Everything;
+        AudioRecorderReplayer audio = new AudioRecorderReplayer();
 
+        #region init / constructor
         public KinectCamera()
         {
             AudioRecordDevice.refresList();
@@ -29,14 +33,18 @@ namespace Kinect_Wrapper.camera
         {
             this.sensor = sensor;
         }
-
+        #endregion
 
         #region state
         private CameraState _state = CameraState.UNACTIVE;
         public CameraState State
         {
             get { return _state; }
-            private set { _state = value; }
+            set
+            {
+                _state = value;
+                audio.State = value;
+            }
         }
         #endregion
 
@@ -54,16 +62,70 @@ namespace Kinect_Wrapper.camera
         }
         #endregion
 
+        #region replay (file)
+        public event EventHandler onReplayFinish;
         public void replay(string replayFile)
         {
+            stream = File.OpenRead(replayFile);
+            reader = new BinaryReader(stream);
+
+            Options = (KinectRecordOptions)reader.ReadInt32();
+            //var paramsArrayLength = reader.ReadInt32();
+            //var colorToDepthRelationalParameters = reader.ReadBytes(paramsArrayLength);
+            //CoordinateMapper = new CoordinateMapper(colorToDepthRelationalParameters);
+
+            AddFrames(reader);
+            onReplayFinish?.Invoke(this, EventArgs.Empty);
+            audio.replay(replayFile);
             State = CameraState.PLAYING;
         }
+        #endregion
 
+        #region update replay data
+        public event EventHandler<ReplayFrame> onFrameReady;
+        private ReplayFrame lastFrame;
         public void update()
         {
+            if (State != CameraState.PLAYING && State != CameraState.PLAYING_PAUSE) return;
+            if (State != CameraState.PLAYING_PAUSE)
+            {
+                lastFrame = frames.PopAt(0);
+            }
 
+            Thread.Sleep(TimeSpan.FromMilliseconds(lastFrame.TimeStamp));
+            onFrameReady?.Invoke(this, lastFrame);
         }
+        #endregion
 
+        #region add replay frames
+        protected readonly List<ReplayFrame> frames = new List<ReplayFrame>();
+        private void AddFrames(BinaryReader reader)
+        {
+            //not the best of approaches - assuming that color frame is the 1st frame followed by depth and skeleton frame
+            while (reader.PeekChar() != -1 || reader.BaseStream.Position < reader.BaseStream.Length)
+            {
+                var header = (FrameType)reader.ReadInt32();
+                switch (header)
+                {
+                    case FrameType.Color:
+                        var colorFrame = new FrameColorReplayer(reader);
+                        frames.Add(new ReplayFrame { Color = colorFrame });
+                        break;
+                    case FrameType.Depth:
+
+                        var depthFrame = new FrameDepthReplayer(reader);
+                        if (frames.Any())
+                            frames.Last().Depth = depthFrame;
+                        break;
+                    case FrameType.Skeletons:
+                        var skeletonFrame = new FrameSkeletonReplayer(reader);
+                        if (frames.Any())
+                            frames.Last().Skeleton = skeletonFrame;
+                        break;
+                }
+            }
+        }
+        #endregion
 
         #region is recording possible
         public bool isRecordingPossible()
@@ -73,7 +135,6 @@ namespace Kinect_Wrapper.camera
         #endregion
 
         #region record
-
         public void record(string toFile)
         {
             if (Path.GetExtension(toFile).Trim() != "replay") return;
@@ -81,15 +142,14 @@ namespace Kinect_Wrapper.camera
             stream = File.Create(toFile);
             writer = new BinaryWriter(stream);
 
-            var audioFileName = Path.GetFileNameWithoutExtension(toFile) + ".wav";
-            waveWrite = new WaveFileWriter(audioFileName, new WaveFormat());
 
-            writer.Write((int)options); // TODO delete this write version
+
+            writer.Write((int)Options); // TODO delete this write version
 
             colorRecorder = new ColorRecorder(writer, sensor);
             depthRecorder = new DepthRecorder(writer, sensor);
             skeletonRecorder = new SkeletonRecorder(writer, sensor);
-            audioRecorder = new AudioRecorder(waveWrite);
+            audio.record(toFile);
 
             previousFlushDate = DateTime.Now;
             State = CameraState.RECORDING;
@@ -100,7 +160,6 @@ namespace Kinect_Wrapper.camera
         private SkeletonRecorder skeletonRecorder;
         private ColorRecorder colorRecorder;
         private DepthRecorder depthRecorder;
-        private AudioRecorder audioRecorder;
         public void update(ColorImageFrame color, DepthImageFrame depth, SkeletonFrame skeleton, KinectSensor sensor)
         {
             if (skeletonRecorder == null || colorRecorder == null ||
@@ -148,10 +207,30 @@ namespace Kinect_Wrapper.camera
         }
         #endregion
 
+        #region pause
         public void pause()
         {
-            throw new NotImplementedException();
+            switch (State)
+            {
+                case CameraState.UNACTIVE:
+                    break;
+                case CameraState.PLAYING:
+                    State = CameraState.PLAYING_PAUSE;
+                    break;
+                case CameraState.PLAYING_PAUSE:
+                    State = CameraState.PLAYING;
+                    break;
+                case CameraState.RECORDING:
+                    State = CameraState.RECORDING_PAUSE;
+                    break;
+                case CameraState.RECORDING_PAUSE:
+                    State = CameraState.RECORDING;
+                    break;
+                default:
+                    break;
+            }
         }
+        #endregion
 
     }
 }

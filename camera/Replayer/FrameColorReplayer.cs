@@ -8,28 +8,13 @@ using System.Threading.Tasks;
 
 namespace Kinect_Wrapper.camera.Replayer
 {
-    public class ColorReplayer : ReplayerBase
+    public class FrameColorReplayer : ReplayFrameBase
     {
         private readonly ColorImageFrame internalFrame;
         public ColorImageFormat Format { get; private set; }
 
         #region constructor
-        public ColorReplayer(ColorImageFrame frame)
-        {
-            Format = frame.Format;
-            BytesPerPixel = frame.BytesPerPixel;
-            FrameNumber = frame.FrameNumber;
-            TimeStamp = frame.Timestamp;
-            Width = frame.Width;
-            Height = frame.Height;
-
-            PixelDataLength = frame.PixelDataLength;
-            internalFrame = frame;
-        }
-        #endregion
-
-        #region create color from reader
-        internal override void CreateFromReader(BinaryReader reader)
+        public FrameColorReplayer(BinaryReader reader)
         {
             TimeStamp = reader.ReadInt64();
             BytesPerPixel = reader.ReadInt32();
@@ -44,6 +29,18 @@ namespace Kinect_Wrapper.camera.Replayer
             streamPosition = stream.Position;
 
             stream.Position += PixelDataLength;
+        }
+        public FrameColorReplayer(ColorImageFrame frame)
+        {
+            Format = frame.Format;
+            BytesPerPixel = frame.BytesPerPixel;
+            FrameNumber = frame.FrameNumber;
+            TimeStamp = frame.Timestamp;
+            Width = frame.Width;
+            Height = frame.Height;
+
+            PixelDataLength = frame.PixelDataLength;
+            internalFrame = frame;
         }
         #endregion
 
@@ -65,9 +62,9 @@ namespace Kinect_Wrapper.camera.Replayer
         }
         #endregion
 
-        public static implicit operator ColorReplayer(ColorImageFrame frame)
+        public static implicit operator FrameColorReplayer(ColorImageFrame frame)
         {
-            return new ColorReplayer(frame);
+            return new FrameColorReplayer(frame);
         }
 
     }

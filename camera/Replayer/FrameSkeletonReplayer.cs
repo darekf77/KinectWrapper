@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Kinect_Wrapper.camera.Replayer
 {
-    public class SkeletonReplayer : ReplayerBase
+    public class FrameSkeletonReplayer : ReplayFrameBase
     {
         public Tuple<float, float, float, float> FloorClipPlane { get; private set; }
         public SkeletonTrackingMode TrackingMode { get; set; }
@@ -19,18 +19,7 @@ namespace Kinect_Wrapper.camera.Replayer
         public bool IsSkeletonDetected { get; set; }
 
         #region constructor
-        public SkeletonReplayer(SkeletonFrame frame)
-        {
-            FloorClipPlane = frame.FloorClipPlane;
-            FrameNumber = frame.FrameNumber;
-            TimeStamp = frame.Timestamp;
-            //Skeletons = frame.GetSkeletons();
-            TrackingMode = frame.TrackingMode;
-        }
-        #endregion
-
-        #region create skeleton from reader
-        internal override void CreateFromReader(BinaryReader reader)
+        public FrameSkeletonReplayer(BinaryReader reader)
         {
             TimeStamp = reader.ReadInt64();
             TrackingMode = (SkeletonTrackingMode)reader.ReadInt32();
@@ -48,11 +37,19 @@ namespace Kinect_Wrapper.camera.Replayer
 
             IsSkeletonDetected = reader.ReadBoolean();
         }
+        public FrameSkeletonReplayer(SkeletonFrame frame)
+        {
+            FloorClipPlane = frame.FloorClipPlane;
+            FrameNumber = frame.FrameNumber;
+            TimeStamp = frame.Timestamp;
+            //Skeletons = frame.GetSkeletons();
+            TrackingMode = frame.TrackingMode;
+        }
         #endregion
 
-        public static implicit operator SkeletonReplayer(SkeletonFrame frame)
+        public static implicit operator FrameSkeletonReplayer(SkeletonFrame frame)
         {
-            return new SkeletonReplayer(frame);
+            return new FrameSkeletonReplayer(frame);
         }
     }
 }

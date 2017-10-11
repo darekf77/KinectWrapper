@@ -1,4 +1,5 @@
-﻿using Kinect_Wrapper.device;
+﻿using Kinect_Wrapper.camera.Replayer;
+using Kinect_Wrapper.device;
 using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
@@ -13,28 +14,42 @@ namespace Kinect_Wrapper.camera
     {
         UNACTIVE,
         PLAYING,
-        RECORDING
+        PLAYING_PAUSE,
+        RECORDING,
+        RECORDING_PAUSE
+    }
+
+
+    [Flags]
+    public enum KinectRecordOptions
+    {
+        Frames = 1,
+        Audio = 2,
+        Everything = 3
+    }
+
+    public interface IKinectCameraOperator
+    {
+        void record(string toFile);
+        void replay(string replayFile);
+        void stop();
+        void pause();
+        CameraState State { get; set; }
     }
 
 
 
-    public interface IKinectCamera
+    public interface IKinectCamera : IKinectCameraOperator
     {
         void init(KinectSensor sensor);
-
-        void record(string toFile);
         bool isRecordingPossible();
 
-        void replay(string replayFile);
-
-        void stop();
-        void pause();
+        event EventHandler onReplayFinish;
+        event EventHandler<ReplayFrame> onFrameReady;
 
         ObservableCollection<IAudioRecordDevice> RecordingDevices { get; }
 
         void refreshAudioRecordingDevices(IDevice currentDevice);
-
-        CameraState State { get; }
 
         /// <summary>
         /// Update when recording

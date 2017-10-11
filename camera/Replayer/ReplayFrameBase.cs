@@ -7,13 +7,10 @@ using System.Threading.Tasks;
 
 namespace Kinect_Wrapper.camera.Replayer
 {
-    public abstract class ReplayerBase
+    public abstract class ReplayFrameBase
     {
         public virtual int FrameNumber { get; protected set; }
         public virtual long TimeStamp { get; protected set; }
-
-        internal abstract void CreateFromReader(BinaryReader reader);
-
         protected Stream stream { get; set; }
         protected BinaryReader streamReader { get; set; }
         protected long streamPosition { get; set; }
