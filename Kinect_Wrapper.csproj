@@ -83,23 +83,21 @@
     <Compile Include="app\KinectWrapperListWidget.xaml.cs">
       <DependentUpon>KinectWrapperListWidget.xaml</DependentUpon>
     </Compile>
-    <Compile Include="camera\AudioRecordDevice\AudioRecordDevice.cs" />
-    <Compile Include="camera\AudioRecordDevice\IAudioRecordDevice.cs" />
+    <Compile Include="camera\AudioDevice\AudioDevice.cs" />
+    <Compile Include="camera\AudioDevice\IAudioDevice.cs" />
+    <Compile Include="camera\AudioRecorderReplayer\AudioRecorderReplayer.cs" />
     <Compile Include="camera\FrameType.cs" />
     <Compile Include="camera\IKinectCamera.cs" />
     <Compile Include="camera\KinectCamera.cs" />
-    <Compile Include="camera\KinectRecordOptions.cs" />
-    <Compile Include="camera\Recorder\AudioRecorder.cs" />
     <Compile Include="camera\Recorder\ColorRecorder.cs" />
     <Compile Include="camera\Recorder\DepthRecorder.cs" />
     <Compile Include="camera\Recorder\RecorderBase.cs" />
     <Compile Include="camera\Recorder\SkeletonRecorder.cs" />
-    <Compile Include="camera\Replayer\AllReplay.cs" />
-    <Compile Include="camera\Replayer\AudioReplayer.cs" />
-    <Compile Include="camera\Replayer\ColorReplayer.cs" />
-    <Compile Include="camera\Replayer\DepthReplayer.cs" />
-    <Compile Include="camera\Replayer\ReplayerBase.cs" />
-    <Compile Include="camera\Replayer\SkeletonReplayer.cs" />
+    <Compile Include="camera\Replayer\ReplayFrame.cs" />
+    <Compile Include="camera\Replayer\FrameColorReplayer.cs" />
+    <Compile Include="camera\Replayer\FrameDepthReplayer.cs" />
+    <Compile Include="camera\Replayer\ReplayFrameBase.cs" />
+    <Compile Include="camera\Replayer\FrameSkeletonReplayer.cs" />
     <Compile Include="camera\VersionDetector\IVersionDetector.cs" />
     <Compile Include="camera\VersionDetector\VersionDetector.cs" />
     <Compile Include="camera\VersionDetector\VersionType.cs" />
@@ -206,6 +204,10 @@
     <ProjectReference Include="..\sharedlibjg\SharedLibJG.csproj">
       <Project>{95f45d9e-3d43-4a78-9ec4-537e50c29de2}</Project>
       <Name>SharedLibJG</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VoiceRecorder.Audio\VoiceRecorder.Audio.csproj">
+      <Project>{91EDFCAD-2495-44D2-BD45-7CC389C6D838}</Project>
+      <Name>VoiceRecorder.Audio</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
