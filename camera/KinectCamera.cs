@@ -18,6 +18,7 @@ namespace Kinect_Wrapper.camera
         BinaryWriter writer;
         WaveFileWriter waveWrite;
         Stream stream;
+        KinectRecordOptions options = KinectRecordOptions.Everything;
 
         public KinectCamera()
         {
@@ -40,7 +41,6 @@ namespace Kinect_Wrapper.camera
         #endregion
 
         #region recording devices
-
         public ObservableCollection<IAudioRecordDevice> RecordingDevices
         {
             get
@@ -48,8 +48,7 @@ namespace Kinect_Wrapper.camera
                 return AudioRecordDevice.Devices;
             }
         }
-
-        public void refreshRecordingDevices(IDevice currentDevice)
+        public void refreshAudioRecordingDevices(IDevice currentDevice)
         {
             AudioRecordDevice.refresList(currentDevice);
         }
@@ -60,16 +59,21 @@ namespace Kinect_Wrapper.camera
             State = CameraState.PLAYING;
         }
 
+        public void update()
+        {
+
+        }
 
 
-
-        #region record
-
-
+        #region is recording possible
         public bool isRecordingPossible()
         {
             return (sensor != null && sensor.IsRunning && sensor.Status == KinectStatus.Connected);
         }
+        #endregion
+
+        #region record
+
         public void record(string toFile)
         {
             if (Path.GetExtension(toFile).Trim() != "replay") return;
@@ -80,7 +84,7 @@ namespace Kinect_Wrapper.camera
             var audioFileName = Path.GetFileNameWithoutExtension(toFile) + ".wav";
             waveWrite = new WaveFileWriter(audioFileName, new WaveFormat());
 
-            // writer.Write((int)Options); //write version
+            writer.Write((int)options); // TODO delete this write version
 
             colorRecorder = new ColorRecorder(writer, sensor);
             depthRecorder = new DepthRecorder(writer, sensor);
@@ -126,7 +130,6 @@ namespace Kinect_Wrapper.camera
             }
         }
         #endregion
-
         #endregion
 
         #region stop

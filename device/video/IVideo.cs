@@ -1,13 +1,6 @@
-﻿using Kinect.Replay.Replay;
-using Kinect_Wrapper.frame;
+﻿using Kinect_Wrapper.frame;
 using Kinect_Wrapper.structures;
-using Microsoft.Kinect;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
 
 namespace Kinect_Wrapper.device.video
 {

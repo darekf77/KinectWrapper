@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kinect_Wrapper.camera.Recorder
+namespace Kinect_Wrapper.camera.Replayer
 {
-    public interface IRecorder
+    class AudioReplayer
     {
     }
 }

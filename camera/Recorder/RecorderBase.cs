@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Kinect_Wrapper.camera.Recorder
 {
-    public abstract class RecorderBase : IRecorder
+    public abstract class RecorderBase
     {
         public RecorderBase(BinaryWriter writer, KinectSensor sensor)
         {

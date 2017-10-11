@@ -88,12 +88,18 @@
     <Compile Include="camera\FrameType.cs" />
     <Compile Include="camera\IKinectCamera.cs" />
     <Compile Include="camera\KinectCamera.cs" />
+    <Compile Include="camera\KinectRecordOptions.cs" />
     <Compile Include="camera\Recorder\AudioRecorder.cs" />
     <Compile Include="camera\Recorder\ColorRecorder.cs" />
     <Compile Include="camera\Recorder\DepthRecorder.cs" />
-    <Compile Include="camera\Recorder\IRecorder.cs" />
     <Compile Include="camera\Recorder\RecorderBase.cs" />
     <Compile Include="camera\Recorder\SkeletonRecorder.cs" />
+    <Compile Include="camera\Replayer\AllReplay.cs" />
+    <Compile Include="camera\Replayer\AudioReplayer.cs" />
+    <Compile Include="camera\Replayer\ColorReplayer.cs" />
+    <Compile Include="camera\Replayer\DepthReplayer.cs" />
+    <Compile Include="camera\Replayer\ReplayerBase.cs" />
+    <Compile Include="camera\Replayer\SkeletonReplayer.cs" />
     <Compile Include="camera\VersionDetector\IVersionDetector.cs" />
     <Compile Include="camera\VersionDetector\VersionDetector.cs" />
     <Compile Include="camera\VersionDetector\VersionType.cs" />
@@ -201,10 +207,6 @@
       <Project>{95f45d9e-3d43-4a78-9ec4-537e50c29de2}</Project>
       <Name>SharedLibJG</Name>
     </ProjectReference>
-    <ProjectReference Include="Kinect.Replay\Kinect.Replay\Kinect.Replay.csproj">
-      <Project>{7ce86894-45da-4ed7-bc9d-0d073c0e481b}</Project>
-      <Name>Kinect.Replay</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="assets\img\nosignalw640.png">
@@ -222,9 +224,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="camera\Replayer\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

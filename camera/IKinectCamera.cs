@@ -32,11 +32,23 @@ namespace Kinect_Wrapper.camera
 
         ObservableCollection<IAudioRecordDevice> RecordingDevices { get; }
 
-        void refreshRecordingDevices(IDevice currentDevice);
+        void refreshAudioRecordingDevices(IDevice currentDevice);
 
         CameraState State { get; }
 
+        /// <summary>
+        /// Update when recording
+        /// </summary>
+        /// <param name="color"></param>
+        /// <param name="depth"></param>
+        /// <param name="skeleton"></param>
+        /// <param name="sensor"></param>
         void update(ColorImageFrame color, DepthImageFrame depth, SkeletonFrame skeleton, KinectSensor sensor);
+
+        /// <summary>
+        /// Update when replaying
+        /// </summary>
+        void update();
 
     }
 }
