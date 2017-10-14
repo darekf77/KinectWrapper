@@ -1,18 +1,7 @@
 ﻿using Kinect_Wrapper.device;
-using Kinect_Wrapper.device.audio.message;
-using Kinect_Wrapper.device.stream;
-using Kinect_Wrapper.frame;
-using Kinect_Wrapper.statistic;
 using Kinect_Wrapper.structures;
-using Microsoft.Kinect;
-using SharedLibJG.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
 using System.Threading;
-using System.Windows.Controls;
 
 namespace Kinect_Wrapper.wrapper
 {
@@ -47,8 +36,7 @@ namespace Kinect_Wrapper.wrapper
                 }
 
                 lock (_locker)
-                    while (Device == null ||
-                        Device.Type == DeviceType.RECORD_FILE_KINECT_1)
+                    while (Device == null)
                         Monitor.Wait(_locker);// thread is waiting until new data from kinect                 
             }
         }

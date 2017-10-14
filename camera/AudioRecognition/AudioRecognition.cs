@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Kinect_Wrapper.device.audio.message;
 using Microsoft.Speech.Recognition;
 using Microsoft.Speech.AudioFormat;
 using Microsoft.Kinect;
@@ -59,8 +58,7 @@ namespace Kinect_Wrapper.camera
                             break;
                         case AudioSourceType.OtherDevice:
                             #region speach recognition + other audio devices
-                            SpeechRecognizer.SetInputToAudioStream(source.Stream, new SpeechAudioFormatInfo(
-                                44100, AudioBitsPerSample.Sixteen, AudioChannel.Mono));
+                            SpeechRecognizer.SetInputToWaveStream(source.Stream);
                             break;
                         #endregion
                         default:

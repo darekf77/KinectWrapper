@@ -14,16 +14,21 @@ using System.Threading;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Apex.MVVM;
+using Kinect_Wrapper.frame;
 
 namespace Kinect_Wrapper.camera
 {
-    public class KinectCamera : IKinectCamera
+    public partial class KinectCamera : IKinectCamera
     {
         KinectSensor sensor;
         BinaryWriter writer;
         BinaryReader reader;
         Stream stream;
         KinectRecordOptions Options = KinectRecordOptions.Everything;
+        IKinectFrame frame { get; set; }
+        String RecordReplayFilePath { get; }
+
+        public event EventHandler<IKinectFrame> FrameReady;
 
         #region singleton 
         private volatile static IKinectCamera _instance;
@@ -58,6 +63,20 @@ namespace Kinect_Wrapper.camera
         {
             this.sensor = device.sensor;
             audio.init(device);
+            switch (device.Type)
+            {
+                case structures.DeviceType.NO_DEVICE:
+                    frame = device.nodeviceframe;
+                    break;
+                case structures.DeviceType.KINECT_1:
+                    frame = new KinectFrame(this);
+                    break;
+                case structures.DeviceType.RECORD_FILE_KINECT_1:
+                    frame = new KinectFrame(this);
+                    break;
+                default:
+                    break;
+            }
             OnPropertyChanged("isRecordingPossible");
         }
 
@@ -86,6 +105,8 @@ namespace Kinect_Wrapper.camera
 
         #region replay (file)
         public event EventHandler onReplayFinish;
+        public event EventHandler<string> RecordComplete;
+
         public void replay(string replayFile)
         {
             stream = File.OpenRead(replayFile);
@@ -97,25 +118,8 @@ namespace Kinect_Wrapper.camera
             //CoordinateMapper = new CoordinateMapper(colorToDepthRelationalParameters);
 
             AddFrames(reader);
-            onReplayFinish?.Invoke(this, EventArgs.Empty);
             audio.replay(replayFile);
             State = CameraState.PLAYING;
-        }
-        #endregion
-
-        #region update replay data
-        public event EventHandler<ReplayFrame> onFrameReady;
-        private ReplayFrame lastFrame;
-        public void update()
-        {
-            if (State != CameraState.PLAYING && State != CameraState.PLAYING_PAUSE) return;
-            if (State != CameraState.PLAYING_PAUSE)
-            {
-                lastFrame = frames.PopAt(0);
-            }
-
-            Thread.Sleep(TimeSpan.FromMilliseconds(lastFrame.TimeStamp));
-            onFrameReady?.Invoke(this, lastFrame);
         }
         #endregion
 
@@ -150,9 +154,13 @@ namespace Kinect_Wrapper.camera
         #endregion
 
         #region is recording possible
-        public bool isRecordingPossible()
+        public bool IsRecordingPossible
         {
-            return (sensor != null && sensor.IsRunning && sensor.Status == KinectStatus.Connected);
+            get
+            {
+                return (sensor != null && sensor.IsRunning && sensor.Status == KinectStatus.Connected);
+            }
+
         }
         #endregion
 
@@ -160,7 +168,7 @@ namespace Kinect_Wrapper.camera
         public void record(string toFile)
         {
             if (Path.GetExtension(toFile).Trim() != "replay") return;
-            if (!isRecordingPossible()) return;
+            if (IsRecordingPossible) return;
             stream = File.Create(toFile);
             writer = new BinaryWriter(stream);
 
@@ -176,41 +184,13 @@ namespace Kinect_Wrapper.camera
             previousFlushDate = DateTime.Now;
             State = CameraState.RECORDING;
         }
-        #endregion
-
-        #region update record data
-        private SkeletonRecorder skeletonRecorder;
-        private ColorRecorder colorRecorder;
-        private DepthRecorder depthRecorder;
-        public void update(ColorImageFrame color, DepthImageFrame depth, SkeletonFrame skeleton, KinectSensor sensor)
+        public bool IsRecording
         {
-            if (skeletonRecorder == null || colorRecorder == null ||
-                depthRecorder == null || sensor == null || writer == null)
+            get
             {
-                Console.WriteLine("bad data Kinect.Camera.update");
-                return;
-            }
-
-            skeletonRecorder.update(skeleton);
-            Flush();
-            colorRecorder.update(color);
-            Flush();
-            depthRecorder.update(depth);
-            Flush();
-        }
-        #region flush date
-        private DateTime previousFlushDate;
-        private void Flush()
-        {
-            var now = DateTime.Now;
-
-            if (now.Subtract(previousFlushDate).TotalSeconds > 60)
-            {
-                previousFlushDate = now;
-                writer.Flush();
+                return (State == CameraState.RECORDING);
             }
         }
-        #endregion
         #endregion
 
         #region stop
@@ -264,6 +244,15 @@ namespace Kinect_Wrapper.camera
                     break;
             }
         }
+
+        public bool IsPaused
+        {
+            get
+            {
+                return (State == CameraState.PLAYING_PAUSE || State == CameraState.RECORDING_PAUSE);
+            }
+        }
+
         public Command Pause
         {
             get
@@ -274,8 +263,48 @@ namespace Kinect_Wrapper.camera
                 });
             }
         }
-
         #endregion
 
+        public Command NextFrame
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public Command PausePlay
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public Command CancelRecord
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public int MaxDepth
+        {
+            get
+            {
+                //_sensor.DepthStream.MaxDepth;
+                throw new NotImplementedException();
+            }
+        }
+
+        public int MinDepth
+        {
+            get
+            {
+                //_sensor.DepthStream.MinDepth;
+                throw new NotImplementedException();
+            }
+        }
     }
 }

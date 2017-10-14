@@ -1,8 +1,6 @@
-﻿using Kinect_Wrapper.device;
-using Kinect_Wrapper.device.audio;
-using Kinect_Wrapper.device.audio.message;
+﻿using Kinect_Wrapper.camera;
+using Kinect_Wrapper.device;
 using Kinect_Wrapper.device.stream;
-using Kinect_Wrapper.device.video;
 using Kinect_Wrapper.frame;
 using Kinect_Wrapper.gestures;
 using Kinect_Wrapper.structures;
@@ -19,9 +17,7 @@ namespace Kinect_Wrapper.wrapper
 
     public interface IKinectWrapper
     {
-        Audio Audio { get; }
-
-        Video Video { get; }
+        IKinectCamera Camera { get; }
 
         IGesturesDetector Gestures { get; }
 

@@ -23,6 +23,8 @@ namespace Kinect_Wrapper.device
 
         IKinectCamera camera { get; }
 
+        IKinectFrame nodeviceframe { get; }
+
         DeviceState State { get; }
 
         String Name { get; }

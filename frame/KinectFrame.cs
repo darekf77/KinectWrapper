@@ -1,5 +1,5 @@
-﻿using Kinect.Replay.Record;
-using Kinect.Replay.Replay;
+﻿using Kinect_Wrapper.camera;
+using Kinect_Wrapper.camera.Recorder;
 using Kinect_Wrapper.structures;
 using Microsoft.Kinect;
 using SharedLibJG.models;
@@ -16,16 +16,13 @@ namespace Kinect_Wrapper.frame
         private byte[] _colorByte = new byte[_pixelColorDataLength];
         private byte[] _depthByte = new byte[_pixelDepthDataLength];
         private byte[] _playerIsolated = new byte[_pixelColorDataLength];
-        public int MaxDepth = 0;
-        public int MinDepth = 0;
         private short[] _depthShort = new short[_pixelDepthDataLength];
         private DepthImagePixel[] _depthPixels = new DepthImagePixel[_pixelDepthDataLength];
         private DepthImagePoint[] _depthPoint = new DepthImagePoint[_pixelDepthDataLength];
         private Skeleton[] totalSkeleton = new Skeleton[6];
         private const long _pixelColorDataLength = 1228800;
         private const long _pixelDepthDataLength = 307200;
-        private KinectSensor _sensor;
-        private KinectReplay _replay;
+        private IKinectCamera _camera;
         private Bitmap _bitmap;
 
 
@@ -64,24 +61,11 @@ namespace Kinect_Wrapper.frame
             if (frame.DepthColor != null) frame.DepthColor.CopyTo(DepthColor, 0);
         }
 
-        public KinectFrame(KinectSensor sensor)
-        {
-            init();
-            _sensor = sensor;
-            //_pixelColorDataLength = sensor.ColorStream.FramePixelDataLength;
-            //_pixelDepthDataLength = sensor.DepthStream.FramePixelDataLength;
-            MaxDepth = _sensor.DepthStream.MaxDepth;
-            MinDepth = _sensor.DepthStream.MinDepth;
-        }
 
-        public KinectFrame(KinectReplay replay)
+        public KinectFrame(IKinectCamera camera)
         {
             init();
-            _replay = replay;
-            //_pixelColorDataLength = replay.ColorDataPixelLength;
-            //_pixelDepthDataLength = replay.DepthDataPixelLength;
-            MaxDepth = replay.MaxDepth;
-            MinDepth = replay.MinDepth;
+            _camera = camera;
         }
 
         public KinectFrame(Bitmap bitmap)

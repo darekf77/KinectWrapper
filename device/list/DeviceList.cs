@@ -1,5 +1,4 @@
-﻿using Kinect_Wrapper.device.audio;
-using Kinect_Wrapper.device.video;
+﻿
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -16,18 +15,14 @@ namespace Kinect_Wrapper.device.list
     {
         public static string AppPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
         private ObservableCollection<Device> Devices;
-        private Audio audio;
-        private Video video;
         private bool isLoadingFiles = false;
 
-        public DevicesList(ObservableCollection<Device> Devices, Audio audio, Video video)
+        public DevicesList(ObservableCollection<Device> Devices)
         {
             this.Devices = Devices;
-            this.video = video;
-            this.audio = audio;
             Devices.CollectionChanged += (e, v) =>
             {
-                if(!isLoadingFiles) save();
+                if (!isLoadingFiles) save();
             };
 
             this.load();
@@ -56,12 +51,13 @@ namespace Kinect_Wrapper.device.list
                 List<string> replaysList = JsonConvert.DeserializeObject<List<string>>(jsonList);
                 foreach (var replayPath in replaysList)
                 {
-                    if(File.Exists(replayPath)) {
+                    if (File.Exists(replayPath))
+                    {
                         FileInfo f = new FileInfo(replayPath);
                         if (f.Length == 0) continue;
-                        Devices.Add(new Device(audio, video, replayPath));
+                        Devices.Add(new Device(replayPath));
                     }
-                    
+
                 }
                 s.Close();
             }
@@ -72,7 +68,7 @@ namespace Kinect_Wrapper.device.list
         #region save
         private void save()
         {
-            var filePath = AppPath + "\\devices.json";            
+            var filePath = AppPath + "\\devices.json";
             using (var w = new StreamWriter(filePath))
             {
                 var devicesPaths = new List<string>();
@@ -87,7 +83,7 @@ namespace Kinect_Wrapper.device.list
 
                 w.WriteLine(devices);
                 w.Close();
-            }          
+            }
 
         }
 

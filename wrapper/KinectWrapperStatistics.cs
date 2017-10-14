@@ -1,11 +1,9 @@
-﻿using Kinect_Wrapper.device;
-using Kinect_Wrapper.device.audio.message;
-using Kinect_Wrapper.device.stream;
-using Kinect_Wrapper.frame;
+﻿using Kinect_Wrapper.frame;
 using Kinect_Wrapper.statistic;
 using Kinect_Wrapper.structures;
 using Microsoft.Kinect;
 using SharedLibJG.Helpers;
+using SharedLibJG.models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -48,6 +46,39 @@ namespace Kinect_Wrapper.wrapper
             get
             {
                 return (_statistic != null) ? _statistic.FramesPerSecond(StatFrameType.NORMAL) : -1;
+            }
+        }
+
+        void Video_FramesReady(object sender, IKinectFrame e)
+        {
+            if (UIEnable && e.IsSkeletonDetected)
+            {
+                if (App.Current != null) App.Current.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    _infoLeftHand.Value = e.UserSkeleton[SkeletonDataType.HandLeft].ToString();
+                    _infoRightHand.Value = e.UserSkeleton[SkeletonDataType.HandRight].ToString();
+                    _infoSpine.Value = e.UserSkeleton[SkeletonDataType.Spine].ToString();
+                    _infoIsSkeletonDetected.Value = e.IsSkeletonDetected.ToString();
+                }));
+            }
+        }
+
+        public void commit(IKinectFrame out_frame)
+        {
+            if (DisplayImageReady != null)
+            {
+                _statistic.commitFrame(StatFrameType.NORMAL);
+                DisplayImageReady(this, Stream.update(out_frame));
+                _infoFramesPerSecond.Value = _statistic.FramesPerSecond(StatFrameType.NORMAL).ToString() + "/s";
+            }
+        }
+        public void commit(System.Drawing.Bitmap out_frame)
+        {
+            if (DisplayImageReady != null)
+            {
+                _statistic.commitFrame(StatFrameType.NORMAL);
+                DisplayImageReady(this, Stream.update(HelpersConverters.ToBitmapSourceFast(out_frame)));
+                _infoFramesPerSecond.Value = _statistic.FramesPerSecond(StatFrameType.NORMAL).ToString() + "/s";
             }
         }
 

@@ -1,28 +1,24 @@
 ﻿using Kinect_Wrapper.device;
-using Kinect_Wrapper.device.audio.message;
-using Kinect_Wrapper.device.stream;
-using Kinect_Wrapper.frame;
-using Kinect_Wrapper.statistic;
 using Kinect_Wrapper.structures;
-using Microsoft.Kinect;
-using SharedLibJG.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
-using System.Threading;
-using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using Kinect_Wrapper.device.audio;
-using Kinect_Wrapper.device.video;
 using Kinect_Wrapper.gestures;
+using System.Runtime.CompilerServices;
+using Kinect_Wrapper.camera;
+using Kinect_Wrapper.frame;
+using SharedLibJG.models;
+using SharedLibJG.Helpers;
 
 namespace Kinect_Wrapper.wrapper
 {
     public partial class KinectWrapper : IKinectWrapper, INotifyPropertyChanged
     {
+        public IKinectCamera Camera { get; private set; }
+
+        public event EventHandler<ImageSource> DisplayImageReady;
+
         #region singleton 
         private static IKinectWrapper _instance;
         static readonly object _locker = new object();
@@ -38,10 +34,20 @@ namespace Kinect_Wrapper.wrapper
         }
         #endregion
 
+        #region propety changed
+        public event PropertyChangedEventHandler PropertyChanged;
+        virtual protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
 
+        #region init
         private KinectWrapper()
         {
-            initAudioVideo();
+            Camera = KinectCamera.Instance;
+            Camera.FrameReady += Video_FramesReady;
+            Camera.RecordComplete += Video_RecordComplete;
             UIEnable = true;
             initStatistics();
             initStreams();
@@ -49,42 +55,82 @@ namespace Kinect_Wrapper.wrapper
             initWorker();
             initGestures();
         }
+        #endregion
 
-
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public event EventHandler<ImageSource> DisplayImageReady;
+        #region gestures
         public IGesturesDetector Gestures { get; private set; }
-
-
         private void initGestures()
         {
             Gestures = new GesturesDetector();
-            Video.FrameReady += (e, frame) =>
-             {
-                 if (Device.Type == DeviceType.KINECT_1)
-                 {
-                     Gestures.update(frame);
-                 }
-             };
+            Camera.FrameReady += (e, frame) =>
+            {
+                if (Device.Type == DeviceType.KINECT_1)
+                {
+                    Gestures.update(frame);
+                }
+            };
             Gestures.start();
         }
+        #endregion
 
-
-
-        virtual protected void OnPropertyChanged(string propName)
+        #region quick fix record complete
+        void Video_RecordComplete(object sender, String path)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propName));
+            Helpers.SetTimeout(() => // TODO QUICK_FIX
+            {
+                if (App.Current != null) App.Current.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    _devices.Add(new Device(path));
+                }));
+            }, 2000);
+
+        }
+        #endregion
+
+        #region streams
+        public event EventHandler<StreamBase> StreamChanged;
+        private StreamBase _stream;
+        private ObservableCollection<StreamBase> _streams = new ObservableCollection<StreamBase>();
+
+        private void initStreams()
+        {
+            StreamBase color = new ColorStream();
+            _streams.Add(color);
+            Stream = color;
+            StreamBase depth = new DepthStream();
+            _streams.Add(depth);
         }
 
+        public StreamBase Stream
+        {
+            get
+            {
+                return _stream;
+            }
+            set
+            {
+                var different = (_stream != null && !_stream.Equals(value));
+                _stream = value;
+                OnPropertyChanged("Stream");
+                if (different && StreamChanged != null && value != null)
+                {
+                    StreamChanged(this, value);
+                }
+            }
+        }
 
-
-
-
-
+        public ObservableCollection<StreamBase> Streams
+        {
+            get
+            {
+                return _streams;
+            }
+            set
+            {
+                _streams = value;
+            }
+        }
+        #endregion
 
     }
 }

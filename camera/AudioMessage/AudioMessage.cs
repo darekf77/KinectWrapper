@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kinect_Wrapper.device.audio.message
+namespace Kinect_Wrapper.camera
 {
-    public class AudioMessage:IAudioMessage
+    public class AudioMessage : IAudioMessage
     {
-        public AudioMessage(String message,float confidence)
+        public AudioMessage(String message, float confidence)
         {
             Message = message;
             Confidence = confidence;

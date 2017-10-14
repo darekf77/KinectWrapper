@@ -1,7 +1,4 @@
-﻿
-using Kinect.Replay.Replay.Color;
-using Kinect.Replay.Replay.Depth;
-using Kinect.Replay.Replay.Skeletons;
+﻿using Kinect_Wrapper.camera.Replayer;
 using Kinect_Wrapper.structures;
 using Microsoft.Kinect;
 using SharedLibJG.models;
@@ -20,15 +17,16 @@ namespace Kinect_Wrapper.frame
     public interface IKinectFrame : DimensionalFrame
     {
         void synchronize(
-            ReplayDepthImageFrame depthFrame,
-            ReplayColorImageFrame colorFrame,
-            ReplaySkeletonFrame skletonFrame,
+            FrameDepthReplayer depthFrame,
+            FrameColorReplayer colorFrame,
+            FrameSkeletonReplayer skletonFrame,
             Boolean isPauseMode
             );
         void synchronize(
             DepthImageFrame depthFrame,
             ColorImageFrame colorFrame,
             SkeletonFrame skletonFrame,
+            CoordinateMapper CoordinateMapper,
             Boolean isPauseMode
             );
         void synchronize(String message, Boolean isVisible, Boolean isPauseMode);

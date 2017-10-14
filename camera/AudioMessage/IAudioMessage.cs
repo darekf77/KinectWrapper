@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kinect_Wrapper.device.audio.message
+namespace Kinect_Wrapper.camera
 {
     public interface IAudioMessage
     {

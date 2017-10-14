@@ -1,8 +1,5 @@
-﻿using Kinect.Replay.Record;
-using Kinect.Replay.Replay;
-using Kinect.Replay.Replay.Color;
-using Kinect.Replay.Replay.Depth;
-using Kinect.Replay.Replay.Skeletons;
+﻿using Kinect_Wrapper.camera.Recorder;
+using Kinect_Wrapper.camera.Replayer;
 using Kinect_Wrapper.structures;
 using Microsoft.Kinect;
 using SharedLibJG.Helpers;
@@ -24,9 +21,9 @@ namespace Kinect_Wrapper.frame
         }
 
         public void synchronize(
-            ReplayDepthImageFrame depthFrame,
-            ReplayColorImageFrame colorFrame,
-            ReplaySkeletonFrame skletonFrame,
+            FrameDepthReplayer depthFrame,
+            FrameColorReplayer colorFrame,
+            FrameSkeletonReplayer skletonFrame,
             Boolean isPauseMode
             )
         {
@@ -62,6 +59,7 @@ namespace Kinect_Wrapper.frame
             DepthImageFrame depthFrame,
             ColorImageFrame colorFrame,
             SkeletonFrame skletonFrame,
+            CoordinateMapper CoordinateMapper,
             Boolean isPauseMode
             )
         {
@@ -71,12 +69,12 @@ namespace Kinect_Wrapper.frame
             //Console.WriteLine("max depth: "+depthFrame.MaxDepth);
             depthFrame.CopyDepthImagePixelDataTo(_depthPixels);
 
-            _sensor.CoordinateMapper.MapColorFrameToDepthFrame(
-                ColorImageFormat.RgbResolution640x480Fps30,
-                DepthImageFormat.Resolution640x480Fps30,
-                _depthPixels,
-                _depthPoint
-                );
+            CoordinateMapper.MapColorFrameToDepthFrame(
+                 ColorImageFormat.RgbResolution640x480Fps30,
+                 DepthImageFormat.Resolution640x480Fps30,
+                 _depthPixels,
+                 _depthPoint
+                 );
 
 
             for (int i = 0; i < _pixelDepthDataLength; i++)
@@ -115,7 +113,7 @@ namespace Kinect_Wrapper.frame
                     IsSkeletonDetected = true;
                     foreach (var joint in SkeletonRecorder.neeededJoints)
                     {
-                        UserSkeleton[(SkeletonDataType)joint] = ScalePosition(firstSkeleton.Joints[joint].Position);
+                        UserSkeleton[(SkeletonDataType)joint] = ScalePosition(firstSkeleton.Joints[joint].Position, CoordinateMapper);
                     }
                     return;
                 }
@@ -152,9 +150,9 @@ namespace Kinect_Wrapper.frame
 
         private static Font fontMedium = new Font("Segoe UI Bold", Helpers.getResponsiveFontSize(15));
 
-        private Point ScalePosition(SkeletonPoint skeletonPoint)
+        private Point ScalePosition(SkeletonPoint skeletonPoint, CoordinateMapper CoordinateMapper)
         {
-            ColorImagePoint depthPoint = _sensor.CoordinateMapper.
+            ColorImagePoint depthPoint = CoordinateMapper.
             MapSkeletonPointToColorPoint(skeletonPoint, ColorImageFormat.RgbResolution640x480Fps30);
             return new Point(depthPoint.X, depthPoint.Y);
         }

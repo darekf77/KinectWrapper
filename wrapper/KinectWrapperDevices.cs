@@ -83,8 +83,8 @@ namespace Kinect_Wrapper.wrapper
         private void initDevices()
         {
             _devices = new TrulyObservableCollection<Device>();
-            replaysList = new DevicesList(Devices, Audio, Video);
-            _defaultDevice = new Device(Audio, Video);
+            replaysList = new DevicesList(Devices);
+            _defaultDevice = new Device();
             Device = _defaultDevice;
             Device.start();
             checkPotentialSensor();
@@ -99,7 +99,7 @@ namespace Kinect_Wrapper.wrapper
             {
                 if (device != null && device.sensor != null && device.sensor.UniqueKinectId.Equals(e.Sensor.UniqueKinectId)) return;
             }
-            Devices.Add(new Device(Audio, Video, e.Sensor));
+            Devices.Add(new Device(e.Sensor));
         }
 
 
@@ -114,7 +114,7 @@ namespace Kinect_Wrapper.wrapper
             {
                 FileInfo f = new FileInfo(file);
                 if (f.Length == 0) continue;
-                _devices.Add(new Device(Audio, Video, file));
+                _devices.Add(new Device(file));
             }
         }
 
@@ -123,7 +123,7 @@ namespace Kinect_Wrapper.wrapper
             foreach (var potentialSensor in KinectSensor.KinectSensors)
             {
                 if (potentialSensor == null) continue;
-                _devices.Add(new Device(Audio, Video, potentialSensor));
+                _devices.Add(new Device(potentialSensor));
             }
         }
 

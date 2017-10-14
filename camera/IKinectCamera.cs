@@ -1,6 +1,7 @@
 ﻿using Apex.MVVM;
 using Kinect_Wrapper.camera.Replayer;
 using Kinect_Wrapper.device;
+using Kinect_Wrapper.frame;
 using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
@@ -16,8 +17,11 @@ namespace Kinect_Wrapper.camera
         UNACTIVE,
         PLAYING,
         PLAYING_PAUSE,
+        PLAYING_STOPPING,
         RECORDING,
-        RECORDING_PAUSE
+        RECORDING_PAUSE,
+        RECORDING_STOPPING,
+        RECORDING_CANCEL
     }
 
 
@@ -35,28 +39,33 @@ namespace Kinect_Wrapper.camera
     {
         void record(string toFile);
         void replay(string replayFile);
+        CameraState State { get; set; }
+        IAudioRecorderReplayer Audio { get; }
+        void init(IDevice device);
+        void update();
+
+        // FRAME
+        int MaxDepth { get; }
+        int MinDepth { get; }
+
+        // COMMANDS
+
         Command Stop { get; }
         Command Pause { get; }
-        CameraState State { get; set; }
+        Command NextFrame { get; }
+        Command PausePlay { get; }
+        Command CancelRecord { get; }
 
-        IAudioRecorderReplayer Audio { get; }
+        // FLAGS
 
-        void init(IDevice device);
-        bool isRecordingPossible();
+        bool IsRecordingPossible { get; }
+        bool IsRecording { get; }
+        bool IsPaused { get; }
 
+        // EVENTS
         event EventHandler onReplayFinish;
-        event EventHandler<ReplayFrame> onFrameReady;
-
-
-        /// <summary>
-        /// Update when recording
-        /// </summary>
-        void update(ColorImageFrame color, DepthImageFrame depth, SkeletonFrame skeleton, KinectSensor sensor);
-
-        /// <summary>
-        /// Update when replaying
-        /// </summary>
-        void update();
+        event EventHandler<String> RecordComplete;
+        event EventHandler<IKinectFrame> FrameReady;
 
     }
 }

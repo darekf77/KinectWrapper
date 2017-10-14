@@ -11,5 +11,10 @@ namespace Kinect_Wrapper.camera.Replayer
         public FrameColorReplayer Color { get; set; }
         public FrameDepthReplayer Depth { get; set; }
         public FrameSkeletonReplayer Skeleton { get; set; }
+
+        public bool isCorrect
+        {
+            get { return (Color != null && Depth != null && Skeleton != null); }
+        }
     }
 }
