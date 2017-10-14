@@ -10,6 +10,7 @@ using Kinect_Wrapper.camera;
 using Kinect_Wrapper.frame;
 using SharedLibJG.models;
 using SharedLibJG.Helpers;
+using Kinect_Wrapper.device.stream;
 
 namespace Kinect_Wrapper.wrapper
 {
@@ -52,7 +53,7 @@ namespace Kinect_Wrapper.wrapper
             initStatistics();
             initStreams();
             initDevices();
-            initWorker();
+            initWorkers();
             initGestures();
         }
         #endregion

@@ -23,6 +23,13 @@ namespace Kinect_Wrapper.camera
         #region worker update
         public void update()
         {
+            if (State == CameraState.RECORDING_CANCEL)
+            {
+                System.GC.Collect();
+                System.GC.WaitForPendingFinalizers();
+                File.Delete(RecordFilePath);
+                return;
+            }
 
         }
         #endregion

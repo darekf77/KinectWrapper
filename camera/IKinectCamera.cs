@@ -10,21 +10,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Kinect_Wrapper.camera
 {
-    public enum CameraState
-    {
-        UNACTIVE,
-        PLAYING,
-        PLAYING_PAUSE,
-        PLAYING_STOPPING,
-        RECORDING,
-        RECORDING_PAUSE,
-        RECORDING_STOPPING,
-        RECORDING_CANCEL
-    }
-
-
     [Flags]
     public enum KinectRecordOptions
     {

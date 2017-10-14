@@ -7,39 +7,62 @@ namespace Kinect_Wrapper.wrapper
 {
     public partial class KinectWrapper
     {
-        private BackgroundWorker _worker;
+        static readonly object _lockerWorkerFrames = new object();
+        static readonly object _lockerWorkerState = new object();
 
-        private void initWorker()
-        {
-            _worker = new BackgroundWorker();
-            _worker.DoWork += _worker_DoWork;
-            _worker.RunWorkerAsync();
-        }
+        private BackgroundWorker _workerFrames;
+        private BackgroundWorker _workerState;
 
-        void _worker_DoWork(object sender, DoWorkEventArgs e)
+        private void initWorkers()
         {
-            while (true)
+            _workerFrames = new BackgroundWorker();
+
+            _workerFrames.DoWork += (e, v) =>
             {
-                if (Device != null)
+                while (true)
                 {
-                    Device.update();
-                    if (Device.Type == DeviceType.NO_DEVICE)
+                    if (Device != null)
                     {
-                        Thread.Sleep(1000);
+                        Device.update(DeviceUpdateType.FRAMES);
+                        if (Device.Type == DeviceType.NO_DEVICE)
+                        {
+                            Thread.Sleep(1000);
+                        }
+                        else if (Device.State == DeviceState.NOT_READY) // if current device not ready set default
+                        {
+                            Device = _defaultDevice;
+                            Device.start();
+                        }
+                        continue;
                     }
-                    else if (Device.State == DeviceState.READY || Device.State == DeviceState.NOT_READY)
-                    {
-                        Device = _defaultDevice;
-                        Device.start();
-                    }
-                    continue;
-                }
 
-                lock (_locker)
-                    while (Device == null)
-                        Monitor.Wait(_locker);// thread is waiting until new data from kinect                 
-            }
+                    lock (_lockerWorkerFrames)
+                        while (Device == null)
+                            Monitor.Wait(_lockerWorkerFrames);// thread is waiting until new data from kinect                 
+                }
+            };
+            _workerFrames.RunWorkerAsync();
+
+
+            _workerState = new BackgroundWorker();
+            _workerState.DoWork += (e, v) =>
+            {
+                while (true)
+                {
+                    if (Device != null)
+                    {
+                        Device.update(DeviceUpdateType.STATE);
+                    }
+                    Thread.Sleep(1000);
+                    lock (_lockerWorkerState)
+                        while (Device == null)
+                            Monitor.Wait(_lockerWorkerState);// thread is waiting until new data from kinect   
+                }
+            };
+            _workerState.RunWorkerAsync();
+
         }
+
 
     }
 }

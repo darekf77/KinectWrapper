@@ -1,7 +1,4 @@
 ﻿using Kinect_Wrapper.camera;
-using Kinect_Wrapper.device.audio;
-using Kinect_Wrapper.device.stream;
-using Kinect_Wrapper.device.video;
 using Kinect_Wrapper.frame;
 using Kinect_Wrapper.structures;
 using Microsoft.Kinect;
@@ -11,13 +8,22 @@ using System.Collections.ObjectModel;
 
 namespace Kinect_Wrapper.device
 {
+    public enum DeviceUpdateType
+    {
+        FRAMES,
+        STATE,
+        ALL
+    }
+
+
+
     public interface IDevice
     {
         void start();
 
         void stop();
 
-        void update();
+        void update(DeviceUpdateType type);
 
         KinectSensor sensor { get; }
 

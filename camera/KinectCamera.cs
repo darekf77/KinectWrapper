@@ -20,13 +20,14 @@ namespace Kinect_Wrapper.camera
 {
     public partial class KinectCamera : IKinectCamera
     {
-        KinectSensor sensor;
-        BinaryWriter writer;
-        BinaryReader reader;
-        Stream stream;
+        KinectSensor sensor { get; set; }
+        BinaryWriter writer { get; set; }
+        BinaryReader reader { get; set; }
+        Stream stream { get; set; }
         KinectRecordOptions Options = KinectRecordOptions.Everything;
         IKinectFrame frame { get; set; }
-        String RecordReplayFilePath { get; }
+        String ReplayFilePath { get; }
+        String RecordFilePath { get; set; }
 
         public event EventHandler<IKinectFrame> FrameReady;
 
@@ -182,6 +183,8 @@ namespace Kinect_Wrapper.camera
             audio.record(toFile);
 
             previousFlushDate = DateTime.Now;
+
+            RecordFilePath = toFile;
             State = CameraState.RECORDING;
         }
         public bool IsRecording
@@ -265,6 +268,7 @@ namespace Kinect_Wrapper.camera
         }
         #endregion
 
+
         public Command NextFrame
         {
             get
@@ -285,7 +289,10 @@ namespace Kinect_Wrapper.camera
         {
             get
             {
-                throw new NotImplementedException();
+                return new Command(() =>
+                {
+                    State = CameraState.RECORDING_CANCEL;
+                });
             }
         }
 

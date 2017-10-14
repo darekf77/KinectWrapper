@@ -28,34 +28,21 @@ namespace Kinect_Wrapper.app
     public partial class PageKinectWrapperControl : Page
     {
         private IKinectWrapper Kinect;
-        
+
         public PageKinectWrapperControl(IKinectWrapper kinect)
         {
-            InitializeComponent();            
+            InitializeComponent();
             Kinect = kinect;
             ComboboxStreams.SelectedIndex = 0;
-            kinect.StreamChanged += kinect_StreamChanged;
             this.DataContext = new
             {
                 kinect = Kinect,
-                video = Kinect.Video,
-                audio = Kinect.Audio
+                camera = Kinect.Camera,
+                audio = Kinect.Camera.Audio
             };
         }
 
-       
-        
 
-        void kinect_StreamChanged(object sender, StreamBase e)
-        {
-            Console.WriteLine("Kinect stream changed");
-            //App.Current.Dispatcher.BeginInvoke(new Action(() =>
-            //{
-            //    ComboboxStreams.SelectedItem = e; 
-            //}));
-            
-        }
-     
 
         private void play(object sender, RoutedEventArgs e)
         {
@@ -63,38 +50,39 @@ namespace Kinect_Wrapper.app
             Kinect.Device.start();
         }
 
-        private void stop(object sender, RoutedEventArgs e)
+        private void cancel(object sender, RoutedEventArgs e)
         {
-            if(Kinect.Video.IsRecording)
-            {
-                Kinect.Video.stopRecord(true);
-                System.GC.Collect();
-                System.GC.WaitForPendingFinalizers();
-                File.Delete(Kinect.Video.RecordingFilePath);
-            }
-            else  Kinect.Device.stop();
+            Kinect.Camera.CancelRecord.DoExecute();
         }
-        
+
+        String lastRecordedFilename;
         private void record(object sender, RoutedEventArgs e)
         {
-            if(Kinect.Video.IsRecording) {
-                Kinect.Video.stopRecord();
+            if (Kinect.Camera.IsRecording)
+            {
+                Kinect.Camera.Stop.DoExecute();
             }
-            else {
+            else
+            {
                 var saveFileDialog = new SaveFileDialog { Title = "Select filename", Filter = "Replay files|*.replay" };
                 if (saveFileDialog.ShowDialog() != true) return;
-                Kinect.Video.startRecordAndSaveTo(saveFileDialog.FileName);
+                Kinect.Camera.record(saveFileDialog.FileName);
             }
         }
-        
+
         private void next_frame(object sender, RoutedEventArgs e)
         {
-            Kinect.Video.nextFrame();
+            Kinect.Camera.NextFrame.DoExecute();
         }
 
         private void pause(object sender, RoutedEventArgs e)
         {
-            Kinect.Video.pausePlay();
+            Kinect.Camera.PausePlay.DoExecute();
+        }
+
+        private void stop(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
