@@ -1,4 +1,5 @@
-﻿using Kinect_Wrapper.camera.Replayer;
+﻿using Apex.MVVM;
+using Kinect_Wrapper.camera.Replayer;
 using Kinect_Wrapper.device;
 using Microsoft.Kinect;
 using System;
@@ -28,36 +29,28 @@ namespace Kinect_Wrapper.camera
         Everything = 3
     }
 
-    public interface IKinectCameraOperator
+
+
+    public interface IKinectCamera
     {
         void record(string toFile);
         void replay(string replayFile);
-        void stop();
-        void pause();
+        Command Stop { get; }
+        Command Pause { get; }
         CameraState State { get; set; }
-    }
 
+        IAudioRecorderReplayer Audio { get; }
 
-
-    public interface IKinectCamera : IKinectCameraOperator
-    {
-        void init(KinectSensor sensor);
+        void init(IDevice device);
         bool isRecordingPossible();
 
         event EventHandler onReplayFinish;
         event EventHandler<ReplayFrame> onFrameReady;
 
-        ObservableCollection<IAudioRecordDevice> RecordingDevices { get; }
-
-        void refreshAudioRecordingDevices(IDevice currentDevice);
 
         /// <summary>
         /// Update when recording
         /// </summary>
-        /// <param name="color"></param>
-        /// <param name="depth"></param>
-        /// <param name="skeleton"></param>
-        /// <param name="sensor"></param>
         void update(ColorImageFrame color, DepthImageFrame depth, SkeletonFrame skeleton, KinectSensor sensor);
 
         /// <summary>

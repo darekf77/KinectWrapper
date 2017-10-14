@@ -19,13 +19,13 @@ namespace Kinect_Wrapper.device.audio
     public partial class Audio : IAudio, INotifyPropertyChanged
     {
 
-        public ObservableCollection<IAudioRecordDevice> RecordingDevices { get; }
+        public ObservableCollection<IAudioSourceDevice> RecordingDevices { get; }
 
         private Boolean audioStarted = false;
 
         public Audio()
         {
-            RecordingDevices = new ObservableCollection<IAudioRecordDevice>();
+            RecordingDevices = new ObservableCollection<IAudioSourceDevice>();
             initGrammar();
             initRecordingDevices();
         }

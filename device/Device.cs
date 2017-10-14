@@ -1,4 +1,4 @@
-﻿using Kinect.Replay.Replay;
+﻿using Kinect_Wrapper.camera;
 using Kinect_Wrapper.device.audio;
 using Kinect_Wrapper.device.video;
 using Kinect_Wrapper.structures;
@@ -11,7 +11,7 @@ namespace Kinect_Wrapper.device
     public partial class Device : IDevice, INotifyPropertyChanged
     {
         public KinectSensor sensor { get; private set; }
-        public KinectReplay replay { get; private set; }
+        public IKinectCamera camera { get; private set; }
 
         private DeviceType _deviceType;
 
@@ -44,8 +44,12 @@ namespace Kinect_Wrapper.device
             _filePath = filePath;
             _deviceType = DeviceType.RECORD_FILE_KINECT_1;
             _name = "RF-" + System.IO.Path.GetFileName(_filePath);
-            replay = new KinectReplay(_filePath);
-            replay.ReplayFinished += Replay_ReplayFinished;
+            camera.init(this);
+            camera.onReplayFinish += (e, v) =>
+            {
+                StateChanged?.Invoke(this, EventArgs.Empty);
+            };
+
         }
 
         public Device(Audio audio, Video video)

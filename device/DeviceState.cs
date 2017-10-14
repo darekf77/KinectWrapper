@@ -8,11 +8,6 @@ namespace Kinect_Wrapper.device
     public partial class Device
     {
 
-        private void Replay_ReplayFinished()
-        {
-            StateChanged?.Invoke(this, EventArgs.Empty);
-        }
-
         private void _video_StreamingStarted(object sender, EventArgs e)
         {
             if (_initializingDevice) _initializingDevice = false;

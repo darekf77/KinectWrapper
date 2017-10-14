@@ -11,6 +11,9 @@ using System.Collections.ObjectModel;
 using Kinect_Wrapper.device;
 using Kinect_Wrapper.camera.Replayer;
 using System.Threading;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using Apex.MVVM;
 
 namespace Kinect_Wrapper.camera
 {
@@ -21,19 +24,52 @@ namespace Kinect_Wrapper.camera
         BinaryReader reader;
         Stream stream;
         KinectRecordOptions Options = KinectRecordOptions.Everything;
-        AudioRecorderReplayer audio = new AudioRecorderReplayer();
 
-        #region init / constructor
-        public KinectCamera()
+        #region singleton 
+        private volatile static IKinectCamera _instance;
+        static readonly object _locker = new object();
+        public static IKinectCamera Instance
         {
-            AudioRecordDevice.refresList();
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new KinectCamera();
+                }
+                return _instance;
+            }
         }
-
-        public void init(KinectSensor sensor)
+        private KinectCamera()
         {
-            this.sensor = sensor;
+
         }
         #endregion
+
+        #region propety changed
+        public event PropertyChangedEventHandler PropertyChanged;
+        virtual protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
+
+        #region init / constructor
+        public void init(IDevice device)
+        {
+            this.sensor = device.sensor;
+            audio.init(device);
+            OnPropertyChanged("isRecordingPossible");
+        }
+
+        #endregion
+
+        #region audio
+        AudioRecorderReplayer audio = new AudioRecorderReplayer();
+        public IAudioRecorderReplayer Audio
+        {
+            get { return audio; }
+        }
+        #endregion        
 
         #region state
         private CameraState _state = CameraState.UNACTIVE;
@@ -45,20 +81,6 @@ namespace Kinect_Wrapper.camera
                 _state = value;
                 audio.State = value;
             }
-        }
-        #endregion
-
-        #region recording devices
-        public ObservableCollection<IAudioRecordDevice> RecordingDevices
-        {
-            get
-            {
-                return AudioRecordDevice.Devices;
-            }
-        }
-        public void refreshAudioRecordingDevices(IDevice currentDevice)
-        {
-            AudioRecordDevice.refresList(currentDevice);
         }
         #endregion
 
@@ -205,6 +227,18 @@ namespace Kinect_Wrapper.camera
         {
             if (State == CameraState.RECORDING) stopRecord();
         }
+
+        public Command Stop
+        {
+            get
+            {
+                return new Command(() =>
+                {
+                    stop();
+                });
+            }
+        }
+
         #endregion
 
         #region pause
@@ -230,6 +264,17 @@ namespace Kinect_Wrapper.camera
                     break;
             }
         }
+        public Command Pause
+        {
+            get
+            {
+                return new Command(() =>
+                {
+                    pause();
+                });
+            }
+        }
+
         #endregion
 
     }

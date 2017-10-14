@@ -1,4 +1,4 @@
-﻿using Kinect.Replay.Replay;
+﻿using Kinect_Wrapper.camera;
 using Kinect_Wrapper.device.audio;
 using Kinect_Wrapper.device.stream;
 using Kinect_Wrapper.device.video;
@@ -16,19 +16,19 @@ namespace Kinect_Wrapper.device
         void start();
 
         void stop();
-        
+
         void update();
 
         KinectSensor sensor { get; }
 
-        KinectReplay replay { get; }        
-        
+        IKinectCamera camera { get; }
+
         DeviceState State { get; }
-        
+
         String Name { get; }
-        
+
         String Path { get; }
-        
+
         DeviceType Type { get; }
 
         event EventHandler StateChanged;
