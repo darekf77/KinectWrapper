@@ -33,8 +33,8 @@ namespace Kinect_Wrapper.app
             this.DataContext = new
             {
                 kinectWrap = _kinect,
-                video = _kinect.Video,
-                audio = _kinect.Audio,
+                camera = _kinect.Camera,
+                audio = _kinect.Camera.Audio,
                 gestures = kinect.Gestures
             };
             kinect.Gestures.onResizeGesture += (e, v) =>
@@ -59,7 +59,7 @@ namespace Kinect_Wrapper.app
         {
             var openFileDialog = new OpenFileDialog { Title = "Select filename", Filter = "Replay files|*.replay" };
             if (openFileDialog.ShowDialog() != true) return;
-            _kinect.Devices.Add(new Device(_kinect.Audio, _kinect.Video, openFileDialog.FileName));
+            _kinect.Devices.Add(new Device(openFileDialog.FileName));
         }
 
         private void remove_device_from_list(object sender, RoutedEventArgs e)

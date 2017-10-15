@@ -73,7 +73,7 @@
 
         <Label Content="Audio" Grid.Row="3" Grid.ColumnSpan="2" FontSize="8" Padding="0" />
 
-        <ComboBox Name="ComboboxAudioDevices" ItemsSource="{Binding audio.RecordingDevices}" 
+        <ComboBox Name="ComboboxAudioDevices" ItemsSource="{Binding audio.Devices}" 
                   
                        Grid.Row="4"  Height="20" >
         </ComboBox>

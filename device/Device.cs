@@ -2,6 +2,7 @@
 using Kinect_Wrapper.frame;
 using Kinect_Wrapper.structures;
 using Microsoft.Kinect;
+using SharedLibJG.Helpers;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -114,6 +115,7 @@ namespace Kinect_Wrapper.device
                     break;
                 case DeviceType.KINECT_1:
                     if (sensor == null) State = DeviceState.NOT_READY;
+                    else if (State == DeviceState.RESTARTING && (sensor.Status != KinectStatus.Connected)) break;
                     else if (sensor.Status == KinectStatus.Initializing) State = DeviceState.INITIALIZING;
                     else if (sensor.Status == KinectStatus.Connected)
                     {
@@ -133,7 +135,7 @@ namespace Kinect_Wrapper.device
                     else if (sensor.Status == KinectStatus.Error)
                     {
                         State = DeviceState.RESTARTING;
-                        tryRestartDevice();
+                        tryRestartKinect();
                     }
                     else
                     {
@@ -174,6 +176,21 @@ namespace Kinect_Wrapper.device
         public void start()
         {
             State = DeviceState.INITIALIZING;
+
+            switch (Type)
+            {
+                case DeviceType.NO_DEVICE:
+                    break;
+                case DeviceType.KINECT_1:
+                    startKinect();
+                    break;
+                case DeviceType.RECORD_FILE_KINECT_1:
+                    break;
+                default:
+                    break;
+            }
+
+
             //stop();
             //_video.StreamingStarted += _video_StreamingStarted;
             //if (Type == DeviceType.KINECT_1)
@@ -207,6 +224,45 @@ namespace Kinect_Wrapper.device
             //    _initializingDevice = false;
             //}
         }
+
+        private void startKinect()
+        {
+            if (sensor == null || sensor.Status == KinectStatus.Disconnected) return;
+            if (sensor.IsRunning)
+            {
+                stopKinect();
+                Helpers.SetTimeout(() =>
+                {
+                    startKinect();
+                }, 1000);
+            }
+            try
+            {
+                sensor.Start();
+                sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
+                sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
+                sensor.SkeletonStream.Enable();
+                State = DeviceState.READY;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("cannot start kinect or already started" + e.Message);
+            }
+        }
+
+        private void stopKinect()
+        {
+            try
+            {
+                sensor.Stop();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+
+
         #endregion
 
         #region stop
@@ -251,8 +307,9 @@ namespace Kinect_Wrapper.device
         }
 
 
-        void tryRestartDevice()
+        void tryRestartKinect()
         {
+            sensor.Stop();
 
         }
 
