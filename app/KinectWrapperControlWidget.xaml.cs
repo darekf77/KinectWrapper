@@ -46,8 +46,8 @@ namespace Kinect_Wrapper.app
 
         private void play(object sender, RoutedEventArgs e)
         {
-            Kinect.Device = Kinect.SelectedDevice; // TODO again press play - > Complete !!! ballls containter
-            Kinect.Device.start();
+            Kinect.Manager.Device = Kinect.Manager.SelectedDevice; // TODO again press play - > Complete !!! ballls containter
+            Kinect.Manager.Device.start();
         }
 
         private void cancel(object sender, RoutedEventArgs e)

@@ -5,6 +5,7 @@ using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace Kinect_Wrapper.device
 {
@@ -17,7 +18,7 @@ namespace Kinect_Wrapper.device
 
 
 
-    public interface IDevice
+    public interface IDevice : INotifyPropertyChanged
     {
         void start();
 
@@ -26,8 +27,6 @@ namespace Kinect_Wrapper.device
         void update(DeviceUpdateType type);
 
         KinectSensor sensor { get; }
-
-        IKinectCamera camera { get; }
 
         IKinectFrame nodeviceframe { get; }
 

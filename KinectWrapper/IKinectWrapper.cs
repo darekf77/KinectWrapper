@@ -1,6 +1,7 @@
 ﻿using Kinect_Wrapper.camera;
 using Kinect_Wrapper.device;
 using Kinect_Wrapper.device.stream;
+using Kinect_Wrapper.devicemanager;
 using Kinect_Wrapper.frame;
 using Kinect_Wrapper.gestures;
 using Kinect_Wrapper.structures;
@@ -19,21 +20,13 @@ namespace Kinect_Wrapper.wrapper
     {
         IKinectCamera Camera { get; }
 
+        IDeviceManager Manager { get; }
+
         IGesturesDetector Gestures { get; }
-
-        Boolean IsStopped { get; }
-
-        ObservableCollection<Device> Devices { get; }
-
-        Device Device { get; set; }
-
-        Device SelectedDevice { get; set; }
 
         StreamBase Stream { get; set; }
 
         ObservableCollection<StreamBase> Streams { get; set; }
-
-        DeviceType AutopickupDeviceType { get; }
 
         Boolean UIEnable { get; set; }
 
@@ -50,8 +43,5 @@ namespace Kinect_Wrapper.wrapper
 
         event EventHandler<StreamBase> StreamChanged;
 
-        event EventHandler DeviceChanged;
-
-        event EventHandler OnAutopickupDeviceChanged;
     }
 }

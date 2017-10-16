@@ -1,37 +1,54 @@
-﻿
+﻿using Kinect_Wrapper.device;
+using Kinect_Wrapper.structures;
+using Microsoft.Kinect;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace Kinect_Wrapper.device.list
+namespace Kinect_Wrapper.devicemanager
 {
-    public class DevicesList
+    public partial class DeviceManager
     {
+
         public static string AppPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-        private ObservableCollection<Device> Devices;
         private bool isLoadingFiles = false;
 
-        public DevicesList(ObservableCollection<Device> Devices)
+        #region check potential files
+        private void loadReplayFilesInWorkspace()
         {
-            this.Devices = Devices;
-            Devices.CollectionChanged += (e, v) =>
+            var currentDirectory = System.IO.Directory.GetCurrentDirectory();
+            string[] potentialReplayfiles = Directory.GetFiles(currentDirectory, "*.replay", SearchOption.AllDirectories);
+            foreach (var file in potentialReplayfiles)
             {
-                if (!isLoadingFiles) save();
-            };
+                FileInfo f = new FileInfo(file);
+                if (f.Length == 0) continue;
+                Devices.Add(new Device(file));
+            }
+        }
+        #endregion
 
-            this.load();
+        #region check potential sensors
+        private void loadSensorsFromSystem()
+        {
+            foreach (var potentialSensor in KinectSensor.KinectSensors)
+            {
+                if (potentialSensor == null) continue;
+                Devices.Add(new Device(potentialSensor));
+            }
         }
 
-
+        #endregion
 
         #region load
-        private void load()
+        private void loadReplayFilesFromConfigFile()
         {
             isLoadingFiles = true;
             var fileScenariosPath = AppPath + "\\devices.json";
@@ -86,10 +103,7 @@ namespace Kinect_Wrapper.device.list
             }
 
         }
+        #endregion
 
     }
-    #endregion
-
-    //}
-
 }

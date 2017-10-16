@@ -52,14 +52,14 @@ namespace Kinect_Wrapper.app
 
         private void ListViewDevices_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            _kinect.SelectedDevice = (Device)ListViewDevices.SelectedItem;
+            _kinect.Manager.SelectedDevice = (Device)ListViewDevices.SelectedItem;
         }
 
         private void add_device_from_hard_drive(object sender, RoutedEventArgs e)
         {
             var openFileDialog = new OpenFileDialog { Title = "Select filename", Filter = "Replay files|*.replay" };
             if (openFileDialog.ShowDialog() != true) return;
-            _kinect.Devices.Add(new Device(openFileDialog.FileName));
+            _kinect.Manager.Devices.Add(new Device(openFileDialog.FileName));
         }
 
         private void remove_device_from_list(object sender, RoutedEventArgs e)
@@ -68,7 +68,7 @@ namespace Kinect_Wrapper.app
                MessageBox.Show("Are you sure?", "Delete device from list",
                MessageBoxButton.YesNo);
             if (messageBoxResult == MessageBoxResult.Yes)
-                _kinect.Devices.Remove(_kinect.SelectedDevice);
+                _kinect.Manager.Devices.Remove(_kinect.Manager.SelectedDevice);
         }
 
         private void gestureEntererd(object sender, KeyEventArgs e)

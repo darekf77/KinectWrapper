@@ -11,24 +11,26 @@ using Kinect_Wrapper.frame;
 using SharedLibJG.models;
 using SharedLibJG.Helpers;
 using Kinect_Wrapper.device.stream;
+using Kinect_Wrapper.devicemanager;
 
 namespace Kinect_Wrapper.wrapper
 {
     public partial class KinectWrapper : IKinectWrapper, INotifyPropertyChanged
     {
         public IKinectCamera Camera { get; private set; }
+        public IDeviceManager Manager { get; set; }
 
-        public event EventHandler<ImageSource> DisplayImageReady;
 
         #region singleton 
         private static IKinectWrapper _instance;
         static readonly object _locker = new object();
         public static IKinectWrapper Instance(bool autopickupKinect = true)
         {
-            AutopickupDevice = autopickupKinect;
+
             if (_instance == null)
             {
                 _instance = new KinectWrapper();
+                _instance.Manager.AutopickupDevice = autopickupKinect;
             }
             return _instance;
 
@@ -43,17 +45,17 @@ namespace Kinect_Wrapper.wrapper
         }
         #endregion
 
-        #region init
+        #region constructor
         private KinectWrapper()
         {
             Camera = KinectCamera.Instance;
             Camera.FrameReady += Video_FramesReady;
-            Camera.RecordComplete += Video_RecordComplete;
+
+            Manager = new DeviceManager(Camera);
+
             UIEnable = true;
             initStatistics();
             initStreams();
-            initDevices();
-            initWorkers();
             initGestures();
         }
         #endregion
@@ -65,26 +67,12 @@ namespace Kinect_Wrapper.wrapper
             Gestures = new GesturesDetector();
             Camera.FrameReady += (e, frame) =>
             {
-                if (Device.Type == DeviceType.KINECT_1)
+                if (Manager.Device.Type == DeviceType.KINECT_1)
                 {
                     Gestures.update(frame);
                 }
             };
             Gestures.start();
-        }
-        #endregion
-
-        #region quick fix record complete
-        void Video_RecordComplete(object sender, String path)
-        {
-            Helpers.SetTimeout(() => // TODO QUICK_FIX
-            {
-                if (App.Current != null) App.Current.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    _devices.Add(new Device(path));
-                }));
-            }, 2000);
-
         }
         #endregion
 
@@ -131,7 +119,9 @@ namespace Kinect_Wrapper.wrapper
                 _streams = value;
             }
         }
-        #endregion
 
     }
+    #endregion
+
+
 }

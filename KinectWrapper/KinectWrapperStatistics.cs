@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Threading;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace Kinect_Wrapper.wrapper
 {
@@ -62,6 +63,8 @@ namespace Kinect_Wrapper.wrapper
                 }));
             }
         }
+
+        public event EventHandler<ImageSource> DisplayImageReady;
 
         public void commit(IKinectFrame out_frame)
         {

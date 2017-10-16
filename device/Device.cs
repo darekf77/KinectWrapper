@@ -10,7 +10,7 @@ using System.Runtime.CompilerServices;
 
 namespace Kinect_Wrapper.device
 {
-    public partial class Device : IDevice, INotifyPropertyChanged
+    public partial class Device : IDevice
     {
         public KinectSensor sensor { get; private set; }
         public IKinectCamera camera { get; private set; }

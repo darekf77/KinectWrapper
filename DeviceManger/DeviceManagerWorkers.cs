@@ -1,12 +1,19 @@
 ﻿using Kinect_Wrapper.device;
 using Kinect_Wrapper.structures;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
-namespace Kinect_Wrapper.wrapper
+namespace Kinect_Wrapper.devicemanager
 {
-    public partial class KinectWrapper
+    public partial class DeviceManager
     {
+
         static readonly object _lockerWorkerFrames = new object();
         static readonly object _lockerWorkerState = new object();
 
@@ -30,7 +37,7 @@ namespace Kinect_Wrapper.wrapper
                         }
                         else if (Device.State == DeviceState.NOT_READY) // if current device not ready set default
                         {
-                            Device = _defaultDevice;
+                            Device = DefaultDevice;
                             Device.start();
                         }
                         continue;
