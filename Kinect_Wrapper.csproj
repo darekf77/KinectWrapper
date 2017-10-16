@@ -83,6 +83,7 @@
     <Compile Include="app\KinectWrapperListWidget.xaml.cs">
       <DependentUpon>KinectWrapperListWidget.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DeviceManger\DeviceManagerLoadSave.cs" />
     <Compile Include="DeviceManger\DeviceManagerWorkers.cs" />
     <Compile Include="DeviceManger\DeviceManager.cs" />
     <Compile Include="DeviceManger\IDeviceManager.cs" />
@@ -113,7 +114,6 @@
     <Compile Include="KinectCamera\AudioMessage\IAudioMessage.cs" />
     <Compile Include="Device\DeviceState.cs" />
     <Compile Include="Device\DeviceType.cs" />
-    <Compile Include="DeviceManger\DeviceList.cs" />
     <Compile Include="Device\stream\DepthStream.cs" />
     <Compile Include="Device\stream\ColorStream.cs" />
     <Compile Include="Device\stream\StreamBase.cs" />
