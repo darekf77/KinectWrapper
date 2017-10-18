@@ -8,12 +8,20 @@ using Microsoft.Speech.Recognition;
 using Microsoft.Speech.AudioFormat;
 using Microsoft.Kinect;
 using System.IO;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace Kinect_Wrapper.camera
 {
     public class AudioRecognition : IAudioRecognition
     {
-
+        #region propety changed
+        public event PropertyChangedEventHandler PropertyChanged;
+        virtual protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
 
         private SpeechRecognitionEngine SpeechRecognizer { get; set; }
 
@@ -85,6 +93,7 @@ namespace Kinect_Wrapper.camera
 
         private void destroy()
         {
+            if (SpeechRecognizer == null) return;
             SpeechRecognizer.UnloadAllGrammars();
             SpeechRecognizer.SpeechRecognized -= SreSpeechRecognized;
             SpeechRecognizer.SpeechHypothesized -= SreSpeechHypothesized;

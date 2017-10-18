@@ -28,21 +28,7 @@ namespace Kinect_Wrapper.devicemanager
             {
                 while (true)
                 {
-                    if (Device != null)
-                    {
-                        Device.update(DeviceUpdateType.FRAMES);
-                        if (Device.Type == DeviceType.NO_DEVICE)
-                        {
-                            Thread.Sleep(1000);
-                        }
-                        else if (Device.State == DeviceState.NOT_READY) // if current device not ready set default
-                        {
-                            Device = DefaultDevice;
-                            Device.start();
-                        }
-                        continue;
-                    }
-
+                    Camera.update();
                     lock (_lockerWorkerFrames)
                         while (Device == null)
                             Monitor.Wait(_lockerWorkerFrames);// thread is waiting until new data from kinect                 
@@ -56,9 +42,9 @@ namespace Kinect_Wrapper.devicemanager
             {
                 while (true)
                 {
-                    if (Device != null)
+                    foreach (var device in Devices)
                     {
-                        Device.update(DeviceUpdateType.STATE);
+                        Device.update(Camera.State, Camera.Device.Equals(device));
                     }
                     Thread.Sleep(1000);
                     lock (_lockerWorkerState)

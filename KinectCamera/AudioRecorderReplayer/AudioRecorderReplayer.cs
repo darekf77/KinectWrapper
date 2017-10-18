@@ -13,7 +13,7 @@ using VoiceRecorder.Audio;
 
 namespace Kinect_Wrapper.camera
 {
-    public class AudioRecorderReplayer : IAudioRecorderReplayer, INotifyPropertyChanged
+    public class AudioRecorderReplayer : IAudioRecorderReplayer
     {
         private IAudioPlayer player;
         private IAudioRecorder recorder;

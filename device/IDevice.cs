@@ -9,22 +9,13 @@ using System.ComponentModel;
 
 namespace Kinect_Wrapper.device
 {
-    public enum DeviceUpdateType
-    {
-        FRAMES,
-        STATE,
-        ALL
-    }
-
-
-
     public interface IDevice : INotifyPropertyChanged
     {
-        void start();
+        void start(Action actionWhenReadyToPlay);
 
         void stop();
 
-        void update(DeviceUpdateType type);
+        void update(CameraState CameraState, bool isActive);
 
         KinectSensor sensor { get; }
 

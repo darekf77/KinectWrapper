@@ -41,48 +41,9 @@ namespace Kinect_Wrapper.app
                 audio = Kinect.Camera.Audio
             };
         }
+        
 
 
 
-        private void play(object sender, RoutedEventArgs e)
-        {
-            Kinect.Manager.Device = Kinect.Manager.SelectedDevice; // TODO again press play - > Complete !!! ballls containter
-            Kinect.Manager.Device.start();
-        }
-
-        private void cancel(object sender, RoutedEventArgs e)
-        {
-            Kinect.Camera.CancelRecord.DoExecute();
-        }
-
-        String lastRecordedFilename;
-        private void record(object sender, RoutedEventArgs e)
-        {
-            if (Kinect.Camera.IsRecording)
-            {
-                Kinect.Camera.Stop.DoExecute();
-            }
-            else
-            {
-                var saveFileDialog = new SaveFileDialog { Title = "Select filename", Filter = "Replay files|*.replay" };
-                if (saveFileDialog.ShowDialog() != true) return;
-                Kinect.Camera.record(saveFileDialog.FileName);
-            }
-        }
-
-        private void next_frame(object sender, RoutedEventArgs e)
-        {
-            Kinect.Camera.NextFrame.DoExecute();
-        }
-
-        private void pause(object sender, RoutedEventArgs e)
-        {
-            Kinect.Camera.PausePlay.DoExecute();
-        }
-
-        private void stop(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

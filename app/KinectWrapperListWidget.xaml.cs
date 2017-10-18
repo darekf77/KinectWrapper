@@ -35,7 +35,8 @@ namespace Kinect_Wrapper.app
                 kinectWrap = _kinect,
                 camera = _kinect.Camera,
                 audio = _kinect.Camera.Audio,
-                gestures = kinect.Gestures
+                gestures = kinect.Gestures,
+                recognizer = kinect.Camera.Audio.Recognizer
             };
             kinect.Gestures.onResizeGesture += (e, v) =>
              {

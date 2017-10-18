@@ -13,10 +13,46 @@ namespace Kinect_Wrapper.device
     public partial class Device : IDevice
     {
         public KinectSensor sensor { get; private set; }
-        public IKinectCamera camera { get; private set; }
         public DeviceType Type { get; private set; }
+        private CameraState CameraState { get; set; }
 
         public event EventHandler StateChanged;
+
+        #region propety changed
+        public event PropertyChangedEventHandler PropertyChanged;
+        virtual protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
+
+        #region constructors
+        #region constructor sensor xbox360
+        public Device(KinectSensor sensor_xbox360)
+        {
+            sensor = sensor_xbox360;
+            Type = DeviceType.KINECT_1;
+            Name = "K360-" + sensor.UniqueKinectId;
+        }
+        #endregion
+
+        #region costructor replay file
+        public Device(String filePath)
+        {
+            _filePath = filePath;
+            Type = DeviceType.RECORD_FILE_KINECT_1;
+            Name = "replay-" + System.IO.Path.GetFileName(_filePath);
+        }
+        #endregion
+
+        #region constructor empty device
+        public Device()
+        {
+            Type = DeviceType.NO_DEVICE;
+            Name = "Plug in your Kinect";
+        }
+        #endregion
+        #endregion
 
         #region Path
         private String _filePath;
@@ -38,47 +74,12 @@ namespace Kinect_Wrapper.device
         public string Name
         {
             get { return _name; }
-        }
-        #endregion
-
-        #region propety changed
-        public event PropertyChangedEventHandler PropertyChanged;
-        virtual protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
-
-        #region constructor sensor xbox360
-        public Device(KinectSensor sensor_xbox360)
-        {
-            sensor = sensor_xbox360;
-            Type = DeviceType.KINECT_1;
-            _name = "K360-" + sensor.UniqueKinectId;
-        }
-        #endregion
-
-        #region costructor replay file
-        public Device(String filePath)
-        {
-            _filePath = filePath;
-            Type = DeviceType.RECORD_FILE_KINECT_1;
-            _name = "RF-" + System.IO.Path.GetFileName(_filePath);
-            camera.init(this);
-            camera.onReplayFinish += (e, v) =>
+            private set
             {
-                StateChanged?.Invoke(this, EventArgs.Empty);
-            };
+                _name = value;
+                OnPropertyChanged("Name");
+            }
         }
-        #endregion
-
-        #region constructor empty device
-        public Device()
-        {
-            Type = DeviceType.NO_DEVICE;
-            _name = "Plug in your Kinect";
-        }
-
         #endregion
 
         #region state
@@ -105,135 +106,41 @@ namespace Kinect_Wrapper.device
 
             }
         }
+        #endregion
 
-        void updateState()
+        #region start
+        public void start(Action actionWhenReadyToPlay)
         {
+            State = DeviceState.INITIALIZING;
             switch (Type)
             {
                 case DeviceType.NO_DEVICE:
                     State = DeviceState.READY;
+                    if (actionWhenReadyToPlay != null) actionWhenReadyToPlay.Invoke();
                     break;
                 case DeviceType.KINECT_1:
-                    if (sensor == null) State = DeviceState.NOT_READY;
-                    else if (State == DeviceState.RESTARTING && (sensor.Status != KinectStatus.Connected)) break;
-                    else if (sensor.Status == KinectStatus.Initializing) State = DeviceState.INITIALIZING;
-                    else if (sensor.Status == KinectStatus.Connected)
-                    {
-                        if (CameraState.PLAYING.EnumGroupRange().isInside((int)camera.State))
-                        {
-                            State = DeviceState.PLAYING;
-                        }
-                        else if (CameraState.RECORDING.EnumGroupRange().isInside((int)camera.State))
-                        {
-                            State = DeviceState.RECORDING;
-                        }
-                        else //  if (camera.State == CameraState.UNACTIVE) // is obvous
-                        {
-                            State = DeviceState.READY;
-                        }
-                    }
-                    else if (sensor.Status == KinectStatus.Error)
-                    {
-                        State = DeviceState.RESTARTING;
-                        tryRestartKinect();
-                    }
-                    else
-                    {
-                        State = DeviceState.NOT_READY;
-                    }
-                    break;
-                case DeviceType.RECORD_FILE_KINECT_1:
-
-                    if (!File.Exists(Path))
-                    {
-                        State = DeviceState.NOT_READY;
-                    }
-                    else if (CameraState.PLAYING.EnumGroupRange().isInside((int)camera.State))
-                    {
-                        State = DeviceState.PLAYING;
-                    }
-                    else if (CameraState.RECORDING.EnumGroupRange().isInside((int)camera.State))
-                    {
-                        State = DeviceState.RECORDING;
-                    }
-                    else //  if (camera.State == CameraState.UNACTIVE) // is obvous
+                    startKinect(() =>
                     {
                         State = DeviceState.READY;
-                    }
-
-                    break;
-                default:
-                    break;
-            }
-        }
-
-
-
-
-        #endregion
-
-        #region start
-        public void start()
-        {
-            State = DeviceState.INITIALIZING;
-
-            switch (Type)
-            {
-                case DeviceType.NO_DEVICE:
-                    break;
-                case DeviceType.KINECT_1:
-                    startKinect();
+                        if (actionWhenReadyToPlay != null) actionWhenReadyToPlay.Invoke();
+                    });
                     break;
                 case DeviceType.RECORD_FILE_KINECT_1:
-                    break;
-                default:
+                    State = DeviceState.READY;
+                    if (actionWhenReadyToPlay != null) actionWhenReadyToPlay.Invoke();
                     break;
             }
-
-
-            //stop();
-            //_video.StreamingStarted += _video_StreamingStarted;
-            //if (Type == DeviceType.KINECT_1)
-            //{
-            //    try
-            //    {
-            //        sensor.Start();
-            //        sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
-            //        sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
-            //        sensor.SkeletonStream.Enable();
-
-
-            //        _video.CurrentDevice = this;
-            //        _audio.CurrentDevice = this;
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        Console.WriteLine("cannot start kinect or already started" + e.Message);
-            //    }
-            //}
-            //else
-            //if (Type == DeviceType.RECORD_FILE_KINECT_1)
-            //{
-            //    _video.CurrentDevice = this;
-            //    _audio.CurrentDevice = this;
-            //}
-            //if (Type == DeviceType.NO_DEVICE)
-            //{
-            //    _video.CurrentDevice = this;
-            //    _audio.CurrentDevice = this;
-            //    _initializingDevice = false;
-            //}
         }
 
-        private void startKinect()
+        private void startKinect(Action action)
         {
             if (sensor == null || sensor.Status == KinectStatus.Disconnected) return;
             if (sensor.IsRunning)
             {
-                stopKinect();
+                stop();
                 Helpers.SetTimeout(() =>
                 {
-                    startKinect();
+                    startKinect(action);
                 }, 1000);
             }
             try
@@ -242,34 +149,21 @@ namespace Kinect_Wrapper.device
                 sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
                 sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
                 sensor.SkeletonStream.Enable();
-                State = DeviceState.READY;
+                action.Invoke();
             }
             catch (Exception e)
             {
                 Console.WriteLine("cannot start kinect or already started" + e.Message);
             }
         }
-
-        private void stopKinect()
-        {
-            try
-            {
-                sensor.Stop();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-        }
-
-
         #endregion
 
         #region stop
+        bool stopNextTime = false;
         public void stop()
         {
-            State = DeviceState.STOPPING;
-            camera.Stop.DoExecute();
+            if (sensor != null) sensor.Stop();
+            stopNextTime = true;
         }
         #endregion
 
@@ -301,34 +195,86 @@ namespace Kinect_Wrapper.device
         }
         #endregion
 
-        private void _video_StreamingStarted(object sender, EventArgs e)
+        #region try restart kienct
+        void tryRestartKinect(Action actionAfterRestart)
         {
-            //if (_initializingDevice) _initializingDevice = false;
+            stop();
+            Helpers.SetTimeout(() =>
+            {
+                start(() =>
+                {
+                    State = DeviceState.READY;
+                });
+            });
         }
-
-
-        void tryRestartKinect()
-        {
-            sensor.Stop();
-
-        }
+        #endregion
 
         #region update 
-        public void update(DeviceUpdateType type)
+        public void update(CameraState CameraState, bool isActive)
         {
-            switch (type)
+            if (stopNextTime)
             {
-                case DeviceUpdateType.FRAMES:
-                    camera.update();
+                stopNextTime = false; ;
+                KinectCamera.Instance.Stop.DoExecute();
+                return;
+            }
+            this.CameraState = CameraState;
+            switch (Type)
+            {
+                case DeviceType.NO_DEVICE:
+                    State = DeviceState.READY;
                     break;
-                case DeviceUpdateType.STATE:
-                    updateState();
+                case DeviceType.KINECT_1:
+                    if (sensor == null) State = DeviceState.NOT_READY;
+                    else if (isActive && State == DeviceState.RESTARTING && (sensor.Status != KinectStatus.Connected)) break;
+                    else if (sensor.Status == KinectStatus.Initializing) State = DeviceState.INITIALIZING;
+                    else if (sensor.Status == KinectStatus.Connected)
+                    {
+                        if (isActive && CameraState.PLAYING.EnumGroupRange().isInside((int)CameraState))
+                        {
+                            State = DeviceState.PLAYING;
+                        }
+                        else if (isActive && CameraState.RECORDING.EnumGroupRange().isInside((int)CameraState))
+                        {
+                            State = DeviceState.RECORDING;
+                        }
+                        else
+                        {
+                            State = DeviceState.READY;
+                        }
+                    }
+                    else if (isActive && sensor.Status == KinectStatus.Error)
+                    {
+                        State = DeviceState.RESTARTING;
+                        KinectCamera.Instance.Pause.DoExecute();
+                        tryRestartKinect(() =>
+                        {
+                            KinectCamera.Instance.PausePlay.DoExecute();
+                        });
+                    }
+                    else
+                    {
+                        State = DeviceState.NOT_READY;
+                    }
                     break;
-                case DeviceUpdateType.ALL:
-                    updateState();
-                    camera.update();
-                    break;
-                default:
+                case DeviceType.RECORD_FILE_KINECT_1:
+
+                    if (!File.Exists(Path))
+                    {
+                        State = DeviceState.NOT_READY;
+                    }
+                    else if (isActive && CameraState.PLAYING.EnumGroupRange().isInside((int)CameraState))
+                    {
+                        State = DeviceState.PLAYING;
+                    }
+                    else if (isActive && CameraState.RECORDING.EnumGroupRange().isInside((int)CameraState))
+                    {
+                        State = DeviceState.RECORDING;
+                    }
+                    else
+                    {
+                        State = DeviceState.READY;
+                    }
                     break;
             }
         }

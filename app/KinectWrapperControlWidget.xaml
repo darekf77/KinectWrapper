@@ -45,29 +45,31 @@
                     Grid.Row="1" Grid.Column="0" Margin="2"  FontSize="9"/>
 
 
-        <Button Content="RUN" Click="play" Name="ButtonPlayAndPause"                    
+        <Button Content="RUN"  Command="{Binding camera.Play}"  Name="ButtonPlayAndPause"                    
                     Visibility="{c:Binding !video.IsStreaming}"
                     Grid.Row="1" Grid.Column="1"  Margin="2"/>
+        
         <Button Content="PAUSE"  Name="ButtonPause" Command="{Binding camera.NextFrame}"
                     IsEnabled="{c:Binding !video.IsRecording}"
                     Visibility="{c:Binding 'video.IsStreaming and !video.IsPaused'}"
                     Grid.Row="1" Grid.Column="1"  Margin="2" />
         
         
-        <Button Content="START"  Name="ButtonStart" Click="pause"
+        <Button Content="START"  Name="ButtonStart" Command="{Binding camera.PausePlay}"
                     IsEnabled="{c:Binding !video.IsRecording}"
                     Visibility="{c:Binding 'video.IsStreaming and video.IsPaused'}"
                     Grid.Row="1" Grid.Column="1"  Margin="2"/>
 
-        <Button Content="RECORD" Click="record" Name="ButtonRecordStart"
+        <Button Content="RECORD"  Command="{Binding camera.Record}" Name="ButtonRecordStart"
                     IsEnabled="{c:Binding video.IsRecordingPossible}"
                     Visibility="{c:Binding !video.IsRecording}"
                     Grid.Row="2" Grid.Column="0"  Margin="2"   />
-        <Button Content="SAVE RECORD" Click="record" Name="ButtonSaveRecord"
+
+        <Button Content="SAVE RECORD"  Command="{Binding camera.Record}" Name="ButtonSaveRecord"
                     Visibility="{c:Binding video.IsRecording}"
                     Grid.Row="2" Grid.Column="0"  Margin="2" FontSize="9" FontWeight="Bold"  />
 
-        <Button Content="NEXT FRAME" Click="next_frame"  Name="ButtonNextFrame"
+        <Button Content="NEXT FRAME" Command="{Binding camera.NextFrame}"  Name="ButtonNextFrame"
                     IsEnabled="{c:Binding 'video.IsStreaming and !video.IsRecording'}" 
                     Grid.Row="2" Grid.Column="1"  Margin="2" FontSize="9" />
 

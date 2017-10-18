@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Kinect_Wrapper.devicemanager
@@ -40,9 +41,16 @@ namespace Kinect_Wrapper.devicemanager
             Devices = new TrulyObservableCollection<IDevice>();
             DefaultDevice = new Device();
             Device = DefaultDevice;
-            Device.start();
 
-            #region load device from all sources
+            #region is repaly or sensor set state to unactive - set no device to work
+            Camera.onNoDeviceNeeded += (e, v) =>
+            {
+                Device = DefaultDevice;
+                Camera.Play.DoExecute();
+            };
+            #endregion
+
+            #region load device from all sources            
             loadSensorsFromSystem();
             loadReplayFilesInWorkspace();
             loadReplayFilesFromConfigFile();
@@ -52,11 +60,30 @@ namespace Kinect_Wrapper.devicemanager
             #region add / remove sensor when plugin in / out
             KinectSensor.KinectSensors.StatusChanged += (e, v) =>
             {
+                #region add new sensor if isn't on list
+                var sensors = KinectSensor.KinectSensors;
+                foreach (var sensor in sensors)
+                {
+                    var dev = Devices.First(s => { return (s != null & s.sensor != null & s.sensor.UniqueKinectId == sensor.UniqueKinectId); });
+                    if (dev == null) Devices.Add(new Device(sensor));
+                }
+                #endregion
+
+                #region remove sensor is is not available in system
+                List<IDevice> toRemove = new List<IDevice>();
                 foreach (var device in Devices)
                 {
-                    if (device != null && device.sensor != null && device.sensor.UniqueKinectId.Equals(v.Sensor.UniqueKinectId)) return;
+                    if (device != null && device.sensor != null)
+                    {
+                        var sensor = sensors.First(s => { return (s != null && s.UniqueKinectId == device.sensor.UniqueKinectId); });
+                        if (sensor == null) toRemove.Add(Device);
+                    }
                 }
-                Devices.Add(new Device(v.Sensor));
+                for (int i = 0; i < toRemove.Count; i++)
+                {
+                    Devices.Remove(toRemove[i]);
+                }
+                #endregion
             };
             #endregion
 
@@ -80,6 +107,7 @@ namespace Kinect_Wrapper.devicemanager
             };
             #endregion
 
+            Camera.Play.DoExecute();
         }
         #endregion
 
@@ -92,11 +120,20 @@ namespace Kinect_Wrapper.devicemanager
                 if (value == null) return;
                 if (CurrentDevice != null && CurrentDevice.Equals(value)) return;
                 CurrentDevice = value;
+                var c = Camera as KinectCamera;
+                c.Device = CurrentDevice;
+                lock (_lockerWorkerState)
+                {
+                    Monitor.Pulse(_lockerWorkerState);
+                }
+                lock (_lockerWorkerFrames)
+                {
+                    Monitor.Pulse(_lockerWorkerFrames);
+                }
                 App.Current.Dispatcher.BeginInvoke(new Action(() =>
                 {
                     DeviceChanged?.Invoke(this, EventArgs.Empty);
                     OnPropertyChanged("IsStopped");
-                    //_infoDeviceName.Value = _currentDevice.Name;
                 }));
 
             }
@@ -151,7 +188,7 @@ namespace Kinect_Wrapper.devicemanager
                     kinectFounded = true;
                     AutopickupDeviceType = DeviceType.KINECT_1;
                     Device = device;
-                    Device.start();
+                    Camera.Play.DoExecute();
                     break;
                 }
             }
@@ -163,7 +200,7 @@ namespace Kinect_Wrapper.devicemanager
                     {
                         AutopickupDeviceType = DeviceType.RECORD_FILE_KINECT_1;
                         Device = device;
-                        Device.start();
+                        Camera.Play.DoExecute();
                         break;
                     }
                 }

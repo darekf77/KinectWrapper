@@ -25,12 +25,13 @@ namespace Kinect_Wrapper.camera
 
     public interface IKinectCamera
     {
-        void record(string toFile);
-        void replay(string replayFile);
         CameraState State { get; set; }
         IAudioRecorderReplayer Audio { get; }
-        void init(IDevice device);
         void update();
+        IDevice Device { get; set; }
+        String ReplayFilePath { get; }
+        String RecordFilePath { get; }
+
 
         // FRAME
         int MaxDepth { get; }
@@ -38,6 +39,8 @@ namespace Kinect_Wrapper.camera
 
         // COMMANDS
 
+        Command Record { get; }
+        Command Play { get; }
         Command Stop { get; }
         Command Pause { get; }
         Command NextFrame { get; }
@@ -51,7 +54,8 @@ namespace Kinect_Wrapper.camera
         bool IsPaused { get; }
 
         // EVENTS
-        event EventHandler onReplayFinish;
+        event EventHandler onReplayEnd;
+        event EventHandler onNoDeviceNeeded;
         event EventHandler<String> RecordComplete;
         event EventHandler<IKinectFrame> FrameReady;
 

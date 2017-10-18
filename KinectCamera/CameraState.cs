@@ -23,31 +23,29 @@ namespace Kinect_Wrapper.camera
 
 static class EnumRange
 {
-    public static SharedLibJG.Helpers.Range EnumGroupRange(this Kinect_Wrapper.camera.CameraState s1)
+    public static SharedLibJG.Helpers.Range EnumGroupRange(this Kinect_Wrapper.camera.CameraState state)
     {
         var playingRange = new SharedLibJG.Helpers.Range();
-        switch (s1)
+        switch (state)
         {
             case Kinect_Wrapper.camera.CameraState.UNACTIVE:
-                break;
+                return new SharedLibJG.Helpers.Range(0, 9);
             case Kinect_Wrapper.camera.CameraState.PLAYING:
-                break;
+                return new SharedLibJG.Helpers.Range(10, 19);
             case Kinect_Wrapper.camera.CameraState.PLAYING_PAUSE:
-                break;
+                return new SharedLibJG.Helpers.Range(10, 19);
             case Kinect_Wrapper.camera.CameraState.PLAYING_STOPPING:
-                break;
+                return new SharedLibJG.Helpers.Range(10, 19);
             case Kinect_Wrapper.camera.CameraState.RECORDING:
-                break;
+                return new SharedLibJG.Helpers.Range(20, 29);
             case Kinect_Wrapper.camera.CameraState.RECORDING_PAUSE:
-                break;
+                return new SharedLibJG.Helpers.Range(20, 29);
             case Kinect_Wrapper.camera.CameraState.RECORDING_STOPPING:
-                break;
+                return new SharedLibJG.Helpers.Range(20, 29);
             case Kinect_Wrapper.camera.CameraState.RECORDING_CANCEL:
-                break;
-            default:
-                break;
+                return new SharedLibJG.Helpers.Range(20, 29);
         }
-        return new SharedLibJG.Helpers.Range();
+        throw new Exception("bad enum state");
     }
 }
 

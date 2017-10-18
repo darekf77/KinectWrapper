@@ -42,7 +42,7 @@
         </TabItem>
         <TabItem Header="Audio" Name="TabCommands" Margin="-2,-2,2,0">
             <Grid >
-                <ListView Name="ListViewCommands"  ItemsSource="{Binding audio.Grammar}"
+                <ListView Name="ListViewCommands"  ItemsSource="{Binding recognizer.Grammar}"
                           PreviewMouseLeftButtonUp="ListViewDevices_PreviewMouseLeftButtonDown" >
                     <ListView.View>
                         <GridView>
