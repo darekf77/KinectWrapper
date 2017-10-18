@@ -52,6 +52,7 @@ namespace Kinect_Wrapper.camera
         bool IsRecordingPossible { get; }
         bool IsRecording { get; }
         bool IsPaused { get; }
+        bool IsStreaming { get; }
 
         // EVENTS
         event EventHandler onReplayEnd;

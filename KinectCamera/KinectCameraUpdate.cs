@@ -20,9 +20,18 @@ namespace Kinect_Wrapper.camera
 {
     public partial class KinectCamera
     {
+        #region propagate frame
+        private void propageteFrame()
+        {
+            FrameReady?.Invoke(this, frame);
+            IsStreaming = true;            
+        }
+        #endregion
+
         #region worker update
         public void update()
         {
+            IsStreaming = false;
             if (Device == null) return;
             switch (Device.Type)
             {
@@ -38,6 +47,7 @@ namespace Kinect_Wrapper.camera
                 default:
                     break;
             }
+            OnPropertyChanged("IsStreaming ");
         }
         #endregion
 
@@ -81,7 +91,7 @@ namespace Kinect_Wrapper.camera
             if (lastFrame.isCorrect)
             {
                 frame.synchronize(lastFrame.Depth, lastFrame.Color, lastFrame.Skeleton, IsPaused);
-                FrameReady?.Invoke(this, frame);
+                propageteFrame();
             }
         }
         #endregion
@@ -128,7 +138,7 @@ namespace Kinect_Wrapper.camera
                     {
                         updateRecordData(colorFrame, depthFrame, skeletonFrame, sensor);
                     }
-                    FrameReady(this, frame);
+                    propageteFrame();
                     return;
                 }
             }
@@ -143,7 +153,7 @@ namespace Kinect_Wrapper.camera
             IKinectFrame noDeviceFrame = frame;
             frame.synchronize(Device.Name, toogleVisibleMessage, IsPaused);
             toogleVisibleMessage = !toogleVisibleMessage;
-            FrameReady?.Invoke(this, frame);
+            propageteFrame();
             Thread.Sleep(1000);
         }
         #endregion

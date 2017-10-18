@@ -20,8 +20,20 @@ namespace Kinect_Wrapper.devicemanager
 
         public static string AppPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
         private bool isLoadingFiles = false;
+        
+        #region load potaential sensor in system
+        private void loadSensorsFromSystem()
+        {
+            foreach (var potentialSensor in KinectSensor.KinectSensors)
+            {
+                if (potentialSensor == null) continue;
+                Devices.Add(new Device(potentialSensor));
+            }
+        }
 
-        #region check potential files
+        #endregion
+
+        #region load replau files from workspace
         private void loadReplayFilesInWorkspace()
         {
             var currentDirectory = System.IO.Directory.GetCurrentDirectory();
@@ -35,19 +47,7 @@ namespace Kinect_Wrapper.devicemanager
         }
         #endregion
 
-        #region check potential sensors
-        private void loadSensorsFromSystem()
-        {
-            foreach (var potentialSensor in KinectSensor.KinectSensors)
-            {
-                if (potentialSensor == null) continue;
-                Devices.Add(new Device(potentialSensor));
-            }
-        }
-
-        #endregion
-
-        #region load
+        #region load replay file from config file
         private void loadReplayFilesFromConfigFile()
         {
             isLoadingFiles = true;
@@ -82,8 +82,8 @@ namespace Kinect_Wrapper.devicemanager
         }
         #endregion
 
-        #region save
-        private void save()
+        #region save replay devices to config file
+        private void saveDevicesToConfigFile()
         {
             var filePath = AppPath + "\\devices.json";
             using (var w = new StreamWriter(filePath))

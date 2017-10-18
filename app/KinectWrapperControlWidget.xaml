@@ -35,42 +35,42 @@
         </ComboBox>
 
         <Button Content="STOP" Command="{Binding camera.Stop}" Name="ButtonStopAndCancel"
-                    IsEnabled="{Binding video.IsStreaming}"
-                    Visibility="{c:Binding Path=!video.IsRecording}" 
+                    IsEnabled="{Binding camera.IsStreaming, Mode=OneWay}"
+                    Visibility="{c:Binding Path=!camera.IsRecording, Mode=OneWay}" 
                     Grid.Row="1" Grid.Column="0" Margin="2" />
         
         <Button Content="CANCEL RECORD"  Command="{Binding camera.CancelRecord}"
                 Name="ButtonCancelRecord"
-                    Visibility="{c:Binding Path=video.IsRecording}" 
+                    Visibility="{c:Binding Path=camera.IsRecording, Mode=OneWay}" 
                     Grid.Row="1" Grid.Column="0" Margin="2"  FontSize="9"/>
 
 
         <Button Content="RUN"  Command="{Binding camera.Play}"  Name="ButtonPlayAndPause"                    
-                    Visibility="{c:Binding !video.IsStreaming}"
+                    Visibility="{c:Binding !camera.IsStreaming, Mode=OneWay}"
                     Grid.Row="1" Grid.Column="1"  Margin="2"/>
         
         <Button Content="PAUSE"  Name="ButtonPause" Command="{Binding camera.NextFrame}"
-                    IsEnabled="{c:Binding !video.IsRecording}"
-                    Visibility="{c:Binding 'video.IsStreaming and !video.IsPaused'}"
+                    IsEnabled="{c:Binding !camera.IsRecording, Mode=OneWay}"
+                    Visibility="{c:Binding 'camera.IsStreaming and !camera.IsPaused', Mode=OneWay}"
                     Grid.Row="1" Grid.Column="1"  Margin="2" />
         
         
         <Button Content="START"  Name="ButtonStart" Command="{Binding camera.PausePlay}"
-                    IsEnabled="{c:Binding !video.IsRecording}"
-                    Visibility="{c:Binding 'video.IsStreaming and video.IsPaused'}"
+                    IsEnabled="{c:Binding !camera.IsRecording, Mode=OneWay}"
+                    Visibility="{c:Binding 'camera.IsStreaming and camera.IsPaused', Mode=OneWay}"
                     Grid.Row="1" Grid.Column="1"  Margin="2"/>
 
         <Button Content="RECORD"  Command="{Binding camera.Record}" Name="ButtonRecordStart"
-                    IsEnabled="{c:Binding video.IsRecordingPossible}"
-                    Visibility="{c:Binding !video.IsRecording}"
+                    IsEnabled="{c:Binding camera.IsRecordingPossible, Mode=OneWay}"
+                    Visibility="{c:Binding !camera.IsRecording, Mode=OneWay}"
                     Grid.Row="2" Grid.Column="0"  Margin="2"   />
 
         <Button Content="SAVE RECORD"  Command="{Binding camera.Record}" Name="ButtonSaveRecord"
-                    Visibility="{c:Binding video.IsRecording}"
+                    Visibility="{c:Binding camera.IsRecording, Mode=OneWay}"
                     Grid.Row="2" Grid.Column="0"  Margin="2" FontSize="9" FontWeight="Bold"  />
 
         <Button Content="NEXT FRAME" Command="{Binding camera.NextFrame}"  Name="ButtonNextFrame"
-                    IsEnabled="{c:Binding 'video.IsStreaming and !video.IsRecording'}" 
+                    IsEnabled="{c:Binding 'camera.IsStreaming and !camera.IsRecording', Mode=OneWay}" 
                     Grid.Row="2" Grid.Column="1"  Margin="2" FontSize="9" />
 
         <Label Content="Audio" Grid.Row="3" Grid.ColumnSpan="2" FontSize="8" Padding="0" />
@@ -88,7 +88,7 @@
 
         <Slider Value="20"  Grid.Row="6" Grid.ColumnSpan="2"  ></Slider>
 
-        <TextBlock  Text="{Binding video.StreamingFilePath}" 
+        <TextBlock  Text="{Binding camera.StreamingFilePath}" 
                     TextWrapping="Wrap" Margin="2"
                Grid.Row="7" Grid.ColumnSpan="2" FontSize="10" 
                >

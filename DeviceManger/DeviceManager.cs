@@ -103,11 +103,12 @@ namespace Kinect_Wrapper.devicemanager
             #region save device list automaticly to file
             Devices.CollectionChanged += (e, v) =>
             {
-                if (!isLoadingFiles) save();
+                if (!isLoadingFiles) saveDevicesToConfigFile();
             };
             #endregion
 
             Camera.Play.DoExecute();
+            initWorkers();
         }
         #endregion
 

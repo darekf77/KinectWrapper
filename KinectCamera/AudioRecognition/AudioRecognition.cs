@@ -10,6 +10,7 @@ using Microsoft.Kinect;
 using System.IO;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace Kinect_Wrapper.camera
 {
@@ -24,19 +25,36 @@ namespace Kinect_Wrapper.camera
         #endregion
 
         private SpeechRecognitionEngine SpeechRecognizer { get; set; }
-
         public event EventHandler<IAudioMessage> UserSaying;
 
+        #region constructor
         public AudioRecognition()
         {
+            Grammar = new ObservableCollection<String>();
+            Grammar.CollectionChanged += (e, v) =>
+            {
+                SpeechRecognizer?.LoadGrammarAsync(GetCurrentGrammar());
+            };
+            Grammar.Add("test");
+        }
+        #endregion
 
+        #region handle thread stream + recognizer
+        Task AudioThread;
+
+        private CancellationToken getToken()
+        {
+            tokenSource = new CancellationTokenSource();
+            return tokenSource.Token;
         }
 
-        Task AudioThread;
+        CancellationTokenSource tokenSource;
+        CancellationToken cancelationTaskToken;
         public void init(IAudioSourceDevice source)
         {
             destroy();
-            if (AudioThread != null) AudioThread.Dispose();
+            tokenSource?.Cancel();
+            cancelationTaskToken = getToken();
             AudioThread = Task.Factory.StartNew(() =>
             {
                 initialize();
@@ -78,8 +96,9 @@ namespace Kinect_Wrapper.camera
                 {
                     Console.WriteLine(ex.Message);
                 }
-            });
+            }, cancelationTaskToken);
         }
+        #endregion
 
         #region initializer / destroy
         private void initialize()
@@ -150,16 +169,6 @@ namespace Kinect_Wrapper.camera
 
         #region grammar
         public ObservableCollection<string> Grammar { get; set; }
-        void initGrammar()
-        {
-            Grammar = new ObservableCollection<String>();
-            Grammar.CollectionChanged += Grammar_CollectionChanged;
-            Grammar.Add("test");
-        }
-        private void Grammar_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            SpeechRecognizer.LoadGrammarAsync(GetCurrentGrammar());
-        }
         private Grammar GetCurrentGrammar()
         {
             var gb = new GrammarBuilder { Culture = recognizerInfo.Culture };

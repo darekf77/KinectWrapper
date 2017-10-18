@@ -360,5 +360,9 @@ namespace Kinect_Wrapper.camera
             }
         }
         #endregion
+
+        #region is streaming
+        public bool IsStreaming { get; private set; }
+        #endregion
     }
 }
