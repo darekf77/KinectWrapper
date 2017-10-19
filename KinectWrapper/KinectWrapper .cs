@@ -24,7 +24,7 @@ namespace Kinect_Wrapper.wrapper
         #region singleton 
         private static IKinectWrapper _instance;
         static readonly object _locker = new object();
-        public static IKinectWrapper Instance(bool autopickupKinect = true)
+        public static IKinectWrapper Instance(bool autopickupKinect = false)
         {
 
             if (_instance == null)

@@ -1,7 +1,9 @@
-﻿using Kinect_Wrapper.camera;
+﻿using Apex.MVVM;
+using Kinect_Wrapper.camera;
 using Kinect_Wrapper.device;
 using Kinect_Wrapper.structures;
 using Microsoft.Kinect;
+using Microsoft.Win32;
 using SharedLibJG.Helpers;
 using System;
 using System.Collections.Generic;
@@ -13,6 +15,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Kinect_Wrapper.devicemanager
 {
@@ -54,7 +57,7 @@ namespace Kinect_Wrapper.devicemanager
             loadSensorsFromSystem();
             loadReplayFilesInWorkspace();
             loadReplayFilesFromConfigFile();
-            autopickupDeveic();
+            //autopickupDeveic();
             #endregion
 
             #region add / remove sensor when plugin in / out
@@ -109,6 +112,38 @@ namespace Kinect_Wrapper.devicemanager
 
             Camera.Play.DoExecute();
             initWorkers();
+        }
+        #endregion
+
+        #region add from harddrive to list
+        public Command AddFromHardDrive
+        {
+            get
+            {
+                return new Command(() =>
+                {
+                    var openFileDialog = new OpenFileDialog { Title = "Select filename", Filter = "Replay files|*.replay" };
+                    if (openFileDialog.ShowDialog() != true) return;
+                    Devices.Add(new Device(openFileDialog.FileName));
+                });
+            }
+        }
+        #endregion
+
+        #region remove from devices
+        public Command RemoveFromDevices
+        {
+            get
+            {
+                return new Command(() =>
+                {
+                    MessageBoxResult messageBoxResult =
+                      MessageBox.Show("Are you sure?", "Delete device from list",
+                      MessageBoxButton.YesNo);
+                    if (messageBoxResult == MessageBoxResult.Yes)
+                        Devices.Remove(SelectedDevice);
+                });
+            }
         }
         #endregion
 

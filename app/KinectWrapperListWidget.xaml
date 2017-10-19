@@ -10,8 +10,8 @@
     <TabControl HorizontalAlignment="Left" VerticalAlignment="Top" Height="250" Width="170" Margin="10,0,0,0" >
         <TabItem Header="List" Name="TabList" Margin="-2,-2,2,0">
             <StackPanel >
-                <ListView Name="ListViewDevices"  ItemsSource="{Binding kinectWrap.Devices}" Height="196"
-                          PreviewMouseLeftButtonUp="ListViewDevices_PreviewMouseLeftButtonDown"
+                <ListView Name="ListViewDevices"  ItemsSource="{Binding manager.Devices}" Height="196"
+                          SelectedItem="{Binding manager.SelectedDevice}"
                           ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                           >
                     <ListView.View>
@@ -22,15 +22,15 @@
                     </ListView.View>
                 </ListView>
                 <Grid Height="20" Margin="0,2,0,0" >
-                    <Button Content="+ Add from hard drive" Margin="0,0,26,-4" Click="add_device_from_hard_drive"  />
-                    <Button Content="-" HorizontalContentAlignment="Center" Margin="140,0,0,-4" Click="remove_device_from_list" />
+                    <Button Content="+ Add from hard drive" Margin="0,0,26,-4"  Command="{Binding manager.AddFromHardDrive}"  />
+                    <Button Content="-" HorizontalContentAlignment="Center" Margin="140,0,0,-4" Command="{Binding manager.RemoveFromDevices}" />
                 </Grid>
 
             </StackPanel>
         </TabItem>
         <TabItem Header="Info" Name="TabSkeleton">
             <Grid   >
-                <ListView Name="InfoList" ItemsSource="{Binding kinectWrap.Info}" PreviewMouseLeftButtonUp="ListViewDevices_PreviewMouseLeftButtonDown" >
+                <ListView Name="InfoList" ItemsSource="{Binding kinectWrap.Info}" >
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Width="80" Header="Name" DisplayMemberBinding="{Binding Name}"/>
@@ -42,8 +42,7 @@
         </TabItem>
         <TabItem Header="Audio" Name="TabCommands" Margin="-2,-2,2,0">
             <Grid >
-                <ListView Name="ListViewCommands"  ItemsSource="{Binding recognizer.Grammar}"
-                          PreviewMouseLeftButtonUp="ListViewDevices_PreviewMouseLeftButtonDown" >
+                <ListView Name="ListViewCommands"  ItemsSource="{Binding recognizer.Grammar}" >
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Width="160" Header="Commands" DisplayMemberBinding="{Binding}"/>

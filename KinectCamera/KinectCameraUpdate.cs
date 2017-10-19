@@ -15,6 +15,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Apex.MVVM;
 using Kinect_Wrapper.frame;
+using Kinect_Wrapper.structures;
 
 namespace Kinect_Wrapper.camera
 {
@@ -24,7 +25,7 @@ namespace Kinect_Wrapper.camera
         private void propageteFrame()
         {
             FrameReady?.Invoke(this, frame);
-            IsStreaming = true;            
+            IsStreaming = (Device.Type != DeviceType.NO_DEVICE);
         }
         #endregion
 

@@ -76,15 +76,15 @@ namespace Kinect_Wrapper.camera
                             break;
                         case AudioSourceType.File:
                             #region speach recognizer + wav file
-                            SpeechRecognizer.SetInputToAudioStream(
-                              File.OpenRead(source.Path),
-                              new SpeechAudioFormatInfo(
-                                44100, AudioBitsPerSample.Sixteen, AudioChannel.Mono));
+                            //SpeechRecognizer.SetInputToAudioStream(
+                            //  File.OpenRead(source.Path),
+                            //  new SpeechAudioFormatInfo(
+                            //    44100, AudioBitsPerSample.Sixteen, AudioChannel.Mono));
                             #endregion
                             break;
                         case AudioSourceType.OtherDevice:
                             #region speach recognition + other audio devices
-                            SpeechRecognizer.SetInputToWaveStream(source.Stream);
+                            //SpeechRecognizer.SetInputToWaveStream(source.Stream);
                             break;
                         #endregion
                         default:

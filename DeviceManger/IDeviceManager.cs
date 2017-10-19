@@ -1,4 +1,5 @@
-﻿using Kinect_Wrapper.camera;
+﻿using Apex.MVVM;
+using Kinect_Wrapper.camera;
 using Kinect_Wrapper.device;
 using Kinect_Wrapper.structures;
 using System;
@@ -23,6 +24,10 @@ namespace Kinect_Wrapper.devicemanager
         Boolean IsStopped { get; }
 
         DeviceType AutopickupDeviceType { get; }
+
+        Command AddFromHardDrive { get; }
+
+        Command RemoveFromDevices { get; }
 
         bool AutopickupDevice { get; set; }
 

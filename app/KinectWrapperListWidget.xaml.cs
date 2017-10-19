@@ -24,17 +24,18 @@ namespace Kinect_Wrapper.app
     /// </summary>
     public partial class PageKinectWrapperList : Page
     {
-        private IKinectWrapper _kinect;
+        private IKinectWrapper kinect;
 
         public PageKinectWrapperList(IKinectWrapper kinect)
         {
             InitializeComponent();
-            _kinect = kinect;
+            this.kinect = kinect;
             this.DataContext = new
             {
-                kinectWrap = _kinect,
-                camera = _kinect.Camera,
-                audio = _kinect.Camera.Audio,
+                kinectWrap = kinect,
+                camera = kinect.Camera,
+                manager = kinect.Manager,
+                audio = kinect.Camera.Audio,
                 gestures = kinect.Gestures,
                 recognizer = kinect.Camera.Audio.Recognizer
             };
@@ -50,35 +51,14 @@ namespace Kinect_Wrapper.app
 
              };
         }
-
-        private void ListViewDevices_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            _kinect.Manager.SelectedDevice = (Device)ListViewDevices.SelectedItem;
-        }
-
-        private void add_device_from_hard_drive(object sender, RoutedEventArgs e)
-        {
-            var openFileDialog = new OpenFileDialog { Title = "Select filename", Filter = "Replay files|*.replay" };
-            if (openFileDialog.ShowDialog() != true) return;
-            _kinect.Manager.Devices.Add(new Device(openFileDialog.FileName));
-        }
-
-        private void remove_device_from_list(object sender, RoutedEventArgs e)
-        {
-            MessageBoxResult messageBoxResult =
-               MessageBox.Show("Are you sure?", "Delete device from list",
-               MessageBoxButton.YesNo);
-            if (messageBoxResult == MessageBoxResult.Yes)
-                _kinect.Manager.Devices.Remove(_kinect.Manager.SelectedDevice);
-        }
-
+        
         private void gestureEntererd(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
                 var t = int.Parse(InputResize.Text);
                 if (t > 0) t /= 100;
-                _kinect.Gestures.triggerResizeGesture(t);
+                kinect.Gestures.triggerResizeGesture(t);
             }
         }
     }

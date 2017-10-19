@@ -82,24 +82,27 @@ namespace Kinect_Wrapper.camera
         #region ini camera from device
         public void init(IDevice device)
         {
-            if (device == null) return;
-            Devices.Clear();
-            int i = 0;
-            for (i = 0; i < WaveIn.DeviceCount; i++)
+            App.Current.Dispatcher.BeginInvoke(new Action(() =>
             {
-                var product = WaveIn.GetCapabilities(i);
-                var dev = new AudioSourceDevice(product, device.sensor, player, i);
-                Devices.Add(dev);
-            }
-            if (File.Exists(device.Path))
-            {
-                var replayDevice = new AudioSourceDevice(device.Path, i);
-                SelectedDevice = replayDevice;
-            }
-            else
-            {
-                SelectedDevice = Devices.First();
-            }
+                if (device == null) return;
+                Devices.Clear();
+                int i = 0;
+                for (i = 0; i < WaveIn.DeviceCount; i++)
+                {
+                    var product = WaveIn.GetCapabilities(i);
+                    var dev = new AudioSourceDevice(product, device.sensor, player, i);
+                    Devices.Add(dev);
+                }
+                if (File.Exists(device.Path))
+                {
+                    var replayDevice = new AudioSourceDevice(device.Path, i);
+                    SelectedDevice = replayDevice;
+                }
+                else
+                {
+                    SelectedDevice = Devices.FirstOrDefault();
+                }
+            }));
         }
         #endregion
 
