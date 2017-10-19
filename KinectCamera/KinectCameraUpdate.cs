@@ -25,7 +25,7 @@ namespace Kinect_Wrapper.camera
         private void propageteFrame()
         {
             FrameReady?.Invoke(this, frame);
-            IsStreaming = (Device.Type != DeviceType.NO_DEVICE);
+            IsStreaming = (CurrentDevice.Type != DeviceType.NO_DEVICE);
         }
         #endregion
 
@@ -33,8 +33,8 @@ namespace Kinect_Wrapper.camera
         public void update()
         {
             IsStreaming = false;
-            if (Device == null) return;
-            switch (Device.Type)
+            if (CurrentDevice == null) return;
+            switch (CurrentDevice.Type)
             {
                 case structures.DeviceType.NO_DEVICE:
                     updateNoDevice();
@@ -48,7 +48,7 @@ namespace Kinect_Wrapper.camera
                 default:
                     break;
             }
-            OnPropertyChanged("IsStreaming ");
+            _updateLabeIsStreaming();
         }
         #endregion
 
@@ -108,7 +108,7 @@ namespace Kinect_Wrapper.camera
                 return;
             }
             #endregion
-            var sensor = Device.sensor;
+            var sensor = CurrentDevice.sensor;
             if (State == CameraState.PLAYING_STOPPING)
             {
                 State = CameraState.UNACTIVE;
@@ -152,7 +152,7 @@ namespace Kinect_Wrapper.camera
         private void updateNoDevice()
         {
             IKinectFrame noDeviceFrame = frame;
-            frame.synchronize(Device.Name, toogleVisibleMessage, IsPaused);
+            frame.synchronize(CurrentDevice.Name, toogleVisibleMessage, IsPaused);
             toogleVisibleMessage = !toogleVisibleMessage;
             propageteFrame();
             Thread.Sleep(1000);

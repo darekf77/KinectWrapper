@@ -38,7 +38,8 @@ namespace Kinect_Wrapper.app
             {
                 kinect = Kinect,
                 camera = Kinect.Camera,
-                audio = Kinect.Camera.Audio
+                audio = Kinect.Camera.Audio,
+                manager = Kinect.Manager
             };
         }
         

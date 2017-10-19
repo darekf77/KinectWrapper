@@ -38,7 +38,7 @@ namespace Kinect_Wrapper.camera
         /// <summary>
         /// Same device in Device Manager 
         /// </summary>
-        public IDevice Device { get; set; }
+        public IDevice CurrentDevice { get; set; }
         #endregion
 
         public event EventHandler<IKinectFrame> FrameReady;
@@ -81,21 +81,22 @@ namespace Kinect_Wrapper.camera
             {
                 return new Command(() =>
                 {
-                    if (Device == null) return;
-                    Device.start(() =>
+                    if (DeviceSelecteToPlay == null) return;
+                    CurrentDevice = DeviceSelecteToPlay;
+                    CurrentDevice.start(() =>
                     {
-                        audio.init(Device);
-                        switch (Device.Type)
+                        audio.init(CurrentDevice);
+                        switch (CurrentDevice.Type)
                         {
                             case structures.DeviceType.NO_DEVICE:
-                                frame = Device.nodeviceframe;
+                                frame = CurrentDevice.nodeviceframe;
                                 break;
                             case structures.DeviceType.KINECT_1:
-                                this.sensor = Device.sensor;
+                                this.sensor = CurrentDevice.sensor;
                                 frame = new KinectFrame(this);
                                 break;
                             case structures.DeviceType.RECORD_FILE_KINECT_1:
-                                ReplayFilePath = Device.Path;
+                                ReplayFilePath = CurrentDevice.Path;
                                 frame = new KinectFrame(this);
                                 stream = File.OpenRead(ReplayFilePath);
                                 reader = new BinaryReader(stream);
@@ -136,6 +137,11 @@ namespace Kinect_Wrapper.camera
                 {
                     onNoDeviceNeeded?.Invoke(this, EventArgs.Empty);
                 }
+                OnPropertyChanged("IsPaused");
+                OnPropertyChanged("IsRecordingPossible");
+                OnPropertyChanged("IsPaused");
+                OnPropertyChanged("IsStreaming");
+
             }
         }
         #endregion
@@ -362,7 +368,27 @@ namespace Kinect_Wrapper.camera
         #endregion
 
         #region is streaming
-        public bool IsStreaming { get; private set; }
+        //public bool IsStreaming { get; private set; }
+        private bool _IsStreaming;
+        private bool _IsStreamingLabelUpdate;
+        public bool IsStreaming
+        {
+            get { return _IsStreaming; }
+            set
+            {
+                _IsStreamingLabelUpdate = (value != _IsStreaming);
+                _IsStreaming = value;
+            }
+        }
+
+        private void _updateLabeIsStreaming()
+        {
+            if (_IsStreamingLabelUpdate) OnPropertyChanged("IsStreaming");
+        }
+        #endregion
+
+        #region selected device
+        public IDevice DeviceSelecteToPlay { get; set; }
         #endregion
     }
 }

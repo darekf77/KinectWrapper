@@ -28,7 +28,8 @@ namespace Kinect_Wrapper.camera
         CameraState State { get; set; }
         IAudioRecorderReplayer Audio { get; }
         void update();
-        IDevice Device { get; set; }
+        IDevice CurrentDevice { get; set; }
+        IDevice DeviceSelecteToPlay { get; set; }
         String ReplayFilePath { get; }
         String RecordFilePath { get; }
 

@@ -45,7 +45,8 @@
                     Grid.Row="1" Grid.Column="0" Margin="2"  FontSize="9"/>
 
 
-        <Button Content="RUN"  Command="{Binding camera.Play}"  Name="ButtonPlayAndPause"                    
+        <Button Content="RUN"  Command="{Binding camera.Play}"  Name="ButtonPlayAndPause"     
+                    IsEnabled="{Binding manager.IsSelectedDevice, Mode=OneWay}"
                     Visibility="{c:Binding !camera.IsStreaming, Mode=OneWay}"
                     Grid.Row="1" Grid.Column="1"  Margin="2"/>
         

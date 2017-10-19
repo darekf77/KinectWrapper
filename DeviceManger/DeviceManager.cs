@@ -31,10 +31,7 @@ namespace Kinect_Wrapper.devicemanager
 
         private IDevice DefaultDevice { get; set; }
         public ObservableCollection<IDevice> Devices { get; private set; }
-        private IDevice CurrentDevice { get; set; }
-        public IDevice SelectedDevice { get; set; }
         public IKinectCamera Camera { get; set; }
-
         public event EventHandler DeviceChanged;
 
         #region constructor
@@ -43,12 +40,12 @@ namespace Kinect_Wrapper.devicemanager
             this.Camera = Camera;
             Devices = new TrulyObservableCollection<IDevice>();
             DefaultDevice = new Device();
-            Device = DefaultDevice;
+            Camera.DeviceSelecteToPlay = DefaultDevice;
 
             #region is repaly or sensor set state to unactive - set no device to work
             Camera.onNoDeviceNeeded += (e, v) =>
             {
-                Device = DefaultDevice;
+                Camera.DeviceSelecteToPlay = DefaultDevice;
                 Camera.Play.DoExecute();
             };
             #endregion
@@ -79,7 +76,7 @@ namespace Kinect_Wrapper.devicemanager
                     if (device != null && device.sensor != null)
                     {
                         var sensor = sensors.First(s => { return (s != null && s.UniqueKinectId == device.sensor.UniqueKinectId); });
-                        if (sensor == null) toRemove.Add(Device);
+                        if (sensor == null) toRemove.Add(device);
                     }
                 }
                 for (int i = 0; i < toRemove.Count; i++)
@@ -147,39 +144,41 @@ namespace Kinect_Wrapper.devicemanager
         }
         #endregion
 
-        #region device
-        public IDevice Device
+        #region is selcted device
+        public bool IsSelectedDevice
         {
-            get { return CurrentDevice; }
+            get
+            {
+                return (SelectedDevice != null);
+            }
+        }
+        #endregion
+
+        #region selcted device
+        public IDevice SelectedDevice
+        {
+            get { return Camera.DeviceSelecteToPlay; }
             set
             {
-                if (value == null) return;
-                if (CurrentDevice != null && CurrentDevice.Equals(value)) return;
-                CurrentDevice = value;
-                var c = Camera as KinectCamera;
-                c.Device = CurrentDevice;
+                Camera.DeviceSelecteToPlay = value;
                 lock (_lockerWorkerState)
                 {
                     Monitor.Pulse(_lockerWorkerState);
-                }
-                lock (_lockerWorkerFrames)
-                {
-                    Monitor.Pulse(_lockerWorkerFrames);
                 }
                 App.Current.Dispatcher.BeginInvoke(new Action(() =>
                 {
                     DeviceChanged?.Invoke(this, EventArgs.Empty);
                     OnPropertyChanged("IsStopped");
+                    OnPropertyChanged("IsSelectedDevice");
                 }));
-
             }
         }
         #endregion
-
+        
         #region is stopped
         public bool IsStopped
         {
-            get { return CurrentDevice.Equals(DefaultDevice); }
+            get { return Camera.CurrentDevice.Equals(DefaultDevice); }
         }
         #endregion
 
@@ -211,6 +210,8 @@ namespace Kinect_Wrapper.devicemanager
             }
         }
 
+       
+
         private static Boolean AutoPickUpFirstKinect = true;
         private static Boolean AutoPickUpFirstKinectIsSet = false;
         private void autopickupDeveic()
@@ -223,7 +224,7 @@ namespace Kinect_Wrapper.devicemanager
                 {
                     kinectFounded = true;
                     AutopickupDeviceType = DeviceType.KINECT_1;
-                    Device = device;
+                    Camera.DeviceSelecteToPlay = device;
                     Camera.Play.DoExecute();
                     break;
                 }
@@ -235,7 +236,7 @@ namespace Kinect_Wrapper.devicemanager
                     if (device.Type == structures.DeviceType.RECORD_FILE_KINECT_1)
                     {
                         AutopickupDeviceType = DeviceType.RECORD_FILE_KINECT_1;
-                        Device = device;
+                        Camera.DeviceSelecteToPlay = device;
                         Camera.Play.DoExecute();
                         break;
                     }

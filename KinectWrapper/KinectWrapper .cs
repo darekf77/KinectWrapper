@@ -67,7 +67,7 @@ namespace Kinect_Wrapper.wrapper
             Gestures = new GesturesDetector();
             Camera.FrameReady += (e, frame) =>
             {
-                if (Manager.Device.Type == DeviceType.KINECT_1)
+                if (Camera.CurrentDevice.Type == DeviceType.KINECT_1)
                 {
                     Gestures.update(frame);
                 }

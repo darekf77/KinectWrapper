@@ -16,9 +16,7 @@ namespace Kinect_Wrapper.devicemanager
     {
         IKinectCamera Camera { get; }
         ObservableCollection<IDevice> Devices { get; }
-
-        IDevice Device { get; set; }
-
+        
         IDevice SelectedDevice { get; set; }
 
         Boolean IsStopped { get; }
@@ -30,6 +28,8 @@ namespace Kinect_Wrapper.devicemanager
         Command RemoveFromDevices { get; }
 
         bool AutopickupDevice { get; set; }
+
+        bool IsSelectedDevice { get; }
 
         event EventHandler DeviceChanged;
 

@@ -13,8 +13,6 @@ namespace Kinect_Wrapper.devicemanager
 {
     public partial class DeviceManager
     {
-
-        static readonly object _lockerWorkerFrames = new object();
         static readonly object _lockerWorkerState = new object();
 
         private BackgroundWorker _workerFrames;
@@ -26,13 +24,7 @@ namespace Kinect_Wrapper.devicemanager
 
             _workerFrames.DoWork += (e, v) =>
             {
-                while (true)
-                {
-                    Camera.update();
-                    lock (_lockerWorkerFrames)
-                        while (Device == null)
-                            Monitor.Wait(_lockerWorkerFrames);// thread is waiting until new data from kinect                 
-                }
+                while (true) Camera.update();
             };
             _workerFrames.RunWorkerAsync();
 
@@ -44,11 +36,11 @@ namespace Kinect_Wrapper.devicemanager
                 {
                     foreach (var device in Devices)
                     {
-                        Device.update(Camera.State, Camera.Device.Equals(device));
+                        Camera.CurrentDevice.update(Camera.State, Camera.CurrentDevice.Equals(device));
                     }
                     Thread.Sleep(1000);
                     lock (_lockerWorkerState)
-                        while (Device == null)
+                        while (Camera.CurrentDevice == null)
                             Monitor.Wait(_lockerWorkerState);// thread is waiting until new data from kinect   
                 }
             };
