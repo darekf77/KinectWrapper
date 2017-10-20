@@ -27,7 +27,7 @@ namespace Kinect_Wrapper.camera
         {
             isFramePropagated = true;
             FrameReady?.Invoke(this, frame);
-            IsStreaming = (CurrentDevice.Type != DeviceType.NO_DEVICE);
+            IsStreaming = (CurrentDevice != null && CurrentDevice.Type != DeviceType.NO_DEVICE);
             #region preview next frame only
             if (pauseOnNextFrame)
             {
@@ -49,20 +49,29 @@ namespace Kinect_Wrapper.camera
         public void update()
         {
             isFramePropagated = false;
-            if (CurrentDevice == null) return;
-            switch (CurrentDevice.Type)
+            if (CurrentDevice != null)
             {
-                case structures.DeviceType.NO_DEVICE:
-                    updateNoDevice();
-                    break;
-                case structures.DeviceType.KINECT_1:
-                    updateKinect();
-                    break;
-                case structures.DeviceType.RECORD_FILE_KINECT_1:
-                    updateReplay();
-                    break;
-                default:
-                    break;
+                #region stop device if is no ready
+                if (CurrentDevice.State == DeviceState.NOT_READY)
+                {
+                    CurrentDevice.stop();
+                    State = CameraState.UNACTIVE;
+                }
+                #endregion
+                switch (CurrentDevice.Type)
+                {
+                    case structures.DeviceType.NO_DEVICE:
+                        updateNoDevice();
+                        break;
+                    case structures.DeviceType.KINECT_1:
+                        updateKinect();
+                        break;
+                    case structures.DeviceType.RECORD_FILE_KINECT_1:
+                        updateReplay();
+                        break;
+                    default:
+                        break;
+                }
             }
             if (!isFramePropagated) IsStreaming = false;
         }
@@ -73,10 +82,6 @@ namespace Kinect_Wrapper.camera
         protected readonly List<ReplayFrame> framesCopy = new List<ReplayFrame>();
         public void updateReplay()
         {
-            if (State != CameraState.PLAYING &&
-                State != CameraState.PLAYING_PAUSE &&
-                State != CameraState.PLAYING_STOPPING) return;
-
             #region replay finish, play again frames
             if (frames != null && frames.Count == 0)
             {
@@ -96,12 +101,13 @@ namespace Kinect_Wrapper.camera
             #endregion
 
             #region when is not pause, get new frame
-            if (State != CameraState.PLAYING_PAUSE)
+            if (State == CameraState.PLAYING)
             {
                 lastFrame = frames.PopAt(0);
                 framesCopy.Add(lastFrame);
             }
             #endregion
+
             var howlongSleep = TimeSpan.FromMilliseconds(lastFrame.TimeStamp);
             Thread.Sleep(howlongSleep);
 
@@ -116,33 +122,44 @@ namespace Kinect_Wrapper.camera
         #region update kinect
         private void updateKinect()
         {
-            #region update record data
+            #region stop or cancel recording
             if (State == CameraState.RECORDING_CANCEL ||
                 State == CameraState.RECORDING_STOPPING)
             {
                 updateRecordData();
+                State = CameraState.PLAYING;
                 return;
             }
             #endregion
-            var sensor = CurrentDevice.sensor;
+
+            #region stop device when is playing
             if (State == CameraState.PLAYING_STOPPING)
             {
+                CurrentDevice.stop();
                 State = CameraState.UNACTIVE;
                 return;
             }
+            #endregion
 
-            if (sensor == null ||
-                !sensor.IsRunning ||
-                sensor.Status != KinectStatus.Connected)
-                return;
-            if (sensor.DepthStream == null || sensor.SkeletonStream == null || sensor.ColorStream == null) return;
-            if (!sensor.DepthStream.IsEnabled || !sensor.ColorStream.IsEnabled || !sensor.SkeletonStream.IsEnabled) return;
+            #region handle pause in recording and playing
             if (IsPaused)
             {
                 Thread.Sleep(300);
                 FrameReady(this, frame);
                 return;
             }
+            #endregion
+
+            #region prevent unprepared sensor to access streams
+            var sensor = CurrentDevice.sensor;
+            if (sensor == null || !sensor.IsRunning || sensor.Status != KinectStatus.Connected ||
+                sensor.DepthStream == null || sensor.SkeletonStream == null || sensor.ColorStream == null ||
+                !sensor.DepthStream.IsEnabled || !sensor.ColorStream.IsEnabled || !sensor.SkeletonStream.IsEnabled)
+            {
+                Console.WriteLine("something wrong with kinect");
+                return;
+            }
+            #endregion
 
             using (DepthImageFrame depthFrame = sensor.IsRunning ? sensor.DepthStream.OpenNextFrame(0) : null)
             using (SkeletonFrame skeletonFrame = sensor.IsRunning ? sensor.SkeletonStream.OpenNextFrame(100) : null)
@@ -158,8 +175,11 @@ namespace Kinect_Wrapper.camera
                     propageteFrame();
                     return;
                 }
-            }
-            return;
+                else
+                {
+                    Console.WriteLine("Somethig sucke with streams");
+                }
+            };
         }
         #endregion
 
@@ -187,14 +207,12 @@ namespace Kinect_Wrapper.camera
                 stream.Close();
                 writer.Dispose();
                 stream.Dispose();
-                State = CameraState.PLAYING;
             }
             if (State == CameraState.RECORDING_CANCEL)
             {
                 System.GC.Collect();
                 System.GC.WaitForPendingFinalizers();
                 File.Delete(RecordFilePath);
-                State = CameraState.PLAYING;
             }
         }
         public void updateRecordData(ColorImageFrame color, DepthImageFrame depth, SkeletonFrame skeleton, KinectSensor sensor)

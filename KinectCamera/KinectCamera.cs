@@ -17,6 +17,7 @@ using Apex.MVVM;
 using Kinect_Wrapper.frame;
 using SharedLibJG.config;
 using Microsoft.Win32;
+using SharedLibJG.Helpers;
 
 namespace Kinect_Wrapper.camera
 {
@@ -67,7 +68,7 @@ namespace Kinect_Wrapper.camera
         }
         private KinectCamera()
         {
-
+            initActionIsStreaming();
         }
         #endregion
 
@@ -89,10 +90,11 @@ namespace Kinect_Wrapper.camera
                 return new Command(() =>
                 {
                     if (DeviceSelecteToPlay == null) return;
-                    CurrentDevice = DeviceSelecteToPlay;
-                    onDeviceChanged?.Invoke(this, EventArgs.Empty);
-                    CurrentDevice.start(() =>
+                    CurrentDevice = null;
+                    DeviceSelecteToPlay.start(() =>
                     {
+                        CurrentDevice = DeviceSelecteToPlay;
+                        onDeviceChanged?.Invoke(this, EventArgs.Empty);
                         //audio.init(CurrentDevice);
                         switch (CurrentDevice.Type)
                         {
@@ -380,13 +382,26 @@ namespace Kinect_Wrapper.camera
         #region is streaming
         private bool __IsStreaming;
 
+        private Action<int> actionUpdateIsStreaming;
+        private void initActionIsStreaming()
+        {
+            actionUpdateIsStreaming = (e) =>
+             {
+                 OnPropertyChanged("IsStreaming");
+             };
+        }
+
         public bool IsStreaming
         {
             get { return __IsStreaming; }
             set
             {
                 __IsStreaming = value;
-                if (value != IsStreamingPrev) OnPropertyChanged("IsStreaming");
+                if (value != IsStreamingPrev)
+                {
+                    var debouceWrapp = actionUpdateIsStreaming.Debounce();
+                    debouceWrapp(1000);
+                }
                 IsStreamingPrev = value;
             }
         }

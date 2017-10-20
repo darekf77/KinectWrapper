@@ -141,24 +141,39 @@ namespace Kinect_Wrapper.device
             }
         }
 
+        #region waitin fro kinect until is fully ready
+        private void waitingForKinect(Action action, int trys = 3)
+        {
+            if (--trys == 0) return;
+            if (!sensor.IsRunning ||
+                !sensor.ColorStream.IsEnabled ||
+                !sensor.DepthStream.IsEnabled ||
+                    !sensor.SkeletonStream.IsEnabled ||
+                    sensor.Status != KinectStatus.Connected)
+            {
+                Console.WriteLine("trying waiting for kinect");
+                Helpers.SetTimeout(() =>
+                {
+                    waitingForKinect(action, trys);
+                }, 500);
+            }
+            else
+            {
+                action.Invoke();
+            }
+        }
+        #endregion
+
         private void startKinect(Action action)
         {
             if (sensor == null || sensor.Status == KinectStatus.Disconnected) return;
-            if (sensor.IsRunning)
-            {
-                stop();
-                //Helpers.SetTimeout(() =>
-                //{
-                //    startKinect(action);
-                //}, 1000);
-            }
             try
             {
                 sensor.Start();
                 sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
                 sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
                 sensor.SkeletonStream.Enable();
-                action.Invoke();
+                waitingForKinect(action);
             }
             catch (Exception e)
             {
@@ -168,14 +183,12 @@ namespace Kinect_Wrapper.device
         #endregion
 
         #region stop
-        bool stopNextTime = false;
         public void stop()
         {
             if (sensor != null)
             {
                 sensor.Stop();
             }
-            stopNextTime = true;
         }
         #endregion
 
@@ -224,19 +237,16 @@ namespace Kinect_Wrapper.device
         #region update 
         public void update(CameraState CameraState, bool isActive)
         {
-            if (stopNextTime)
-            {
-                stopNextTime = false; ;
-                KinectCamera.Instance.Stop.DoExecute();
-                return;
-            }
             this.CameraState = CameraState;
             switch (Type)
             {
                 case DeviceType.NO_DEVICE:
+                    #region hand no device
                     State = DeviceState.READY;
+                    #endregion
                     break;
                 case DeviceType.KINECT_1:
+                    #region handle kinect
                     if (sensor == null) State = DeviceState.NOT_READY;
                     else if (isActive && State == DeviceState.RESTARTING && (sensor.Status != KinectStatus.Connected)) break;
                     else if (sensor.Status == KinectStatus.Initializing) State = DeviceState.INITIALIZING;
@@ -268,9 +278,10 @@ namespace Kinect_Wrapper.device
                     {
                         State = DeviceState.NOT_READY;
                     }
+                    #endregion
                     break;
                 case DeviceType.RECORD_FILE_KINECT_1:
-
+                    #region handle record file
                     if (!File.Exists(Path))
                     {
                         State = DeviceState.NOT_READY;
@@ -287,6 +298,7 @@ namespace Kinect_Wrapper.device
                     {
                         State = DeviceState.READY;
                     }
+                    #endregion
                     break;
             }
         }

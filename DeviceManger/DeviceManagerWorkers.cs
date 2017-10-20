@@ -42,7 +42,7 @@ namespace Kinect_Wrapper.devicemanager
                 {
                     foreach (var dev in Devices)
                     {
-                        dev.update(Camera.State, Camera.CurrentDevice.Equals(dev));
+                        dev.update(Camera.State, Camera.CurrentDevice != null && Camera.CurrentDevice.Equals(dev));
                     }
                     Thread.Sleep(1000);
                     lock (_lockerWorkerState)
