@@ -196,7 +196,7 @@ namespace Kinect_Wrapper.devicemanager
         #region is stopped
         public bool IsStopped
         {
-            get { return Camera.CurrentDevice.Equals(DefaultDevice); }
+            get { return (Camera.CurrentDevice != null) ? Camera.CurrentDevice.Equals(DefaultDevice) : false; }
         }
         #endregion
 
