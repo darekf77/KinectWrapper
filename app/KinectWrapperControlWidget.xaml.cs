@@ -43,13 +43,6 @@ namespace Kinect_Wrapper.app
                 manager = Kinect.Manager
             };
 
-            this.ContextMenuClosing += (e, v) =>
-            {
-                foreach (var sensor in KinectSensor.KinectSensors)
-                {
-                    sensor.Stop();
-                }
-            };
         }
 
 

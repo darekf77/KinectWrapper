@@ -2,6 +2,7 @@
 using Kinect_Wrapper.device;
 using Kinect_Wrapper.structures;
 using Kinect_Wrapper.wrapper;
+using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +42,15 @@ namespace Kinect_Wrapper
             _kinectControls = new PageKinectWrapperControl(kinect);
             KinectWrapperDevicesListWidget.NavigationService.Navigate(_devicesList);
             KinectWrapperControlsWidget.NavigationService.Navigate(_kinectControls);
+
+            this.Closing += (e, v) =>
+            {
+                foreach (var sensor in KinectSensor.KinectSensors)
+                {
+                    sensor?.Stop();
+                }
+            };
+
         }
 
         void initApp()

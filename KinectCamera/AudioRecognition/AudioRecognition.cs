@@ -11,6 +11,7 @@ using System.IO;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using SharedLibJG.Helpers;
 
 namespace Kinect_Wrapper.camera
 {
@@ -24,6 +25,21 @@ namespace Kinect_Wrapper.camera
         }
         #endregion
 
+        #region grammar list with detection 
+        public TrulyObservableCollection<GrammarTest> ListGrammar { get; private set; }
+        void rebuildGrammarList()
+        {
+            ListGrammar.Clear();
+            foreach (var g in Grammar)
+            {
+                var lg = new GrammarTest();
+                lg.Name = g;
+                lg.WasJustSayed = "no";
+                ListGrammar.Add(lg);
+            }
+        }
+        #endregion
+
         private SpeechRecognitionEngine SpeechRecognizer { get; set; }
         public event EventHandler<IAudioMessage> UserSaying;
 
@@ -31,11 +47,36 @@ namespace Kinect_Wrapper.camera
         public AudioRecognition()
         {
             Grammar = new ObservableCollection<String>();
+            ListGrammar = new TrulyObservableCollection<GrammarTest>();
             Grammar.CollectionChanged += (e, v) =>
             {
                 SpeechRecognizer?.LoadGrammarAsync(GetCurrentGrammar());
+                rebuildGrammarList();
             };
             Grammar.Add("test");
+            #region grammar list with detection
+            rebuildGrammarList();
+            UserSaying += (e, v) =>
+            {
+                foreach (var g in ListGrammar)
+                {
+                    if (v.Message == g.Name)
+                    {
+                        App.Current.Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            Console.WriteLine("start");
+                            g.WasJustSayed = "yes";
+                            Helpers.SetTimeout(() =>
+                            {
+                                Console.WriteLine("stop");
+                                g.WasJustSayed = "no";
+                            }, 2000);
+                        }));
+                        return;
+                    }
+                }
+            };
+            #endregion
         }
         #endregion
 

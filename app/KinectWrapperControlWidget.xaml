@@ -28,7 +28,7 @@
         </Grid.ColumnDefinitions>
 
         <ComboBox Name="ComboboxStreams" ItemsSource="{Binding kinect.Streams}" 
-                      SelectedItem="{Binding kinect.Stream}" IsEnabled="{c:Binding !kinect.IsStopped,Mode=OneWay}"
+                      SelectedItem="{Binding kinect.Stream}" IsEnabled="{c:Binding !manager.IsStopped,Mode=OneWay}"
                   IsSynchronizedWithCurrentItem="True" Grid.Row="0" Grid.ColumnSpan="2"
                      Height="20"
                     DisplayMemberPath="Name" >
@@ -90,7 +90,7 @@
 
         <Slider Value="20"  Grid.Row="6" Grid.ColumnSpan="2"  ></Slider>
 
-        <TextBlock  Text="{Binding camera.StreamingFilePath}" 
+        <TextBlock  Text="{Binding camera.ReplayFilePath}" 
                     TextWrapping="Wrap" Margin="2"
                Grid.Row="7" Grid.ColumnSpan="2" FontSize="10" 
                >

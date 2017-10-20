@@ -42,10 +42,11 @@
         </TabItem>
         <TabItem Header="Audio" Name="TabCommands" Margin="-2,-2,2,0">
             <Grid >
-                <ListView Name="ListViewCommands"  ItemsSource="{Binding recognizer.Grammar}" >
+                <ListView Name="ListViewCommands"  ItemsSource="{Binding recognizer.ListGrammar}" >
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Width="160" Header="Commands" DisplayMemberBinding="{Binding}"/>
+                            <GridViewColumn Width="100" Header="Commands" DisplayMemberBinding="{Binding Name}"/>
+                            <GridViewColumn Width="50" Header="JustSayed" DisplayMemberBinding="{Binding WasJustSayed}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
