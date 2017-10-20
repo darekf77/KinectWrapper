@@ -94,7 +94,7 @@ namespace Kinect_Wrapper.camera
                     {
                         CurrentDevice = DeviceSelecteToPlay;
                         onDeviceChanged?.Invoke(this, EventArgs.Empty);
-                        //audio.init(CurrentDevice);
+                        audio.init(CurrentDevice);
                         switch (CurrentDevice.Type)
                         {
                             case structures.DeviceType.NO_DEVICE:

@@ -38,7 +38,7 @@
                     IsEnabled="{Binding camera.IsStreaming, Mode=OneWay}"
                     Visibility="{c:Binding Path=!camera.IsRecording, Mode=OneWay}" 
                     Grid.Row="1" Grid.Column="0" Margin="2" />
-        
+
         <Button Content="CANCEL RECORD"  Command="{Binding camera.CancelRecord}"
                 Name="ButtonCancelRecord"
                     Visibility="{c:Binding Path=camera.IsRecording, Mode=OneWay}" 
@@ -49,13 +49,13 @@
                     IsEnabled="{Binding manager.IsSelectedDeviceReadyToPlay, Mode=OneWay}"
                     Visibility="{c:Binding !camera.IsStreaming, Mode=OneWay}"
                     Grid.Row="1" Grid.Column="1"  Margin="2"/>
-        
+
         <Button Content="PAUSE"  Name="ButtonPause" Command="{Binding camera.Pause}"
                     IsEnabled="{c:Binding !camera.IsRecording, Mode=OneWay}"
                     Visibility="{c:Binding 'camera.IsStreaming and !camera.IsPaused', Mode=OneWay}"
                     Grid.Row="1" Grid.Column="1"  Margin="2" />
-        
-        
+
+
         <Button Content="START"  Name="ButtonStart" Command="{Binding camera.PausePlay}"
                     IsEnabled="{c:Binding !camera.IsRecording, Mode=OneWay}"
                     Visibility="{c:Binding 'camera.IsStreaming and camera.IsPaused', Mode=OneWay}"
@@ -77,11 +77,12 @@
         <Label Content="Audio" Grid.Row="3" Grid.ColumnSpan="2" FontSize="8" Padding="0" />
 
         <ComboBox Name="ComboboxAudioDevices" ItemsSource="{Binding audio.Devices}" 
-                  
-                       Grid.Row="4"  Height="20" >
+                  SelectedItem="{Binding audio.SelectedDevice}"
+                  DisplayMemberPath="Name"
+                    Grid.Row="4"  Height="20" >
         </ComboBox>
 
-        <ProgressBar Value="30"  Grid.Row="4" Grid.Column="1" >
+        <ProgressBar Grid.Row="4" Grid.Column="1"  Value="{Binding audio.CurrentInputLevel, Mode=OneWay}" >
         </ProgressBar>
 
         <Label Content="Time: 23:49/23:45" Grid.Row="5" Grid.ColumnSpan="2" FontSize="8" Padding="0" >

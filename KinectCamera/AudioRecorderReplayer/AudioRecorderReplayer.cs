@@ -40,6 +40,33 @@ namespace Kinect_Wrapper.camera
         }
         #endregion
 
+        #region ini camera from device
+        public void init(IDevice device)
+        {
+            App.Current.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                if (device == null) return;
+                Devices.Clear();
+                int i = 0;
+                for (i = 0; i < WaveIn.DeviceCount; i++)
+                {
+                    var product = WaveIn.GetCapabilities(i);
+                    var dev = new AudioSourceDevice(product, device.sensor, player, i);
+                    Devices.Add(dev);
+                }
+                if (File.Exists(device.Path))
+                {
+                    var replayDevice = new AudioSourceDevice(device.Path, i);
+                    SelectedDevice = replayDevice;
+                }
+                else
+                {
+                    SelectedDevice = Devices.FirstOrDefault();
+                }
+            }));
+        }
+        #endregion
+
         #region is recording possible
         private bool _isRecordingPossible = false;
 
@@ -75,35 +102,37 @@ namespace Kinect_Wrapper.camera
                 IsPreparingAudio = true;
                 Recognizer.init(value);
                 IsPreparingAudio = false;
+                if (recorder.RecordingState == RecordingState.Stopped)
+                {
+                    recorder.BeginMonitoring(SelectedDevice.Id);
+                    enableMicrophoeVisualization();
+                }
+                else
+                {
+                    recorder.Stop();
+                    recorder.Stopped += (e, v) =>
+                    {
+                        enableMicrophoeVisualization();
+                    };
+                }
+
             }
         }
         #endregion
 
-        #region ini camera from device
-        public void init(IDevice device)
+        #region microphone visualization
+        void enableMicrophoeVisualization()
         {
-            App.Current.Dispatcher.BeginInvoke(new Action(() =>
+            recorder.SampleAggregator.MaximumCalculated += (e, v) =>
             {
-                if (device == null) return;
-                Devices.Clear();
-                int i = 0;
-                for (i = 0; i < WaveIn.DeviceCount; i++)
-                {
-                    var product = WaveIn.GetCapabilities(i);
-                    var dev = new AudioSourceDevice(product, device.sensor, player, i);
-                    Devices.Add(dev);
-                }
-                if (File.Exists(device.Path))
-                {
-                    var replayDevice = new AudioSourceDevice(device.Path, i);
-                    SelectedDevice = replayDevice;
-                }
-                else
-                {
-                    SelectedDevice = Devices.FirstOrDefault();
-                }
-            }));
+                lastPeak = Math.Max(v.MaxSample, Math.Abs(v.MinSample));
+                OnPropertyChanged("CurrentInputLevel");
+                OnPropertyChanged("RecordedTime");
+            };
         }
+
+        private float lastPeak;
+        public float CurrentInputLevel { get { return lastPeak * 100; } }
         #endregion
 
         #region prepare audio path
@@ -118,7 +147,6 @@ namespace Kinect_Wrapper.camera
         {
             if (SelectedDevice == null) return;
             var audioFileName = prepareAudioPath(toFile);
-            recorder.BeginMonitoring(SelectedDevice.Id);
             recorder.BeginRecording(audioFileName);
         }
         #endregion
