@@ -14,29 +14,35 @@ namespace Kinect_Wrapper.devicemanager
     public partial class DeviceManager
     {
         static readonly object _lockerWorkerState = new object();
+        static readonly object _lockerWorkerUpdate = new object();
 
-        private BackgroundWorker _workerFrames;
-        private BackgroundWorker _workerState;
+        private BackgroundWorker workerState;
+        private BackgroundWorker workerUpdate;
 
         private void initWorkers()
         {
-            _workerFrames = new BackgroundWorker();
-
-            _workerFrames.DoWork += (e, v) =>
-            {
-                while (true) Camera.update();
-            };
-            _workerFrames.RunWorkerAsync();
-
-
-            _workerState = new BackgroundWorker();
-            _workerState.DoWork += (e, v) =>
+            workerUpdate = new BackgroundWorker();
+            workerUpdate.DoWork += (e, v) =>
             {
                 while (true)
                 {
-                    foreach (var device in Devices)
+                    Camera.update();
+                    lock (_lockerWorkerUpdate)
+                        while (Camera.CurrentDevice == null)
+                            Monitor.Wait(_lockerWorkerUpdate);// thread is waiting until new data from kinect 
+                }
+
+            };
+            workerUpdate.RunWorkerAsync();
+
+            workerState = new BackgroundWorker();
+            workerState.DoWork += (e, v) =>
+            {
+                while (true)
+                {
+                    foreach (var dev in Devices)
                     {
-                        Camera.CurrentDevice.update(Camera.State, Camera.CurrentDevice.Equals(device));
+                        dev.update(Camera.State, Camera.CurrentDevice.Equals(dev));
                     }
                     Thread.Sleep(1000);
                     lock (_lockerWorkerState)
@@ -44,8 +50,7 @@ namespace Kinect_Wrapper.devicemanager
                             Monitor.Wait(_lockerWorkerState);// thread is waiting until new data from kinect   
                 }
             };
-            _workerState.RunWorkerAsync();
-
+            workerState.RunWorkerAsync();
         }
 
 

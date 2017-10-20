@@ -47,17 +47,22 @@ namespace Kinect_Wrapper.camera
         public event EventHandler<string> RecordComplete;
 
         #region singleton 
-        private volatile static IKinectCamera _instance;
-        static readonly object _locker = new object();
+        private volatile static IKinectCamera instance;
+        static readonly object syncRoot = new object();
         public static IKinectCamera Instance
         {
             get
             {
-                if (_instance == null)
+                if (instance == null)
                 {
-                    _instance = new KinectCamera();
+                    lock (syncRoot)
+                    {
+                        if (instance == null)
+                            instance = new KinectCamera();
+                    }
+
                 }
-                return _instance;
+                return instance;
             }
         }
         private KinectCamera()
@@ -74,6 +79,8 @@ namespace Kinect_Wrapper.camera
         }
         #endregion
 
+
+        public event EventHandler onDeviceChanged;
         #region play sensor or replay
         public Command Play
         {
@@ -83,9 +90,10 @@ namespace Kinect_Wrapper.camera
                 {
                     if (DeviceSelecteToPlay == null) return;
                     CurrentDevice = DeviceSelecteToPlay;
+                    onDeviceChanged?.Invoke(this, EventArgs.Empty);
                     CurrentDevice.start(() =>
                     {
-                        audio.init(CurrentDevice);
+                        //audio.init(CurrentDevice);
                         switch (CurrentDevice.Type)
                         {
                             case structures.DeviceType.NO_DEVICE:
@@ -105,7 +113,7 @@ namespace Kinect_Wrapper.camera
                                 //var colorToDepthRelationalParameters = reader.ReadBytes(paramsArrayLength);
                                 //CoordinateMapper = new CoordinateMapper(colorToDepthRelationalParameters);
                                 AddFrames(reader);
-                                audio.replay(ReplayFilePath);
+                                //audio.replay(ReplayFilePath);
                                 break;
                         }
                         State = CameraState.PLAYING;
@@ -140,8 +148,6 @@ namespace Kinect_Wrapper.camera
                 OnPropertyChanged("IsPaused");
                 OnPropertyChanged("IsRecordingPossible");
                 OnPropertyChanged("IsPaused");
-                OnPropertyChanged("IsStreaming");
-
             }
         }
         #endregion
@@ -370,20 +376,24 @@ namespace Kinect_Wrapper.camera
         #region is streaming
         //public bool IsStreaming { get; private set; }
         private bool _IsStreaming;
-        private bool _IsStreamingLabelUpdate;
+        private bool updateProperty1;
         public bool IsStreaming
         {
             get { return _IsStreaming; }
             set
             {
-                _IsStreamingLabelUpdate = (value != _IsStreaming);
+                updateProperty1 = (value != _IsStreaming);
                 _IsStreaming = value;
             }
         }
 
-        private void _updateLabeIsStreaming()
+        private void updateStreamingProperty()
         {
-            if (_IsStreamingLabelUpdate) OnPropertyChanged("IsStreaming");
+            if (updateProperty1)
+            {
+                updateProperty1 = false;
+                OnPropertyChanged("IsStreaming");
+            }
         }
         #endregion
 

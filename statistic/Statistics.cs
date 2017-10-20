@@ -12,7 +12,8 @@ namespace Kinect_Wrapper.statistic
     {
         int _perSecond = 0;
         int _frameRate = 0;
-        public void commit() {
+        public void commit()
+        {
             Interlocked.Increment(ref _perSecond);
         }
         public int getFrameRate() { return _frameRate; }
@@ -36,7 +37,7 @@ namespace Kinect_Wrapper.statistic
             _worker.DoWork += _worker_DoWork;
             _worker.RunWorkerAsync();
         }
-        
+
         void _worker_DoWork(object sender, DoWorkEventArgs e)
         {
             while (true)
@@ -51,7 +52,8 @@ namespace Kinect_Wrapper.statistic
             }
         }
 
-        public int NormalFramesPerSecond {
+        public int NormalFramesPerSecond
+        {
             get
             {
                 return _frames[StatFrameType.NORMAL].getFrameRate();

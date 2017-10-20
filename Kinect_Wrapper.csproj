@@ -130,7 +130,6 @@
     <Compile Include="Statistic\IStatistics.cs" />
     <Compile Include="Statistic\Statistics.cs" />
     <Compile Include="structures\InfoRow.cs" />
-    <Compile Include="structures\RecordMode.cs" />
     <Compile Include="KinectWrapper\IKinectWrapper.cs" />
     <Compile Include="KinectWrapper\KinectWrapper .cs" />
     <Compile Include="KinectWrapper\KinectWrapperStatistics.cs" />

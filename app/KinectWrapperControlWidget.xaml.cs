@@ -42,7 +42,7 @@ namespace Kinect_Wrapper.app
                 manager = Kinect.Manager
             };
         }
-        
+
 
 
 

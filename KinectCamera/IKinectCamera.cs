@@ -58,6 +58,7 @@ namespace Kinect_Wrapper.camera
         // EVENTS
         event EventHandler onReplayEnd;
         event EventHandler onNoDeviceNeeded;
+        event EventHandler onDeviceChanged;
         event EventHandler<String> RecordComplete;
         event EventHandler<IKinectFrame> FrameReady;
 

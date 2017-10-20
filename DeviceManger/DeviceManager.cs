@@ -54,8 +54,9 @@ namespace Kinect_Wrapper.devicemanager
             loadSensorsFromSystem();
             loadReplayFilesInWorkspace();
             loadReplayFilesFromConfigFile();
-            //autopickupDeveic();
             #endregion
+
+            //autopickupDeveic();
 
             #region add / remove sensor when plugin in / out
             KinectSensor.KinectSensors.StatusChanged += (e, v) =>
@@ -108,6 +109,20 @@ namespace Kinect_Wrapper.devicemanager
             #endregion
 
             Camera.Play.DoExecute();
+
+            Camera.onDeviceChanged += (e, v) =>
+            {
+                lock (_lockerWorkerState)
+                {
+                    Monitor.PulseAll(_lockerWorkerState);
+                }
+                lock (_lockerWorkerUpdate)
+                {
+                    Monitor.PulseAll(_lockerWorkerUpdate);
+                }
+                DeviceChanged?.Invoke(this, EventArgs.Empty);
+            };
+
             initWorkers();
         }
         #endregion
@@ -161,20 +176,15 @@ namespace Kinect_Wrapper.devicemanager
             set
             {
                 Camera.DeviceSelecteToPlay = value;
-                lock (_lockerWorkerState)
-                {
-                    Monitor.Pulse(_lockerWorkerState);
-                }
                 App.Current.Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    DeviceChanged?.Invoke(this, EventArgs.Empty);
                     OnPropertyChanged("IsStopped");
                     OnPropertyChanged("IsSelectedDevice");
                 }));
             }
         }
         #endregion
-        
+
         #region is stopped
         public bool IsStopped
         {
@@ -210,7 +220,7 @@ namespace Kinect_Wrapper.devicemanager
             }
         }
 
-       
+
 
         private static Boolean AutoPickUpFirstKinect = true;
         private static Boolean AutoPickUpFirstKinectIsSet = false;

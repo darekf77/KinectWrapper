@@ -36,19 +36,19 @@ namespace Kinect_Wrapper.camera
             if (CurrentDevice == null) return;
             switch (CurrentDevice.Type)
             {
-                case structures.DeviceType.NO_DEVICE:
+                case DeviceType.NO_DEVICE:
                     updateNoDevice();
                     break;
-                case structures.DeviceType.KINECT_1:
+                case DeviceType.KINECT_1:
                     updateKinect();
                     break;
-                case structures.DeviceType.RECORD_FILE_KINECT_1:
+                case DeviceType.RECORD_FILE_KINECT_1:
                     updateReplay();
                     break;
                 default:
                     break;
             }
-            _updateLabeIsStreaming();
+            updateStreamingProperty();
         }
         #endregion
 
@@ -86,8 +86,8 @@ namespace Kinect_Wrapper.camera
                 framesCopy.Add(lastFrame);
             }
             #endregion
-
-            Thread.Sleep(TimeSpan.FromMilliseconds(lastFrame.TimeStamp));
+            var howlongSleep = TimeSpan.FromMilliseconds(lastFrame.TimeStamp);
+            Thread.Sleep(howlongSleep);
 
             if (lastFrame.isCorrect)
             {
@@ -155,7 +155,7 @@ namespace Kinect_Wrapper.camera
             frame.synchronize(CurrentDevice.Name, toogleVisibleMessage, IsPaused);
             toogleVisibleMessage = !toogleVisibleMessage;
             propageteFrame();
-            Thread.Sleep(1000);
+            Thread.Sleep(100);
         }
         #endregion
 
