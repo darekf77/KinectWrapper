@@ -272,27 +272,6 @@ namespace Kinect_Wrapper.camera
         #endregion
 
         #region pause
-        public void pause()
-        {
-            switch (State)
-            {
-                case CameraState.PLAYING:
-                    State = CameraState.PLAYING_PAUSE;
-                    break;
-                case CameraState.PLAYING_PAUSE:
-                    State = CameraState.PLAYING;
-                    break;
-                case CameraState.RECORDING:
-                    State = CameraState.RECORDING_PAUSE;
-                    break;
-                case CameraState.RECORDING_PAUSE:
-                    State = CameraState.RECORDING;
-                    break;
-                default:
-                    break;
-            }
-            OnPropertyChanged("IsPaused");
-        }
 
         public bool IsPaused
         {
@@ -308,35 +287,60 @@ namespace Kinect_Wrapper.camera
             {
                 return new Command(() =>
                 {
-                    pause();
+                    switch (State)
+                    {
+                        case CameraState.PLAYING:
+                            State = CameraState.PLAYING_PAUSE;
+                            break;
+                        case CameraState.PLAYING_PAUSE:
+                            State = CameraState.PLAYING;
+                            break;
+                        case CameraState.RECORDING:
+                            State = CameraState.RECORDING_PAUSE;
+                            break;
+                        case CameraState.RECORDING_PAUSE:
+                            State = CameraState.RECORDING;
+                            break;
+                        default:
+                            break;
+                    }
+                    OnPropertyChanged("IsPaused");
                 });
             }
         }
         #endregion
 
         #region next frame
-        private bool onlyNextFrame { get; set; }
+        private bool pauseOnNextFrame { get; set; }
         public Command NextFrame
         {
             get
             {
                 return new Command(() =>
                 {
-                    onlyNextFrame = true;
+                    pauseOnNextFrame = true;
                 });
             }
         }
         #endregion
 
         #region pause play
-        private bool pausePlay { get; set; }
         public Command PausePlay
         {
             get
             {
                 return new Command(() =>
                 {
-                    pausePlay = true;
+                    switch (State)
+                    {
+                        case CameraState.PLAYING_PAUSE:
+                            State = CameraState.PLAYING;
+                            break;
+                        case CameraState.RECORDING_PAUSE:
+                            State = CameraState.RECORDING;
+                            break;
+                    }
+                    OnPropertyChanged("IsPaused");
                 });
             }
         }
@@ -374,27 +378,20 @@ namespace Kinect_Wrapper.camera
         #endregion
 
         #region is streaming
-        //public bool IsStreaming { get; private set; }
-        private bool _IsStreaming;
-        private bool updateProperty1;
+        private bool __IsStreaming;
+
         public bool IsStreaming
         {
-            get { return _IsStreaming; }
+            get { return __IsStreaming; }
             set
             {
-                updateProperty1 = (value != _IsStreaming);
-                _IsStreaming = value;
+                __IsStreaming = value;
+                if (value != IsStreamingPrev) OnPropertyChanged("IsStreaming");
+                IsStreamingPrev = value;
             }
         }
 
-        private void updateStreamingProperty()
-        {
-            if (updateProperty1)
-            {
-                updateProperty1 = false;
-                OnPropertyChanged("IsStreaming");
-            }
-        }
+        private bool IsStreamingPrev { get; set; }
         #endregion
 
         #region selected device

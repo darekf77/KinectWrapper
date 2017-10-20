@@ -32,7 +32,8 @@ namespace Kinect_Wrapper.device
         {
             sensor = sensor_xbox360;
             Type = DeviceType.KINECT_1;
-            Name = "K360-" + sensor.UniqueKinectId;
+            Name = KinectSensor.KinectSensors.IndexOf(sensor_xbox360) + "-kinect-xb360";
+            stop();
         }
         #endregion
 
@@ -53,6 +54,14 @@ namespace Kinect_Wrapper.device
         }
         #endregion
         #endregion
+
+        public bool IsReadyToPlay
+        {
+            get
+            {
+                return (State == DeviceState.READY);
+            }
+        }
 
         #region Path
         private String _filePath;
@@ -138,10 +147,10 @@ namespace Kinect_Wrapper.device
             if (sensor.IsRunning)
             {
                 stop();
-                Helpers.SetTimeout(() =>
-                {
-                    startKinect(action);
-                }, 1000);
+                //Helpers.SetTimeout(() =>
+                //{
+                //    startKinect(action);
+                //}, 1000);
             }
             try
             {
@@ -162,7 +171,10 @@ namespace Kinect_Wrapper.device
         bool stopNextTime = false;
         public void stop()
         {
-            if (sensor != null) sensor.Stop();
+            if (sensor != null)
+            {
+                sensor.Stop();
+            }
             stopNextTime = true;
         }
         #endregion

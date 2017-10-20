@@ -46,11 +46,11 @@
 
 
         <Button Content="RUN"  Command="{Binding camera.Play}"  Name="ButtonPlayAndPause"     
-                    IsEnabled="{Binding manager.IsSelectedDevice, Mode=OneWay}"
+                    IsEnabled="{Binding manager.IsSelectedDeviceReadyToPlay, Mode=OneWay}"
                     Visibility="{c:Binding !camera.IsStreaming, Mode=OneWay}"
                     Grid.Row="1" Grid.Column="1"  Margin="2"/>
         
-        <Button Content="PAUSE"  Name="ButtonPause" Command="{Binding camera.NextFrame}"
+        <Button Content="PAUSE"  Name="ButtonPause" Command="{Binding camera.Pause}"
                     IsEnabled="{c:Binding !camera.IsRecording, Mode=OneWay}"
                     Visibility="{c:Binding 'camera.IsStreaming and !camera.IsPaused', Mode=OneWay}"
                     Grid.Row="1" Grid.Column="1"  Margin="2" />

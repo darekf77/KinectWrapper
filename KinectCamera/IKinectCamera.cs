@@ -6,6 +6,7 @@ using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace Kinect_Wrapper.camera
 
 
 
-    public interface IKinectCamera
+    public interface IKinectCamera : INotifyPropertyChanged
     {
         CameraState State { get; set; }
         IAudioRecorderReplayer Audio { get; }

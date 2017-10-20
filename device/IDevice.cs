@@ -15,6 +15,7 @@ namespace Kinect_Wrapper.device
 
         void stop();
 
+
         void update(CameraState CameraState, bool isActive);
 
         KinectSensor sensor { get; }

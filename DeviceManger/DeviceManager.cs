@@ -65,7 +65,7 @@ namespace Kinect_Wrapper.devicemanager
                 var sensors = KinectSensor.KinectSensors;
                 foreach (var sensor in sensors)
                 {
-                    var dev = Devices.First(s => { return (s != null & s.sensor != null & s.sensor.UniqueKinectId == sensor.UniqueKinectId); });
+                    var dev = Devices.FirstOrDefault(s => { return (s != null && s.sensor != null && s.sensor.UniqueKinectId == sensor.UniqueKinectId); });
                     if (dev == null) Devices.Add(new Device(sensor));
                 }
                 #endregion
@@ -76,7 +76,7 @@ namespace Kinect_Wrapper.devicemanager
                 {
                     if (device != null && device.sensor != null)
                     {
-                        var sensor = sensors.First(s => { return (s != null && s.UniqueKinectId == device.sensor.UniqueKinectId); });
+                        var sensor = sensors.FirstOrDefault(s => { return (s != null && s.UniqueKinectId == device.sensor.UniqueKinectId); });
                         if (sensor == null) toRemove.Add(device);
                     }
                 }
@@ -169,6 +169,14 @@ namespace Kinect_Wrapper.devicemanager
         }
         #endregion
 
+        public bool IsSelectedDeviceReadyToPlay
+        {
+            get
+            {
+                return (SelectedDevice?.State == DeviceState.READY);
+            }
+        }
+
         #region selcted device
         public IDevice SelectedDevice
         {
@@ -176,11 +184,9 @@ namespace Kinect_Wrapper.devicemanager
             set
             {
                 Camera.DeviceSelecteToPlay = value;
-                App.Current.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    OnPropertyChanged("IsStopped");
-                    OnPropertyChanged("IsSelectedDevice");
-                }));
+                OnPropertyChanged("IsStopped");
+                OnPropertyChanged("IsSelectedDevice");
+                OnPropertyChanged("IsSelectedDeviceReadyToPlay");
             }
         }
         #endregion

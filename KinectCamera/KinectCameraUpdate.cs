@@ -22,33 +22,49 @@ namespace Kinect_Wrapper.camera
     public partial class KinectCamera
     {
         #region propagate frame
+        private bool isFramePropagated = false;
         private void propageteFrame()
         {
+            isFramePropagated = true;
             FrameReady?.Invoke(this, frame);
             IsStreaming = (CurrentDevice.Type != DeviceType.NO_DEVICE);
+            #region preview next frame only
+            if (pauseOnNextFrame)
+            {
+                if (IsPaused)
+                {
+                    PausePlay.DoExecute();
+                }
+                else
+                {
+                    pauseOnNextFrame = false;
+                    Pause.DoExecute();
+                }
+            }
+            #endregion
         }
         #endregion
 
         #region worker update
         public void update()
         {
-            IsStreaming = false;
+            isFramePropagated = false;
             if (CurrentDevice == null) return;
             switch (CurrentDevice.Type)
             {
-                case DeviceType.NO_DEVICE:
+                case structures.DeviceType.NO_DEVICE:
                     updateNoDevice();
                     break;
-                case DeviceType.KINECT_1:
+                case structures.DeviceType.KINECT_1:
                     updateKinect();
                     break;
-                case DeviceType.RECORD_FILE_KINECT_1:
+                case structures.DeviceType.RECORD_FILE_KINECT_1:
                     updateReplay();
                     break;
                 default:
                     break;
             }
-            updateStreamingProperty();
+            if (!isFramePropagated) IsStreaming = false;
         }
         #endregion
 
@@ -155,7 +171,7 @@ namespace Kinect_Wrapper.camera
             frame.synchronize(CurrentDevice.Name, toogleVisibleMessage, IsPaused);
             toogleVisibleMessage = !toogleVisibleMessage;
             propageteFrame();
-            Thread.Sleep(100);
+            Thread.Sleep(1000);
         }
         #endregion
 
