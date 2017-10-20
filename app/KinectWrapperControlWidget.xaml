@@ -71,7 +71,7 @@
                     Grid.Row="2" Grid.Column="0"  Margin="2" FontSize="9" FontWeight="Bold"  />
 
         <Button Content="NEXT FRAME" Command="{Binding camera.NextFrame}"  Name="ButtonNextFrame"
-                    IsEnabled="{c:Binding 'camera.IsStreaming and !camera.IsRecording', Mode=OneWay}" 
+                    IsEnabled="{c:Binding 'camera.IsStreaming and !camera.IsRecordingPossible', Mode=OneWay}" 
                     Grid.Row="2" Grid.Column="1"  Margin="2" FontSize="9" />
 
         <Label Content="Audio" Grid.Row="3" Grid.ColumnSpan="2" FontSize="8" Padding="0" />

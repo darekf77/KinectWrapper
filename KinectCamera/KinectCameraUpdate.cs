@@ -54,6 +54,7 @@ namespace Kinect_Wrapper.camera
                 #region stop device if is no ready
                 if (CurrentDevice.State == DeviceState.NOT_READY)
                 {
+                    updateRecordData();
                     CurrentDevice.stop();
                     State = CameraState.UNACTIVE;
                 }
@@ -199,17 +200,22 @@ namespace Kinect_Wrapper.camera
         private SkeletonRecorder skeletonRecorder;
         private ColorRecorder colorRecorder;
         private DepthRecorder depthRecorder;
-        public void updateRecordData()
+        public void updateRecordData(bool unexpectedStop = false)
         {
-            if (State == CameraState.RECORDING_STOPPING)
+            if (State == CameraState.RECORDING_STOPPING || unexpectedStop)
             {
                 writer.Close();
                 stream.Close();
                 writer.Dispose();
                 stream.Dispose();
+                RecordComplete?.Invoke(this, this.RecordFilePath);
             }
             if (State == CameraState.RECORDING_CANCEL)
             {
+                writer.Close();
+                stream.Close();
+                writer.Dispose();
+                stream.Dispose();
                 System.GC.Collect();
                 System.GC.WaitForPendingFinalizers();
                 File.Delete(RecordFilePath);

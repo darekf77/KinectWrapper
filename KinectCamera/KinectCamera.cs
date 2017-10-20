@@ -23,7 +23,6 @@ namespace Kinect_Wrapper.camera
 {
     public partial class KinectCamera : IKinectCamera
     {
-        KinectSensor sensor { get; set; }
         BinaryWriter writer { get; set; }
         BinaryReader reader { get; set; }
         Stream stream { get; set; }
@@ -102,7 +101,6 @@ namespace Kinect_Wrapper.camera
                                 frame = CurrentDevice.nodeviceframe;
                                 break;
                             case structures.DeviceType.KINECT_1:
-                                this.sensor = CurrentDevice.sensor;
                                 frame = new KinectFrame(this);
                                 break;
                             case structures.DeviceType.RECORD_FILE_KINECT_1:
@@ -147,7 +145,7 @@ namespace Kinect_Wrapper.camera
                 {
                     onNoDeviceNeeded?.Invoke(this, EventArgs.Empty);
                 }
-                OnPropertyChanged("IsPaused");
+                OnPropertyChanged("IsRecording");
                 OnPropertyChanged("IsRecordingPossible");
                 OnPropertyChanged("IsPaused");
             }
@@ -189,7 +187,9 @@ namespace Kinect_Wrapper.camera
         {
             get
             {
-                return (sensor != null && sensor.IsRunning && sensor.Status == KinectStatus.Connected);
+                return (CurrentDevice != null && CurrentDevice.sensor != null &&
+                    CurrentDevice.sensor.IsRunning &&
+                    CurrentDevice.sensor.Status == KinectStatus.Connected);
             }
 
         }
@@ -218,18 +218,18 @@ namespace Kinect_Wrapper.camera
                         #endregion
 
                         var toFile = saveFileDialog.FileName;
-                        if (Path.GetExtension(toFile).Trim() != "replay") return;
+                        if (Path.GetExtension(toFile).Trim() != ".replay") return;
                         if (File.Exists(toFile)) File.Delete(toFile);
 
                         RecordFilePath = toFile;
-                        if (IsRecordingPossible) return;
+                        if (!IsRecordingPossible) return;
                         stream = File.Create(toFile);
                         writer = new BinaryWriter(stream);
                         writer.Write((int)Options); // TODO delete this write version
-                        colorRecorder = new ColorRecorder(writer, sensor);
-                        depthRecorder = new DepthRecorder(writer, sensor);
-                        skeletonRecorder = new SkeletonRecorder(writer, sensor);
-                        audio.record(toFile);
+                        colorRecorder = new ColorRecorder(writer, CurrentDevice.sensor);
+                        depthRecorder = new DepthRecorder(writer, CurrentDevice.sensor);
+                        skeletonRecorder = new SkeletonRecorder(writer, CurrentDevice.sensor);
+                        //audio.record(toFile);
                         previousFlushDate = DateTime.Now;
                         State = CameraState.RECORDING;
                         OnPropertyChanged("IsRecording");
@@ -241,7 +241,7 @@ namespace Kinect_Wrapper.camera
         {
             get
             {
-                return (State == CameraState.RECORDING);
+                return (CameraState.RECORDING.EnumGroupRange().isInside((int)State));
             }
         }
         #endregion
@@ -320,7 +320,8 @@ namespace Kinect_Wrapper.camera
             {
                 return new Command(() =>
                 {
-                    pauseOnNextFrame = true;
+                    if (!IsPaused) Pause.DoExecute();
+                    else pauseOnNextFrame = true;
                 });
             }
         }

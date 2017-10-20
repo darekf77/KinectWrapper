@@ -183,6 +183,7 @@ namespace Kinect_Wrapper.devicemanager
             get { return Camera.DeviceSelecteToPlay; }
             set
             {
+                if (value == null) return;
                 Camera.DeviceSelecteToPlay = value;
                 OnPropertyChanged("IsStopped");
                 OnPropertyChanged("IsSelectedDevice");
