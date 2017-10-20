@@ -26,7 +26,7 @@ namespace Kinect_Wrapper.camera
         string Path { get; }
         string Name { get; }
         bool isRecordingPossible { get; set; }
-
+        IAudioPlayer Player { get; }
         KinectAudioSource KinectAudio { get; set; }
     }
 }

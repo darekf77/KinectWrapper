@@ -3,6 +3,7 @@ using Kinect_Wrapper.device.stream;
 using Kinect_Wrapper.statistic;
 using Kinect_Wrapper.structures;
 using Kinect_Wrapper.wrapper;
+using Microsoft.Kinect;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -40,6 +41,14 @@ namespace Kinect_Wrapper.app
                 camera = Kinect.Camera,
                 audio = Kinect.Camera.Audio,
                 manager = Kinect.Manager
+            };
+
+            this.ContextMenuClosing += (e, v) =>
+            {
+                foreach (var sensor in KinectSensor.KinectSensors)
+                {
+                    sensor.Stop();
+                }
             };
         }
 

@@ -29,6 +29,7 @@ namespace Kinect_Wrapper.devicemanager
         }
         #endregion
 
+        public IDevice Device { get { return Camera.CurrentDevice; } }
         private IDevice DefaultDevice { get; set; }
         public ObservableCollection<IDevice> Devices { get; private set; }
         public IKinectCamera Camera { get; set; }

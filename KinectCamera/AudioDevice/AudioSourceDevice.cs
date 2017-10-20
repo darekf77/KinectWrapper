@@ -14,15 +14,15 @@ namespace Kinect_Wrapper.camera
 
     public class AudioSourceDevice : IAudioSourceDevice
     {
-        IAudioPlayer player;
+        public IAudioPlayer Player { get; private set; }
         public AudioSourceDevice(WaveInCapabilities c, KinectSensor sensor, IAudioPlayer player, int Id)
         {
-            this.player = player;
+            this.Player = player;
             this.Id = Id;
             this.Name = c.ProductName;
             //sensor.AudioSource            
             isRecordingPossible = true;
-            if (Name.StartsWith("Kinect"))
+            if (isKinectMicrophone(Name))
             {
                 KinectAudio = sensor.AudioSource;
                 Type = AudioSourceType.Kinect;
@@ -32,6 +32,11 @@ namespace Kinect_Wrapper.camera
                 Type = AudioSourceType.OtherDevice;
             }
 
+        }
+
+        public static bool isKinectMicrophone(string Name)
+        {
+            return (Name.Contains("Microphone") && Name.Contains("Kinect"));
         }
 
         public AudioSourceDevice(string path, int Id)
@@ -46,7 +51,7 @@ namespace Kinect_Wrapper.camera
         {
             get
             {
-                return (player != null) ? player.Stream : null;
+                return (Player != null) ? Player.Stream : null;
             }
         }
 

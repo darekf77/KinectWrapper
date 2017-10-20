@@ -14,7 +14,6 @@ namespace Kinect_Wrapper.camera
         void init(IAudioSourceDevice source);
 
         event EventHandler<IAudioMessage> UserSaying;
-
         ObservableCollection<String> Grammar { get; set; }
     }
 }

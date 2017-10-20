@@ -253,6 +253,7 @@ namespace Kinect_Wrapper.camera
             {
                 return new Command(() =>
                 {
+                    audio.stop();
                     switch (State)
                     {
                         case CameraState.PLAYING:

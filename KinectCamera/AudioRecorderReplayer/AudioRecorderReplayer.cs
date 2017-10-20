@@ -35,14 +35,29 @@ namespace Kinect_Wrapper.camera
         public AudioRecorderReplayer()
         {
             Devices = new ObservableCollection<IAudioSourceDevice>();
+            reinit();
+        }
+        #endregion
+
+        #region reinit
+        private void reinit()
+        {
             Recognizer = new AudioRecognition();
+            if (recorder != null)
+            {
+                recorder.Stop();
+                recorder.SampleAggregator.MaximumCalculated -= SampleAggregator_MaximumCalculated;
+            }
             recorder = new AudioRecorder();
+            player = new AudioPlayer();
         }
         #endregion
 
         #region ini camera from device
+        IDevice _device;
         public void init(IDevice device)
         {
+            _device = device;
             App.Current.Dispatcher.BeginInvoke(new Action(() =>
             {
                 if (device == null) return;
@@ -50,11 +65,18 @@ namespace Kinect_Wrapper.camera
                 int i = 0;
                 for (i = 0; i < WaveIn.DeviceCount; i++)
                 {
+
                     var product = WaveIn.GetCapabilities(i);
+                    if (AudioSourceDevice.isKinectMicrophone(product.ProductName) && device.Type != structures.DeviceType.KINECT_1) continue;
                     var dev = new AudioSourceDevice(product, device.sensor, player, i);
                     Devices.Add(dev);
                 }
-                if (File.Exists(device.Path))
+                if (device.Type == structures.DeviceType.KINECT_1)
+                {
+                    var kinectAudioDevice = Devices.FirstOrDefault(c => c.Type == AudioSourceType.Kinect);
+                    SelectedDevice = kinectAudioDevice;
+                }
+                else if (device.Type == structures.DeviceType.RECORD_FILE_KINECT_1 && File.Exists(device.Path))
                 {
                     var replayDevice = new AudioSourceDevice(device.Path, i);
                     SelectedDevice = replayDevice;
@@ -83,9 +105,11 @@ namespace Kinect_Wrapper.camera
         public bool IsPreparingAudio
         {
             get { return _IsPreparingAudio; }
-            set { _IsPreparingAudio = value; OnPropertyChanged(); }
+            set
+            {
+                _IsPreparingAudio = value; OnPropertyChanged();
+            }
         }
-
         #endregion
 
         #region selected device
@@ -96,41 +120,34 @@ namespace Kinect_Wrapper.camera
             get { return _selectedDevice; }
             set
             {
+
                 _selectedDevice = value;
                 IsRecordingPossible = (value != null && value.isRecordingPossible);
                 OnPropertyChanged();
-                IsPreparingAudio = true;
-                Recognizer.init(value);
-                IsPreparingAudio = false;
-                if (recorder.RecordingState == RecordingState.Stopped)
-                {
-                    recorder.BeginMonitoring(SelectedDevice.Id);
-                    enableMicrophoeVisualization();
-                }
-                else
-                {
-                    recorder.Stop();
-                    recorder.Stopped += (e, v) =>
-                    {
-                        enableMicrophoeVisualization();
-                    };
-                }
+                if (value == null) return;
 
+                #region prepare audio
+                IsPreparingAudio = true;
+                reinit();
+                Recognizer.init(value);
+                recorder.BeginMonitoring(SelectedDevice.Id);
+                recorder.SampleAggregator.MaximumCalculated += SampleAggregator_MaximumCalculated;
+                IsPreparingAudio = false;
+                #endregion
             }
         }
+
+        private void SampleAggregator_MaximumCalculated(object sender, MaxSampleEventArgs v)
+        {
+            lastPeak = Math.Max(v.MaxSample, Math.Abs(v.MinSample));
+            OnPropertyChanged("CurrentInputLevel");
+            OnPropertyChanged("RecordedTime");
+        }
+
+        EventHandler samlehandler;
         #endregion
 
         #region microphone visualization
-        void enableMicrophoeVisualization()
-        {
-            recorder.SampleAggregator.MaximumCalculated += (e, v) =>
-            {
-                lastPeak = Math.Max(v.MaxSample, Math.Abs(v.MinSample));
-                OnPropertyChanged("CurrentInputLevel");
-                OnPropertyChanged("RecordedTime");
-            };
-        }
-
         private float lastPeak;
         public float CurrentInputLevel { get { return lastPeak * 100; } }
         #endregion
@@ -173,7 +190,6 @@ namespace Kinect_Wrapper.camera
             {
                 player.Stop();
             }
-
         }
         #endregion
 

@@ -39,17 +39,17 @@ namespace Kinect_Wrapper.camera
         }
         #endregion
 
-        #region handle thread stream + recognizer
+        #region init thread stream + recognizer
         Task AudioThread;
-
+        #region cancelation token
         private CancellationToken getToken()
         {
             tokenSource = new CancellationTokenSource();
             return tokenSource.Token;
         }
-
         CancellationTokenSource tokenSource;
         CancellationToken cancelationTaskToken;
+        #endregion
         public void init(IAudioSourceDevice source)
         {
             destroy();
@@ -73,24 +73,32 @@ namespace Kinect_Wrapper.camera
                             SpeechRecognizer.SetInputToAudioStream(
                                 kinectStream, new SpeechAudioFormatInfo(EncodingFormat.Pcm, 16000, 16, 1, 32000, 2, null));
                             #endregion
+                            SpeechRecognizer.RecognizeAsync(RecognizeMode.Multiple);
                             break;
                         case AudioSourceType.File:
                             #region speach recognizer + wav file
-                            //SpeechRecognizer.SetInputToAudioStream(
-                            //  File.OpenRead(source.Path),
-                            //  new SpeechAudioFormatInfo(
-                            //    44100, AudioBitsPerSample.Sixteen, AudioChannel.Mono));
+                            SpeechRecognizer.SetInputToAudioStream(
+                              File.OpenRead(source.Path),
+                              new SpeechAudioFormatInfo(
+                                44100, AudioBitsPerSample.Sixteen, AudioChannel.Mono));
+                            SpeechRecognizer.RecognizeAsync(RecognizeMode.Multiple);
                             #endregion
                             break;
                         case AudioSourceType.OtherDevice:
                             #region speach recognition + other audio devices
-                            //SpeechRecognizer.SetInputToWaveStream(source.Stream);
+
+                            // TODO how to get live device stream
+
+                            //source.Player.onStreamReady += (e, v) =>
+                            //{
+                            //    SpeechRecognizer.SetInputToWaveStream(source.Stream);
+                            //    SpeechRecognizer.RecognizeAsync(RecognizeMode.Multiple);
+                            //};
                             break;
                         #endregion
                         default:
                             break;
                     }
-                    SpeechRecognizer.RecognizeAsync(RecognizeMode.Multiple);
                 }
                 catch (Exception ex)
                 {
@@ -132,23 +140,23 @@ namespace Kinect_Wrapper.camera
         }
         #endregion
 
-        #region microsoft speach recognizer 
+        #region get microsoft speach recognizer from stystem
         private RecognizerInfo recognizerInfo = GetRecognizer();
         private static RecognizerInfo GetRecognizer()
         {
             #region speech recognizer info
-            Console.WriteLine("BEFORE");
-            foreach (RecognizerInfo ri in SpeechRecognitionEngine.InstalledRecognizers())
-            {
-                Console.WriteLine(String.Format("Id={0}, Name={1}, Description={2}, Culture={3}", ri.Id, ri.Name, ri.Description, ri.Culture));
-                foreach (string key in ri.AdditionalInfo.Keys)
-                {
-                    Console.WriteLine(string.Format("{0} = {1}", key, ri.AdditionalInfo[key]));
-                }
-                Console.WriteLine("-");
-            }
+            //Console.WriteLine("BEFORE");
+            //foreach (RecognizerInfo ri in SpeechRecognitionEngine.InstalledRecognizers())
+            //{
+            //    Console.WriteLine(String.Format("Id={0}, Name={1}, Description={2}, Culture={3}", ri.Id, ri.Name, ri.Description, ri.Culture));
+            //    foreach (string key in ri.AdditionalInfo.Keys)
+            //    {
+            //        Console.WriteLine(string.Format("{0} = {1}", key, ri.AdditionalInfo[key]));
+            //    }
+            //    Console.WriteLine("-");
+            //}
 
-            Console.WriteLine("AFTER");
+            //Console.WriteLine("AFTER");
             #endregion
             foreach (RecognizerInfo recognizer in SpeechRecognitionEngine.InstalledRecognizers())
             {
@@ -158,7 +166,7 @@ namespace Kinect_Wrapper.camera
                 if ("en-US".Equals(recognizer.Culture.Name, StringComparison.OrdinalIgnoreCase))
                 {
                     Console.WriteLine("Recodnizer description" + recognizer.Description);
-                    Console.WriteLine("Recodnizer id" + recognizer.Id);
+                    //Console.WriteLine("Recodnizer id" + recognizer.Id);
                     return recognizer;
                 }
             }
@@ -188,10 +196,7 @@ namespace Kinect_Wrapper.camera
         private void SreSpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
             if (!IsEnable) return;
-            if (UserSaying != null)
-            {
-                UserSaying(this, new AudioMessage(e.Result.Text, e.Result.Confidence));
-            }
+            UserSaying?.Invoke(this, new AudioMessage(e.Result.Text, e.Result.Confidence));
         }
 
         // REJECTED SPEACH

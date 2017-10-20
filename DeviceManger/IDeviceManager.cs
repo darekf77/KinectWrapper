@@ -15,6 +15,8 @@ namespace Kinect_Wrapper.devicemanager
     public interface IDeviceManager : INotifyPropertyChanged
     {
         IKinectCamera Camera { get; }
+        IDevice Device { get; }
+
         ObservableCollection<IDevice> Devices { get; }
 
         IDevice SelectedDevice { get; set; }

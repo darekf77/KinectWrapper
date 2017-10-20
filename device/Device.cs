@@ -173,6 +173,7 @@ namespace Kinect_Wrapper.device
                 sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
                 sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
                 sensor.SkeletonStream.Enable();
+                sensor.AudioSource.Start();
                 waitingForKinect(action);
             }
             catch (Exception e)
@@ -188,6 +189,10 @@ namespace Kinect_Wrapper.device
             if (sensor != null)
             {
                 sensor.Stop();
+                if (sensor.AudioSource != null)
+                {
+                    sensor.AudioSource.Stop();
+                }
             }
         }
         #endregion

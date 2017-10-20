@@ -16,6 +16,7 @@ namespace Kinect_Wrapper.camera
         void replay(string replayFile);
         void stop();
         void pause();
+        //void refreshAudioDevices();
         float CurrentInputLevel { get; }
         bool IsRecordingPossible { get; }
         bool IsPreparingAudio { get; }
