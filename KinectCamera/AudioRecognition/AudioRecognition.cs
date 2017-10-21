@@ -17,6 +17,9 @@ namespace Kinect_Wrapper.camera
 {
     public class AudioRecognition : IAudioRecognition
     {
+        private SpeechRecognitionEngine SpeechRecognizer { get; set; }
+        public event EventHandler<IAudioMessage> UserSaying;
+
         #region propety changed
         public event PropertyChangedEventHandler PropertyChanged;
         virtual protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -24,24 +27,6 @@ namespace Kinect_Wrapper.camera
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
-
-        #region grammar list with detection 
-        public ObservableCollection<GrammarTest> ListGrammar { get; private set; }
-        void rebuildGrammarList()
-        {
-            ListGrammar.Clear();
-            foreach (var g in Grammar)
-            {
-                var lg = new GrammarTest();
-                lg.Name = g;
-                lg.WasJustSayed = "no";
-                ListGrammar.Add(lg);
-            }
-        }
-        #endregion
-
-        private SpeechRecognitionEngine SpeechRecognizer { get; set; }
-        public event EventHandler<IAudioMessage> UserSaying;
 
         #region constructor
         public AudioRecognition()
@@ -128,11 +113,11 @@ namespace Kinect_Wrapper.camera
                             break;
                         case AudioSourceType.File:
                             #region speach recognizer + wav file
-                            SpeechRecognizer.SetInputToAudioStream(
-                              File.OpenRead(source.Path),
-                              new SpeechAudioFormatInfo(
-                                44100, AudioBitsPerSample.Sixteen, AudioChannel.Mono));
-                            SpeechRecognizer.RecognizeAsync(RecognizeMode.Multiple);
+                            //SpeechRecognizer.SetInputToAudioStream(
+                            //  File.OpenRead(source.Path),
+                            //  new SpeechAudioFormatInfo(
+                            //    44100, AudioBitsPerSample.Sixteen, AudioChannel.Mono));
+                            //SpeechRecognizer.RecognizeAsync(RecognizeMode.Multiple);
                             #endregion
                             break;
                         case AudioSourceType.OtherDevice:
@@ -160,6 +145,21 @@ namespace Kinect_Wrapper.camera
         }
         #endregion
 
+        #region grammar list with detection 
+        public ObservableCollection<GrammarTest> ListGrammar { get; private set; }
+        void rebuildGrammarList()
+        {
+            ListGrammar.Clear();
+            foreach (var g in Grammar)
+            {
+                var lg = new GrammarTest();
+                lg.Name = g;
+                lg.WasJustSayed = "no";
+                ListGrammar.Add(lg);
+            }
+        }
+        #endregion
+
         #region initializer / destroy
         private void initialize()
         {
@@ -178,6 +178,7 @@ namespace Kinect_Wrapper.camera
             SpeechRecognizer.SpeechHypothesized -= SreSpeechHypothesized;
             SpeechRecognizer.SpeechRecognitionRejected -= SreSpeechRecognitionRejected;
             SpeechRecognizer.RecognizeAsyncCancel();
+            SpeechRecognizer.Dispose();
             SpeechRecognizer = null;
         }
         #endregion

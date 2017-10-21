@@ -76,15 +76,15 @@ namespace Kinect_Wrapper.camera
                     var kinectAudioDevice = Devices.FirstOrDefault(c => c.Type == AudioSourceType.Kinect);
                     SelectedDevice = kinectAudioDevice;
                 }
-                else if (device.Type == structures.DeviceType.RECORD_FILE_KINECT_1 && File.Exists(device.Path))
-                {
-                    var replayDevice = new AudioSourceDevice(device.Path, i);
-                    SelectedDevice = replayDevice;
-                }
-                else
-                {
-                    SelectedDevice = Devices.FirstOrDefault();
-                }
+                //else if (device.Type == structures.DeviceType.RECORD_FILE_KINECT_1 && File.Exists(device.Path))
+                //{
+                //    //var replayDevice = new AudioSourceDevice(device.Path, i);
+                //    //SelectedDevice = replayDevice;
+                //}
+                //else
+                //{
+                //    //SelectedDevice = Devices.FirstOrDefault();
+                //}
             }));
         }
         #endregion
