@@ -50,6 +50,7 @@ namespace Kinect_Wrapper.camera
             ListGrammar = new TrulyObservableCollection<GrammarTest>();
             Grammar.CollectionChanged += (e, v) =>
             {
+                SpeechRecognizer?.UnloadAllGrammars();
                 SpeechRecognizer?.LoadGrammarAsync(GetCurrentGrammar());
                 rebuildGrammarList();
             };
