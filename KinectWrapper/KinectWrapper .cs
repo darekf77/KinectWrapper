@@ -23,14 +23,15 @@ namespace Kinect_Wrapper.wrapper
 
         #region singleton 
         private static IKinectWrapper _instance;
+        private static bool AutoPickUpDevice = false;
         static readonly object _locker = new object();
-        public static IKinectWrapper Instance(bool autopickupKinect = false)
+        public static IKinectWrapper Instance(bool autopickupKinect = true)
         {
 
             if (_instance == null)
             {
+                AutoPickUpDevice = autopickupKinect;
                 _instance = new KinectWrapper();
-                _instance.Manager.AutopickupDevice = autopickupKinect;
             }
             return _instance;
 
@@ -51,7 +52,7 @@ namespace Kinect_Wrapper.wrapper
             Camera = KinectCamera.Instance;
             Camera.FrameReady += Video_FramesReady;
 
-            Manager = new DeviceManager(Camera);
+            Manager = new DeviceManager(Camera, AutoPickUpDevice);
 
             UIEnable = true;
             initStatistics();

@@ -27,8 +27,6 @@ namespace Kinect_Wrapper.devicemanager
 
         Command RemoveFromDevices { get; }
 
-        bool AutopickupDevice { get; set; }
-
         bool IsSelectedDevice { get; }
 
         bool IsSelectedDeviceReadyToPlay { get; }

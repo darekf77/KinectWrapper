@@ -36,7 +36,7 @@ namespace Kinect_Wrapper.devicemanager
         public event EventHandler DeviceChanged;
 
         #region constructor
-        public DeviceManager(IKinectCamera Camera)
+        public DeviceManager(IKinectCamera Camera, bool AutoPickupDevice = false)
         {
             this.Camera = Camera;
             Devices = new TrulyObservableCollection<IDevice>();
@@ -57,7 +57,7 @@ namespace Kinect_Wrapper.devicemanager
             loadReplayFilesFromConfigFile();
             #endregion
 
-            //autopickupDeveic();
+            if (AutoPickupDevice) autopickupDevice();
 
             #region add / remove sensor when plugin in / out
             KinectSensor.KinectSensors.StatusChanged += (e, v) =>
@@ -203,30 +203,9 @@ namespace Kinect_Wrapper.devicemanager
             }
         }
         private DeviceType _autopickupDeviceType = DeviceType.NO_DEVICE;
-        public bool AutopickupDevice
+
+        private void autopickupDevice()
         {
-            get
-            {
-                return AutoPickUpFirstKinect;
-            }
-            set
-            {
-                if (!AutoPickUpFirstKinectIsSet)
-                {
-                    AutoPickUpFirstKinect = value;
-                    AutoPickUpFirstKinectIsSet = true;
-                    Console.WriteLine("[KinectWrapper] - device autopickup already set");
-                }
-            }
-        }
-
-
-
-        private static Boolean AutoPickUpFirstKinect = true;
-        private static Boolean AutoPickUpFirstKinectIsSet = false;
-        private void autopickupDeveic()
-        {
-            if (!AutoPickUpFirstKinect) return;
             var kinectFounded = false;
             foreach (var device in Devices)
             {
