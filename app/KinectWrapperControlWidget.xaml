@@ -28,7 +28,7 @@
         </Grid.ColumnDefinitions>
 
         <ComboBox Name="ComboboxStreams" ItemsSource="{Binding kinect.Streams}" 
-                      SelectedItem="{Binding kinect.Stream}" IsEnabled="{c:Binding !manager.IsStopped,Mode=OneWay}"
+                      SelectedItem="{Binding kinect.Stream}" IsEnabled="{c:Binding camera.IsStreaming,Mode=OneWay}"
                   IsSynchronizedWithCurrentItem="True" Grid.Row="0" Grid.ColumnSpan="2"
                      Height="20"
                     DisplayMemberPath="Name" >

@@ -21,8 +21,6 @@ namespace Kinect_Wrapper.devicemanager
 
         IDevice SelectedDevice { get; set; }
 
-        Boolean IsStopped { get; }
-
         DeviceType AutopickupDeviceType { get; }
 
         Command AddFromHardDrive { get; }

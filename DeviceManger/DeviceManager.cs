@@ -168,7 +168,6 @@ namespace Kinect_Wrapper.devicemanager
                 return (SelectedDevice != null);
             }
         }
-        #endregion
 
         public bool IsSelectedDeviceReadyToPlay
         {
@@ -177,6 +176,7 @@ namespace Kinect_Wrapper.devicemanager
                 return (SelectedDevice?.State == DeviceState.READY);
             }
         }
+        #endregion
 
         #region selcted device
         public IDevice SelectedDevice
@@ -186,17 +186,9 @@ namespace Kinect_Wrapper.devicemanager
             {
                 if (value == null) return;
                 Camera.DeviceSelecteToPlay = value;
-                OnPropertyChanged("IsStopped");
                 OnPropertyChanged("IsSelectedDevice");
                 OnPropertyChanged("IsSelectedDeviceReadyToPlay");
             }
-        }
-        #endregion
-
-        #region is stopped
-        public bool IsStopped
-        {
-            get { return (Camera.CurrentDevice != null) ? Camera.CurrentDevice.Equals(DefaultDevice) : false; }
         }
         #endregion
 

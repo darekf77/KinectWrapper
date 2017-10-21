@@ -29,6 +29,12 @@ namespace Kinect_Wrapper.camera
         KinectRecordOptions Options = KinectRecordOptions.Everything;
         IKinectFrame frame { get; set; }
 
+        public event EventHandler<IKinectFrame> FrameReady;
+        public event EventHandler onNoDeviceNeeded;
+        public event EventHandler onReplayEnd;
+        public event EventHandler<string> RecordComplete;
+        public event EventHandler onDeviceChanged;
+
         #region file pathes
         public String ReplayFilePath { get; private set; }
         public String RecordFilePath { get; private set; }
@@ -40,11 +46,6 @@ namespace Kinect_Wrapper.camera
         /// </summary>
         public IDevice CurrentDevice { get; set; }
         #endregion
-
-        public event EventHandler<IKinectFrame> FrameReady;
-        public event EventHandler onNoDeviceNeeded;
-        public event EventHandler onReplayEnd;
-        public event EventHandler<string> RecordComplete;
 
         #region singleton 
         private volatile static IKinectCamera instance;
@@ -79,8 +80,6 @@ namespace Kinect_Wrapper.camera
         }
         #endregion
 
-
-        public event EventHandler onDeviceChanged;
         #region play sensor or replay
         public Command Play
         {
@@ -104,14 +103,11 @@ namespace Kinect_Wrapper.camera
                                 frame = new KinectFrame(this);
                                 break;
                             case structures.DeviceType.RECORD_FILE_KINECT_1:
-                                ReplayFilePath = CurrentDevice.Path;
                                 frame = new KinectFrame(this);
+                                ReplayFilePath = CurrentDevice.Path;
                                 stream = File.OpenRead(ReplayFilePath);
                                 reader = new BinaryReader(stream);
                                 Options = (KinectRecordOptions)reader.ReadInt32();
-                                //var paramsArrayLength = reader.ReadInt32();
-                                //var colorToDepthRelationalParameters = reader.ReadBytes(paramsArrayLength);
-                                //CoordinateMapper = new CoordinateMapper(colorToDepthRelationalParameters);
                                 AddFrames(reader);
                                 //audio.replay(ReplayFilePath);
                                 break;

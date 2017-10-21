@@ -12,6 +12,14 @@ namespace Kinect_Wrapper.camera.Replayer
         public FrameDepthReplayer Depth { get; set; }
         public FrameSkeletonReplayer Skeleton { get; set; }
 
+        public override long TimeStamp
+        {
+            get
+            {
+                return isCorrect ? ((Color.TimeStamp + Depth.TimeStamp + Skeleton.TimeStamp) / 3) : 0;
+            }
+        }
+
         public bool isCorrect
         {
             get { return (Color != null && Depth != null && Skeleton != null); }
