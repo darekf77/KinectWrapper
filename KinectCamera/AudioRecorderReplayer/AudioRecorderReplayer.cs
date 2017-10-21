@@ -35,6 +35,7 @@ namespace Kinect_Wrapper.camera
         public AudioRecorderReplayer()
         {
             Devices = new ObservableCollection<IAudioSourceDevice>();
+            Recognizer = new AudioRecognition();
             reinit();
         }
         #endregion
@@ -42,7 +43,6 @@ namespace Kinect_Wrapper.camera
         #region reinit
         private void reinit()
         {
-            Recognizer = new AudioRecognition();
             if (recorder != null)
             {
                 recorder.Stop();

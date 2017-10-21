@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace Kinect_Wrapper.camera
 {
-    [Serializable]
     public class GrammarTest : INotifyPropertyChanged
     {
         #region propety changed
@@ -47,6 +46,6 @@ namespace Kinect_Wrapper.camera
 
         event EventHandler<IAudioMessage> UserSaying;
         ObservableCollection<String> Grammar { get; set; }
-        TrulyObservableCollection<GrammarTest> ListGrammar { get; }
+        ObservableCollection<GrammarTest> ListGrammar { get; }
     }
 }

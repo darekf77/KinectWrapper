@@ -26,7 +26,7 @@ namespace Kinect_Wrapper.camera
         #endregion
 
         #region grammar list with detection 
-        public TrulyObservableCollection<GrammarTest> ListGrammar { get; private set; }
+        public ObservableCollection<GrammarTest> ListGrammar { get; private set; }
         void rebuildGrammarList()
         {
             ListGrammar.Clear();
@@ -58,23 +58,31 @@ namespace Kinect_Wrapper.camera
             rebuildGrammarList();
             UserSaying += (e, v) =>
             {
-                foreach (var g in ListGrammar)
+                App.Current.Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    if (v.Message == g.Name)
+                    GrammarTest t = null;
+                    foreach (var g in ListGrammar)
                     {
-                        App.Current.Dispatcher.BeginInvoke(new Action(() =>
+                        if (v.Message == g.Name)
                         {
+                            t = g;
                             Console.WriteLine("start");
                             g.WasJustSayed = "yes";
-                            Helpers.SetTimeout(() =>
+                            break;
+                        }
+                    }
+                    if (t != null)
+                    {
+                        Helpers.SetTimeout(() =>
+                        {
+                            App.Current.Dispatcher.BeginInvoke(new Action(() =>
                             {
                                 Console.WriteLine("stop");
-                                g.WasJustSayed = "no";
-                            }, 2000);
-                        }));
-                        return;
+                                t.WasJustSayed = "no";
+                            }));
+                        }, 2000);
                     }
-                }
+                }));
             };
             #endregion
         }
@@ -107,8 +115,9 @@ namespace Kinect_Wrapper.camera
                             #region speeach recognizer + kienct
                             var audioSource = source.KinectAudio;
                             audioSource.BeamAngleMode = BeamAngleMode.Adaptive;
-                            audioSource.EchoCancellationMode = EchoCancellationMode.CancellationOnly;
+                            audioSource.EchoCancellationMode = EchoCancellationMode.CancellationAndSuppression;
                             audioSource.AutomaticGainControlEnabled = true;
+
                             var kinectStream = audioSource.Start();
                             //configure incoming audio stream
                             SpeechRecognizer.SetInputToAudioStream(
@@ -140,6 +149,7 @@ namespace Kinect_Wrapper.camera
                         default:
                             break;
                     }
+                    SpeechRecognizer?.LoadGrammarAsync(GetCurrentGrammar());
                 }
                 catch (Exception ex)
                 {
